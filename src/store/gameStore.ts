@@ -105,7 +105,7 @@ function loadSavedWorlds(): Record<Language, WorldNode[]> {
 export const useGameStore = create<GameState>((set, get) => ({
   currentScreen: 'BOOT',
   language: 'es',
-  totalRounds: 4,
+  totalRounds: 3,
   currentRound: 1,
   currentPlayerIndex: 0,
   activeWorldId: 'saludos',

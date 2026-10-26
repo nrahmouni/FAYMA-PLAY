@@ -1,208 +1,98 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { Trophy, RotateCcw, ShoppingBag, Compass, Sparkles, Gem, Coins, Medal } from 'lucide-react';
+import { ArrowLeft, Play, RotateCcw, Users } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
 import { useProfileStore } from '../store/profileStore';
 import { useSound } from '../hooks/useSound';
 import { JuiceBurst } from '../components/JuiceBurst';
 
 export const PodiumScreen: React.FC = () => {
-  const scores = useGameStore(s => s.scores);
-  const results = useGameStore(s => s.results);
-  const setScreen = useGameStore(s => s.setScreen);
-  const resetSession = useGameStore(s => s.resetSession);
-  const startSession = useGameStore(s => s.startSession);
-
-  const profiles = useProfileStore(s => s.profiles);
-  const addRewards = useProfileStore(s => s.addRewards);
-
+  const scores = useGameStore(state => state.scores);
+  const setScreen = useGameStore(state => state.setScreen);
+  const resetSession = useGameStore(state => state.resetSession);
+  const startSession = useGameStore(state => state.startSession);
+  const profiles = useProfileStore(state => state.profiles);
   const { playFanfare } = useSound();
   const [burst, setBurst] = useState(false);
-
-  // Sort players by score descending
-  const rankedPlayers = [...profiles].sort((a, b) => (scores[b.uid] || 0) - (scores[a.uid] || 0));
-  const winner = rankedPlayers[0];
 
   useEffect(() => {
     playFanfare();
     setBurst(true);
+  }, [playFanfare]);
 
-    // Award bonus gem to the winner
-    if (winner) {
-      addRewards(winner.uid, 20, 1);
-    }
-  }, []);
-
-  const handleRematch = () => {
+  const playAgain = () => {
     resetSession();
     startSession(profiles);
   };
 
+  const chooseAnotherGame = () => {
+    setScreen('WORLD_HUB');
+  };
+
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-8 sm:py-12 flex flex-col items-center">
+    <main className="mx-auto flex min-h-[calc(100vh-76px)] w-full max-w-2xl flex-col justify-center px-4 py-6 sm:px-8">
       <JuiceBurst trigger={burst} type="victory" />
+      <section className="rounded-[2rem] border-4 border-white bg-gradient-to-br from-yellow-100 via-pink-50 to-sky-100 p-5 text-center shadow-[0_20px_50px_rgba(83,111,155,.14)] sm:p-8">
+        <motion.div
+          initial={{ scale: 0.7, rotate: -10 }}
+          animate={{ scale: 1, rotate: 0 }}
+          className="text-7xl sm:text-8xl"
+          aria-hidden="true"
+        >
+          🎉
+        </motion.div>
+        <h1 className="mt-3 text-3xl font-black text-slate-900 sm:text-4xl">¡Partida terminada!</h1>
+        <p className="mt-2 text-sm font-semibold text-slate-600 sm:text-base">¡Lo habéis hecho genial! Cada ronda os enseñó algo nuevo.</p>
 
-      {/* Header Badge */}
-      <div className="text-center mb-8">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-card border border-amber-400/40 text-amber-300 text-xs font-black uppercase tracking-wider mb-2">
-          <Sparkles className="w-4 h-4" />
-          <span>¡Fin de la Partida!</span>
-        </div>
-        <h1 className="text-3xl sm:text-5xl font-black text-slate-100 tracking-tight">
-          Podio de Campeones
-        </h1>
-        <p className="text-sm text-slate-400 mt-1">
-          ¡Gran esfuerzo en todos los desafíos lingüísticos!
-        </p>
-      </div>
-
-      {/* Olympic Podium Display */}
-      <div className="w-full max-w-2xl flex items-end justify-center gap-3 sm:gap-6 my-6 min-h-[300px]">
-        {/* 2nd Place (Silver) */}
-        {rankedPlayers.length > 1 && (
-          <motion.div
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="flex-1 flex flex-col items-center max-w-[160px]"
-          >
-            <div className="text-3xl mb-1 select-none">🥈</div>
-            <div
-              className="w-14 h-14 rounded-full flex items-center justify-center text-2xl border-2 border-slate-300 bg-slate-800 shadow-lg select-none mb-2"
-              style={{ borderColor: rankedPlayers[1].color }}
+        <div className="mt-6 space-y-3">
+          {profiles.map((player, index) => (
+            <motion.div
+              key={player.uid}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.08 }}
+              className="flex items-center gap-3 rounded-2xl border-2 border-white bg-white/90 p-3 text-left shadow-sm sm:p-4"
             >
-              {rankedPlayers[1].avatarUrl || '🥈'}
-            </div>
-            <span className="text-xs sm:text-sm font-extrabold text-slate-200 truncate max-w-full text-center">
-              {rankedPlayers[1].displayName}
-            </span>
-            <span className="text-xs font-black text-cyan-400 mb-2">
-              {scores[rankedPlayers[1].uid] || 0} pts
-            </span>
-
-            {/* Silver pedestal */}
-            <div className="w-full h-32 rounded-t-2xl bg-gradient-to-t from-slate-800 to-slate-700/80 border-t-4 border-slate-300 flex items-center justify-center text-slate-400 font-black text-2xl shadow-xl">
-              2
-            </div>
-          </motion.div>
-        )}
-
-        {/* 1st Place (Gold Champion) */}
-        {winner && (
-          <motion.div
-            initial={{ y: 60, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="flex-1 flex flex-col items-center max-w-[190px] z-10"
-          >
-            <div className="text-4xl mb-1 select-none animate-bounce">👑</div>
-            <div
-              className="w-18 h-18 rounded-full flex items-center justify-center text-3xl border-4 border-amber-400 bg-slate-800 shadow-2xl shadow-amber-500/30 select-none mb-2"
-              style={{ borderColor: winner.color }}
-            >
-              {winner.avatarUrl || '🥇'}
-            </div>
-            <span className="text-sm sm:text-base font-black text-amber-300 truncate max-w-full text-center">
-              {winner.displayName}
-            </span>
-            <div className="flex items-center gap-1 text-xs font-black text-amber-400 mb-2">
-              <span>{scores[winner.uid] || 0} pts</span>
-              <span>•</span>
-              <span className="flex items-center gap-0.5 text-purple-300">
-                <Gem className="w-3 h-3 text-purple-400" /> +1
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-3xl" aria-hidden="true">
+                {player.avatarUrl?.startsWith('data:') ? '🙂' : player.avatarUrl || '⭐'}
               </span>
-            </div>
-
-            {/* Gold pedestal */}
-            <div className="w-full h-44 rounded-t-2xl bg-gradient-to-t from-amber-600/40 via-amber-500/20 to-slate-800 border-t-4 border-amber-400 flex flex-col items-center justify-center text-amber-300 font-black shadow-2xl">
-              <span className="text-4xl">1</span>
-              <span className="text-[10px] uppercase font-bold text-amber-200">Campeón</span>
-            </div>
-          </motion.div>
-        )}
-
-        {/* 3rd Place (Bronze) */}
-        {rankedPlayers.length > 2 && (
-          <motion.div
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="flex-1 flex flex-col items-center max-w-[160px]"
-          >
-            <div className="text-3xl mb-1 select-none">🥉</div>
-            <div
-              className="w-14 h-14 rounded-full flex items-center justify-center text-2xl border-2 border-amber-700 bg-slate-800 shadow-lg select-none mb-2"
-              style={{ borderColor: rankedPlayers[2].color }}
-            >
-              {rankedPlayers[2].avatarUrl || '🥉'}
-            </div>
-            <span className="text-xs sm:text-sm font-extrabold text-slate-200 truncate max-w-full text-center">
-              {rankedPlayers[2].displayName}
-            </span>
-            <span className="text-xs font-black text-cyan-400 mb-2">
-              {scores[rankedPlayers[2].uid] || 0} pts
-            </span>
-
-            {/* Bronze pedestal */}
-            <div className="w-full h-24 rounded-t-2xl bg-gradient-to-t from-slate-900 to-amber-950/50 border-t-4 border-amber-700 flex items-center justify-center text-amber-600 font-black text-2xl shadow-xl">
-              3
-            </div>
-          </motion.div>
-        )}
-      </div>
-
-      {/* Rewards & Summary Card */}
-      <div className="w-full max-w-lg p-5 rounded-3xl glass-panel border border-white/10 my-4 space-y-3">
-        <h3 className="text-xs uppercase font-extrabold tracking-wider text-slate-400 text-center">
-          Resumen de Aprendizaje
-        </h3>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="p-3 rounded-2xl glass-card flex items-center gap-3">
-            <Coins className="w-6 h-6 text-amber-400" />
-            <div>
-              <div className="text-sm font-bold text-slate-100">Monedas Ganadas</div>
-              <div className="text-xs text-slate-400">Canjeables en el Garaje</div>
-            </div>
-          </div>
-          <div className="p-3 rounded-2xl glass-card flex items-center gap-3">
-            <Gem className="w-6 h-6 text-purple-400" />
-            <div>
-              <div className="text-sm font-bold text-slate-100">Bono de Victoria</div>
-              <div className="text-xs text-purple-300 font-bold">+1 Gema exclusiva</div>
-            </div>
-          </div>
+              <span className="min-w-0 flex-1 truncate font-black text-slate-900">{player.displayName}</span>
+              <span className="rounded-full bg-amber-100 px-3 py-1.5 text-sm font-black text-amber-900">⭐ {scores[player.uid] || 0}</span>
+            </motion.div>
+          ))}
         </div>
-      </div>
 
-      {/* Action Navigation Buttons */}
-      <div className="w-full max-w-md grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-2">
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          <button
+            type="button"
+            onClick={playAgain}
+            className="flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-4 text-sm font-black text-white shadow-[0_4px_0_#328248] transition hover:bg-emerald-700 active:translate-y-1 active:shadow-none"
+          >
+            <RotateCcw className="h-4 w-4" /> Otra partida
+          </button>
+          <button
+            type="button"
+            onClick={chooseAnotherGame}
+            className="flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-sky-500 px-4 text-sm font-black text-white shadow-[0_4px_0_#367cad] transition hover:bg-sky-600 active:translate-y-1 active:shadow-none"
+          >
+            <Play className="h-4 w-4 fill-current" /> Otro juego
+          </button>
+          <button
+            type="button"
+            onClick={() => setScreen('PLAYER_SETUP')}
+            className="flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-violet-100 px-4 text-sm font-black text-violet-900 transition hover:bg-violet-200"
+          >
+            <Users className="h-4 w-4" /> Jugadores
+          </button>
+        </div>
         <button
           type="button"
-          onClick={handleRematch}
-          className="py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-lg active:scale-95 transition"
+          onClick={() => setScreen('HOME')}
+          className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-xl px-3 text-sm font-bold text-slate-600 transition hover:bg-white/70"
         >
-          <RotateCcw className="w-4 h-4" />
-          <span>Revancha</span>
+          <ArrowLeft className="h-4 w-4" /> Cambiar idioma
         </button>
-
-        <button
-          type="button"
-          onClick={() => setScreen('GARAGE')}
-          className="py-3 px-4 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 font-extrabold text-xs flex items-center justify-center gap-1.5 hover:bg-amber-500/30 active:scale-95 transition"
-        >
-          <ShoppingBag className="w-4 h-4" />
-          <span>Ir al Garaje</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setScreen('WORLD_HUB')}
-          className="py-3 px-4 rounded-xl glass-card text-slate-300 hover:text-white border border-white/10 font-extrabold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition"
-        >
-          <Compass className="w-4 h-4" />
-          <span>Mundos</span>
-        </button>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };

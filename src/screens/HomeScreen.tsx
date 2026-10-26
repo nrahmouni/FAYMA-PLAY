@@ -1,207 +1,83 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Gamepad2, Play, ShieldCheck, ShoppingBag, Sparkles, Users, BookOpen } from 'lucide-react';
-import { useGameStore } from '../store/gameStore';
-import { useProfileStore } from '../store/profileStore';
+import { Users } from 'lucide-react';
 import { LANGUAGES } from '../data/languages';
 import { Language } from '../types';
+import { useGameStore } from '../store/gameStore';
+import { useProfileStore } from '../store/profileStore';
+
+const LANGUAGE_ORDER: Language[] = ['es', 'fr', 'ar', 'nl-BE'];
+
+const FLAG_ART: Record<Language, string> = {
+  es: 'from-rose-100 to-amber-100',
+  fr: 'from-sky-100 to-indigo-100',
+  ar: 'from-amber-100 to-orange-100',
+  'nl-BE': 'from-yellow-100 to-lime-100',
+};
 
 export const HomeScreen: React.FC = () => {
-  const setScreen = useGameStore(s => s.setScreen);
-  const language = useGameStore(s => s.language);
-  const setLanguage = useGameStore(s => s.setLanguage);
-  const profiles = useProfileStore(s => s.profiles);
-  const activePlayer = profiles[0];
-  const langMeta = LANGUAGES[language];
-  const masteryCount = Object.keys(activePlayer?.mastery ?? {}).length;
-  const explorerRank = masteryCount >= 18 ? 'Políglota' : masteryCount >= 8 ? 'Explorador' : 'Principiante';
+  const setScreen = useGameStore(state => state.setScreen);
+  const setLanguage = useGameStore(state => state.setLanguage);
+  const totalRounds = useGameStore(state => state.totalRounds);
+  const profiles = useProfileStore(state => state.profiles);
+
+  const chooseLanguage = (language: Language) => {
+    setLanguage(language);
+    setScreen('WORLD_HUB');
+  };
 
   return (
-    <div className="fayma-home relative mx-auto flex w-full max-w-6xl flex-col gap-8 overflow-hidden px-4 py-8 sm:px-8 sm:py-12">
-      <div className="pointer-events-none absolute -right-28 -top-20 h-80 w-80 rounded-full bg-fuchsia-500/20 blur-[100px]" />
-      <div className="pointer-events-none absolute -bottom-20 -left-24 h-80 w-80 rounded-full bg-cyan-400/15 blur-[110px]" />
-
-      <section className="relative grid items-center gap-10 lg:grid-cols-[1.15fr_.85fr]">
-        <div className="z-10">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-white/85 px-3 py-1.5 text-[10px] font-black uppercase tracking-[.22em] text-indigo-700 shadow-sm">
-            <Sparkles className="h-3.5 w-3.5" />
-            4 países • 4 idiomas • 1 aventura global
-          </div>
-          <h1 className="max-w-3xl text-5xl font-black leading-[.95] tracking-[-.06em] text-slate-900 sm:text-7xl">
-            FAYMA <span className="fayma-title-gradient">WORLD</span>
-          </h1>
-          <p className="mt-5 max-w-xl text-base leading-7 text-slate-700 sm:text-lg">
-            Conquista rutas, ciudades y culturas reales mientras aprendes español, árabe, francés y neerlandés de Flandes. Cada misión convierte palabras en un viaje épico para niños.
-          </p>
-
-          <div className="mt-7 flex flex-wrap items-center gap-3">
-            <motion.button
-              type="button"
-              whileHover={{ y: -3, scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setScreen('WORLD_HUB')}
-              className="fayma-primary-button inline-flex items-center gap-3 rounded-2xl px-6 py-4 text-base font-black text-slate-900 sm:text-lg"
-            >
-              <Play className="h-5 w-5 fill-current" />
-              EMPEZAR EL VIAJE
-              <ArrowRight className="h-5 w-5" />
-            </motion.button>
-            <div className="rounded-2xl border border-indigo-200 bg-white/80 px-4 py-3 text-left shadow-sm">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-500">Explorador</div>
-              <div className="font-black text-slate-900">{activePlayer?.displayName || 'Crea tu perfil'}</div>
-            </div>
-          </div>
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, rotateY: -18, rotateX: 8, y: 18 }}
-          animate={{ opacity: 1, rotateY: -10, rotateX: 4, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="fayma-hero-stage relative mx-auto flex aspect-[1.15] w-full max-w-lg items-center justify-center"
-          aria-label="Escenario de aventura global"
+    <main className="mx-auto flex min-h-[calc(100vh-76px)] w-full max-w-5xl flex-col justify-center px-4 py-6 sm:px-8 sm:py-10">
+      <header className="mb-6 text-center sm:mb-9">
+        <div className="mb-3 text-5xl sm:text-6xl" aria-hidden="true">🌈</div>
+        <h1 className="text-3xl font-black text-slate-900 sm:text-5xl">¿A qué país viajamos?</h1>
+        <p className="mt-2 text-sm font-semibold text-slate-600 sm:text-lg">¡Elige una bandera para empezar a jugar!</p>
+        <button
+          type="button"
+          onClick={() => setScreen('PLAYER_SETUP')}
+          className="mx-auto mt-4 inline-flex min-h-10 items-center gap-2 rounded-full bg-white/90 px-4 text-xs font-extrabold text-slate-700 shadow-sm ring-1 ring-slate-100 transition hover:bg-white"
         >
-          <div className="fayma-orbit fayma-orbit-back" />
-          <div className="fayma-orbit fayma-orbit-front" />
-          <div className="fayma-stage-platform" />
-          <motion.div
-            animate={{ y: [-8, 8, -8], rotateZ: [-3, 3, -3] }}
-            transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
-            className="fayma-hero-arcade"
-          >
-            <div className="fayma-arcade-screen">
-              <div className="relative flex h-28 w-28 items-center justify-center sm:h-32 sm:w-32">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-sky-400 via-indigo-500 to-fuchsia-500 opacity-90 blur-md" />
-                <div className="relative h-24 w-24 rounded-full border-[10px] border-white/80 bg-[radial-gradient(circle_at_30%_30%,#e0f2fe,transparent_20%),linear-gradient(135deg,#7dd3fc,#60a5fa_38%,#a78bfa_70%,#f9a8d4)] shadow-[0_18px_35px_rgba(59,130,246,0.25)] sm:h-28 sm:w-28" />
-                <div className="absolute h-20 w-[2px] rotate-45 rounded-full bg-white/80 sm:h-24" />
-                <div className="absolute h-20 w-[2px] -rotate-45 rounded-full bg-white/80 sm:h-24" />
-                <div className="absolute h-full w-full rounded-full border border-white/50" />
-                <div className="absolute bottom-2 right-2 rounded-full bg-amber-300 px-2 py-1 text-[9px] font-black uppercase tracking-[.18em] text-slate-900 shadow-lg">
-                  PASS
-                </div>
-              </div>
-              <span className="mt-1 text-[10px] font-black uppercase tracking-[.28em] text-slate-800">world passport</span>
-            </div>
-            <div className="fayma-arcade-controls">
-              <span className="fayma-arcade-stick" />
-              <span className="fayma-arcade-button fayma-arcade-button-pink" />
-              <span className="fayma-arcade-button fayma-arcade-button-cyan" />
-            </div>
-          </motion.div>
-          <div className="absolute left-[9%] top-[22%] rounded-2xl border border-sky-200 bg-white/80 px-3 py-2 text-xs font-black text-sky-700 shadow-xl backdrop-blur">
-            <Gamepad2 className="mr-1 inline h-4 w-4" /> 4 MUNDOS
-          </div>
-          <div className="absolute bottom-[21%] right-[1%] rounded-2xl border border-amber-200 bg-white/80 px-3 py-2 text-xs font-black text-amber-700 shadow-xl backdrop-blur">
-            ✦ APRENDE JUGANDO
-          </div>
-        </motion.div>
+          <Users className="h-4 w-4 text-violet-600" />
+          Juegan: {profiles.map(profile => profile.displayName).join(' y ')}
+          <span className="text-emerald-700">· Cambiar</span>
+        </button>
+      </header>
+
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5" aria-label="Elige un idioma">
+        {LANGUAGE_ORDER.map((language, index) => {
+          const meta = LANGUAGES[language];
+          return (
+            <motion.button
+              key={language}
+              type="button"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.07 }}
+              whileHover={{ y: -4, scale: 1.015 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => chooseLanguage(language)}
+              className={`group relative flex min-h-32 items-center gap-5 overflow-hidden rounded-[2rem] border-4 border-white bg-gradient-to-br ${FLAG_ART[language]} p-5 text-left shadow-[0_8px_0_rgba(71,85,105,.12),0_16px_32px_rgba(71,85,105,.08)] transition sm:min-h-40 sm:p-7`}
+            >
+              <span className="flex h-20 w-24 shrink-0 items-center justify-center rounded-2xl bg-white text-6xl shadow-sm sm:h-24 sm:w-28 sm:text-7xl" aria-hidden="true">
+                {meta.flag}
+              </span>
+              <span className="min-w-0">
+                <span className="block text-2xl font-black text-slate-900 sm:text-3xl">{meta.country === 'Bélgica / Flandes' ? 'Flandes' : meta.country}</span>
+                <span className="mt-1 block text-sm font-bold text-slate-600 sm:text-base">
+                  {language === 'nl-BE' ? 'Flamenco · Nederlands' : meta.name}
+                </span>
+                <span className="mt-3 inline-flex min-h-9 items-center rounded-full bg-white/85 px-4 text-xs font-black text-slate-700 shadow-sm">
+                  ¡Vamos! <span className="ml-1.5 transition-transform group-hover:translate-x-1">→</span>
+                </span>
+              </span>
+            </motion.button>
+          );
+        })}
       </section>
 
-      <section className="relative grid gap-4 rounded-[2rem] border border-indigo-200 bg-white/70 p-4 shadow-[0_20px_50px_rgba(59,130,246,0.12)] backdrop-blur-xl sm:grid-cols-[1fr_auto] sm:items-center sm:p-6">
-        <div>
-          <div className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[.18em] text-slate-600">
-            <span className="text-lg">{langMeta.flag}</span>
-            País principal: {langMeta.country}
-          </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {(Object.keys(LANGUAGES) as Language[]).map(langKey => {
-              const meta = LANGUAGES[langKey];
-              const selected = language === langKey;
-              return (
-                <motion.button
-                  key={langKey}
-                  type="button"
-                  whileTap={{ scale: 0.96 }}
-                  onClick={() => setLanguage(langKey)}
-                  aria-pressed={selected}
-                  className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left transition ${
-                    selected
-                      ? 'border-indigo-300 bg-gradient-to-r from-sky-100 to-pink-100 text-slate-900 shadow-[0_0_22px_rgba(125,211,252,.18)]'
-                      : 'border-slate-200 bg-white/80 text-slate-600 hover:border-indigo-200 hover:text-slate-900'
-                  }`}
-                >
-                  <span className="text-xl">{meta.flag}</span>
-                  <span className="text-left text-[10px] font-black leading-tight">
-                    <span className="block">{meta.country}</span>
-                    <span className="text-[9px] uppercase tracking-wide text-slate-500">{meta.name}</span>
-                  </span>
-                </motion.button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-2 sm:min-w-56 sm:grid-cols-1">
-          <button
-            type="button"
-            onClick={() => setScreen('PLAYER_SETUP')}
-            className="fayma-secondary-action"
-          >
-            <Users className="h-4 w-4 text-cyan-300" /> Jugadores
-            <span className="ml-auto text-slate-400">{profiles.length}</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setScreen('GARAGE')}
-            className="fayma-secondary-action"
-          >
-            <ShoppingBag className="h-4 w-4 text-amber-300" /> Garaje
-          </button>
-          <button
-            type="button"
-            onClick={() => setScreen('AUTH')}
-            className="fayma-secondary-action col-span-2 sm:col-span-1"
-          >
-            <ShieldCheck className="h-4 w-4 text-emerald-300" /> Sincronizar progreso
-          </button>
-        </div>
-      </section>
-
-      <button
-        type="button"
-        onClick={() => setScreen('LEARN_FLEMISH')}
-        className="group grid w-full items-center gap-4 overflow-hidden rounded-[2rem] border-2 border-white bg-gradient-to-r from-emerald-100 via-lime-50 to-yellow-100 p-5 text-left shadow-[0_16px_36px_rgba(54,125,76,.12)] transition hover:-translate-y-1 sm:grid-cols-[auto_1fr_auto] sm:p-7"
-      >
-        <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-white text-4xl shadow-sm" aria-hidden="true">🦁</span>
-        <span>
-          <span className="block text-xs font-black uppercase tracking-[.18em] text-emerald-800">Nuevo · Aprende a tu ritmo</span>
-          <span className="mt-1 block text-xl font-black text-slate-900 sm:text-2xl">¡Descubre el flamenco!</span>
-          <span className="mt-1 block text-sm leading-6 text-slate-700">Más de 100 palabras, frases, audio y juegos para explorar el neerlandés de Flandes.</span>
-        </span>
-        <span className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 text-sm font-black text-white shadow-sm transition group-hover:bg-emerald-700">
-          <BookOpen className="h-4 w-4" /> Empezar <ArrowRight className="h-4 w-4" />
-        </span>
-      </button>
-
-      <section className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-[2rem] border border-indigo-200 bg-white/80 p-4 shadow-[0_20px_40px_rgba(59,130,246,0.12)]">
-          <div className="text-[10px] font-black uppercase tracking-[.2em] text-slate-500">Rango</div>
-          <div className="mt-2 flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-pink-500 text-xl shadow-lg">🏆</div>
-            <div>
-              <div className="text-xl font-black text-slate-900">{explorerRank}</div>
-              <div className="text-xs text-slate-500">Nivel activo</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="rounded-[2rem] border border-indigo-200 bg-white/80 p-4 shadow-[0_20px_40px_rgba(59,130,246,0.12)]">
-          <div className="text-[10px] font-black uppercase tracking-[.2em] text-slate-500">Recompensas</div>
-          <div className="mt-2 flex items-center justify-between">
-            <div className="text-2xl font-black text-slate-900">{activePlayer?.coins ?? 0}</div>
-            <div className="text-2xl">🪙</div>
-          </div>
-          <div className="mt-2 text-xs text-slate-600">Monedas para garaje y objetos del mundo.</div>
-        </div>
-
-        <div className="rounded-[2rem] border border-indigo-200 bg-gradient-to-br from-sky-100 via-white to-pink-100 p-4 shadow-[0_20px_40px_rgba(59,130,246,0.12)]">
-          <div className="text-[10px] font-black uppercase tracking-[.2em] text-slate-500">Memoria</div>
-          <div className="mt-2 flex items-center justify-between">
-            <div className="text-2xl font-black text-slate-900">{masteryCount}</div>
-            <div className="text-2xl">✨</div>
-          </div>
-          <div className="mt-2 text-xs text-slate-600">Palabras ya practicadas con tus retos.</div>
-        </div>
-      </section>
-    </div>
+      <footer className="mt-7 text-center text-xs font-semibold text-slate-500">
+        {profiles.length > 1 ? `${profiles.length} jugadores · ${totalRounds} rondas` : `${totalRounds} rondas · ¡Juega a tu ritmo!`}
+      </footer>
+    </main>
   );
 };

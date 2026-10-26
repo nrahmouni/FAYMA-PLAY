@@ -1,11 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
-import { Trophy, Coins, Clock, ArrowRight, Volume2, CheckCircle2, XCircle } from 'lucide-react';
+import { Coins, ArrowRight, Volume2, CheckCircle2 } from 'lucide-react';
 import { GameResult, PlayerProfile, Language, Word } from '../types';
 import { useSpeech } from '../hooks/useSpeech';
 import { useSound } from '../hooks/useSound';
 import { VOCABULARY_BANK } from '../data/vocabulary';
-import { formatTime } from '../lib/utils';
 import { JuiceBurst } from '../components/JuiceBurst';
 
 interface TurnResultModalProps {
@@ -13,6 +12,7 @@ interface TurnResultModalProps {
   player: PlayerProfile;
   language: Language;
   missionCompleted?: boolean;
+  isFinalTurn?: boolean;
   onContinue: () => void;
 }
 
@@ -21,6 +21,7 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
   player,
   language,
   missionCompleted = false,
+  isFinalTurn = false,
   onContinue,
 }) => {
   const { speak } = useSpeech();
@@ -50,27 +51,27 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
     .filter((w): w is Word => Boolean(w));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-sky-100/80 p-3 backdrop-blur-sm animate-fadeIn sm:p-5">
       <JuiceBurst trigger={missionCompleted} type="victory" />
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="w-full max-w-lg rounded-3xl glass-panel p-6 sm:p-8 shadow-2xl border-2 border-cyan-400/50 text-center relative overflow-hidden"
+        className="relative my-auto w-full max-w-lg overflow-hidden rounded-[2rem] border-4 border-white bg-gradient-to-br from-white via-yellow-50 to-sky-50 p-5 text-center shadow-[0_20px_55px_rgba(51,92,130,.2)] sm:p-7"
       >
         {/* Confetti / Trophy header */}
         {missionCompleted && (
           <motion.div
             initial={{ scale: 0.6, opacity: 0, y: -8 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            className="mb-4 rounded-2xl border border-amber-300/40 bg-gradient-to-r from-amber-400/20 via-pink-400/20 to-cyan-400/20 px-4 py-3"
+            className="mb-4 rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-100 via-pink-50 to-sky-100 px-4 py-3"
           >
-            <div className="text-xs font-black uppercase tracking-[.18em] text-amber-300">¡Nueva misión en el pasaporte!</div>
-            <div className="mt-1 flex items-center justify-center gap-2 text-sm font-bold text-slate-100">
+            <div className="text-xs font-black uppercase tracking-[.18em] text-amber-800">¡Has ganado una estrella!</div>
+            <div className="mt-1 flex items-center justify-center gap-2 text-sm font-bold text-slate-800">
               <span>{celebrationCopy[language]}</span>
               <button
                 type="button"
                 onClick={() => speak(celebrationCopy[language], language)}
-                className="rounded-lg p-1.5 text-cyan-300 transition hover:bg-white/10"
+                className="rounded-lg p-1.5 text-sky-700 transition hover:bg-white/70"
                 aria-label="Escuchar felicitación"
               >
                 <Volume2 className="h-4 w-4" />
@@ -78,66 +79,60 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
             </div>
           </motion.div>
         )}
-        <div className="w-16 h-16 mx-auto mb-3 rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-500 flex items-center justify-center text-3xl shadow-xl shadow-amber-500/20">
+        <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-tr from-amber-200 to-orange-200 text-3xl shadow-sm">
           {accuracy >= 75 ? '🏆' : accuracy >= 40 ? '👍' : '💪'}
         </div>
 
-        <h2 className="text-2xl sm:text-3xl font-black text-slate-100 mb-1">
+        <h2 className="mb-1 text-2xl font-black text-slate-900 sm:text-3xl">
           {accuracy === 100
             ? '¡Ronda Perfecta!'
             : accuracy >= 70
             ? '¡Excelente Trabajo!'
             : '¡Buen Intento!'}
         </h2>
-        <p className="text-sm text-slate-400 mb-5">
-          Resultados del turno de <strong className="text-cyan-400">{player.displayName}</strong>
+        <p className="mb-5 text-sm text-slate-600">
+          ¡Buen trabajo, <strong className="text-emerald-800">{player.displayName}</strong>!
         </p>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-3 gap-2.5 mb-6">
-          <div className="p-3 rounded-2xl glass-card border border-white/5 flex flex-col items-center">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400 mb-1" />
-            <span className="text-lg font-black text-slate-100">{result.correct}</span>
-            <span className="text-[10px] uppercase font-bold text-slate-400">Aciertos</span>
+        <div className="mb-6 grid grid-cols-2 gap-2.5">
+          <div className="flex flex-col items-center rounded-2xl border border-emerald-100 bg-emerald-50 p-3">
+            <CheckCircle2 className="mb-1 h-5 w-5 text-emerald-600" />
+            <span className="text-lg font-black text-slate-900">{result.correct}</span>
+            <span className="text-[10px] font-bold uppercase text-slate-600">Aciertos</span>
           </div>
 
-          <div className="p-3 rounded-2xl glass-card border border-amber-500/30 flex flex-col items-center bg-amber-500/5">
-            <Coins className="w-5 h-5 text-amber-400 mb-1 animate-pulse" />
-            <span className="text-lg font-black text-amber-400">+{result.coinsEarned}</span>
-            <span className="text-[10px] uppercase font-bold text-slate-400">Monedas</span>
-          </div>
-
-          <div className="p-3 rounded-2xl glass-card border border-white/5 flex flex-col items-center">
-            <Clock className="w-5 h-5 text-cyan-400 mb-1" />
-            <span className="text-lg font-black text-slate-100">{formatTime(result.timeMs)}</span>
-            <span className="text-[10px] uppercase font-bold text-slate-400">Tiempo</span>
+          <div className="flex flex-col items-center rounded-2xl border border-amber-100 bg-amber-50 p-3">
+            <Coins className="mb-1 h-5 w-5 text-amber-600" />
+            <span className="text-lg font-black text-amber-800">+{result.coinsEarned}</span>
+            <span className="text-[10px] font-bold uppercase text-slate-600">Estrellas</span>
           </div>
         </div>
 
         {/* Words Review List */}
         {wordsSeenList.length > 0 && (
           <div className="w-full text-left mb-6">
-            <span className="text-xs uppercase font-extrabold tracking-wider text-slate-400 block mb-2 px-1">
-              Repaso de Vocabulario:
+            <span className="mb-2 block px-1 text-xs font-extrabold uppercase tracking-wider text-slate-600">
+              Palabras de esta ronda:
             </span>
             <div className="space-y-2 max-h-36 overflow-y-auto pr-1">
               {wordsSeenList.map(w => (
                 <div
                   key={w.id}
-                  className="flex items-center justify-between p-2.5 rounded-xl glass-card border border-white/5"
+                  className="flex items-center justify-between rounded-xl border border-sky-100 bg-white p-2.5"
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{w.imageUrl}</span>
                     <div>
                       <div
-                        className={`font-black text-slate-100 ${
+                        className={`font-black text-slate-900 ${
                           isArabic ? 'font-arabic text-base' : 'text-sm'
                         }`}
                         dir={isArabic ? 'rtl' : 'ltr'}
                       >
                         {w.text}
                       </div>
-                      <div className="text-xs text-slate-400">
+                      <div className="text-xs text-slate-600">
                         {w.translation} {w.phonetic ? `• [${w.phonetic}]` : ''}
                       </div>
                     </div>
@@ -149,7 +144,7 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
                       playCardFlip();
                       speak(w.audioText || w.text, language);
                     }}
-                    className="p-2 rounded-lg text-cyan-400 hover:bg-cyan-500/20 active:scale-95 transition"
+                    className="rounded-lg p-2 text-sky-700 transition hover:bg-sky-100 active:scale-95"
                     title="Escuchar"
                   >
                     <Volume2 className="w-4 h-4" />
@@ -164,9 +159,9 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
         <button
           type="button"
           onClick={onContinue}
-          className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 hover:from-emerald-300 hover:to-cyan-400 text-slate-950 font-black text-lg flex items-center justify-center gap-2 shadow-2xl active:scale-97 transition cursor-pointer"
+          className="flex min-h-14 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-lime-500 px-6 py-4 text-lg font-black text-white shadow-[0_5px_0_#35824a] transition hover:brightness-105 active:translate-y-1 active:shadow-none"
         >
-          <span>¡SIGUIENTE JUGADOR! 🚀</span>
+          <span>{isFinalTurn ? '¡Ver celebración!' : '¡Siguiente turno!'}</span>
           <ArrowRight className="w-6 h-6" />
         </button>
       </motion.div>

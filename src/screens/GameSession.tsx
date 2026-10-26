@@ -10,6 +10,7 @@ export const GameSession: React.FC = () => {
   const language = useGameStore(s => s.language);
   const activeGameId = useGameStore(s => s.activeGameId);
   const currentRound = useGameStore(s => s.currentRound);
+  const totalRounds = useGameStore(s => s.totalRounds);
   const currentPlayerIndex = useGameStore(s => s.currentPlayerIndex);
   const sessionPhase = useGameStore(s => s.sessionPhase);
   const recordTurnResult = useGameStore(s => s.recordTurnResult);
@@ -99,6 +100,7 @@ export const GameSession: React.FC = () => {
           player={activePlayer}
           language={language}
           missionCompleted={missionCompleted}
+          isFinalTurn={currentRound >= totalRounds && currentPlayerIndex >= profiles.length - 1}
           onContinue={handleContinueNextTurn}
         />
       )}

@@ -21,7 +21,7 @@ interface ProfileState {
 const DEFAULT_PROFILES: PlayerProfile[] = [
   {
     uid: 'local_player_1',
-    displayName: 'Aventurero 1',
+    displayName: '',
     color: '#06b6d4', // Cyan
     createdAt: Date.now(),
     avatarUrl: '🦊',
@@ -31,17 +31,6 @@ const DEFAULT_PROFILES: PlayerProfile[] = [
     inventory: ['frame_neon_cyan'],
     equippedSkin: 'skin_cyber_shades',
     equippedBadge: 'badge_polyglot',
-  },
-  {
-    uid: 'local_player_2',
-    displayName: 'Compañero 2',
-    color: '#f97316', // Orange
-    createdAt: Date.now(),
-    avatarUrl: '🦁',
-    mastery: {},
-    coins: 40,
-    gems: 1,
-    inventory: [],
   },
 ];
 

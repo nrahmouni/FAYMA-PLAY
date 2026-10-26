@@ -20,7 +20,7 @@ export const LANGUAGES: Record<Language, LanguageMeta> = {
     country: 'Marruecos',
     name: 'Árabe',
     nativeName: 'العربية',
-    flag: '🌟',
+    flag: '🇲🇦',
     themeColor: '#f59e0b', // Amber / Gold
     accentColor: '#06b6d4', // Cyan / Turquoise
     bgGradient: 'from-amber-950/40 via-slate-950 to-cyan-950/30',
@@ -34,7 +34,7 @@ export const LANGUAGES: Record<Language, LanguageMeta> = {
     country: 'Bélgica / Flandes',
     name: 'Flamenco',
     nativeName: 'Vlaams (Nederlands)',
-    flag: '🦁',
+    flag: '🇧🇪',
     themeColor: '#f97316', // Bright Orange
     accentColor: '#10b981', // Emerald Green
     bgGradient: 'from-orange-950/40 via-slate-950 to-emerald-950/30',
@@ -48,7 +48,7 @@ export const LANGUAGES: Record<Language, LanguageMeta> = {
     country: 'Francia',
     name: 'Francés',
     nativeName: 'Français',
-    flag: '🥐',
+    flag: '🇫🇷',
     themeColor: '#3b82f6', // Vivid Blue
     accentColor: '#ef4444', // Red / Rose
     bgGradient: 'from-blue-950/40 via-slate-950 to-rose-950/30',
