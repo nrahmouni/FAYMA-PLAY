@@ -9,9 +9,18 @@ import { TurnResultModal } from '../modals/TurnResultModal';
 import { GameProps, GameResult } from '../types';
 import { GAME_COPY } from '../data/gameCopy';
 import { MathGameId, MATH_GAME_COPY } from '../data/mathGameCopy';
+import { LearningGameId, LEARNING_GAME_COPY } from '../data/learningGameCopy';
 
 function isMathGameId(value: string): value is MathGameId {
   return value === 'comet_dash' || value === 'cookie_count' || value === 'number_bridge' || value === 'treasure_trail';
+}
+
+function isLearningGameId(value: string): value is LearningGameId {
+  return value === 'body_detective' || value === 'habitat_rescue' || value === 'space_explorer' || value === 'eco_mission';
+}
+
+function isNonVocabularyGame(value: string) {
+  return isMathGameId(value) || isLearningGameId(value);
 }
 
 export const GameSession: React.FC = () => {
@@ -48,7 +57,9 @@ export const GameSession: React.FC = () => {
     playTurnStart();
     const guide = isMathGameId(activeGameId)
       ? MATH_GAME_COPY[language][activeGameId].voiceGuide
-      : activeGameId === 'safari'
+      : isLearningGameId(activeGameId)
+        ? LEARNING_GAME_COPY[language][activeGameId].voiceGuide
+        : activeGameId === 'safari'
       ? copy.safariVoiceGuide
       : activeGameId === 'garden_match'
         ? copy.gardenVoiceGuide
@@ -93,10 +104,10 @@ export const GameSession: React.FC = () => {
   }, [activePlayer?.uid, handleAnswer, turnKey]);
 
   const handleGameCorrect = useCallback((wordId: string) => {
-    if (!isMathGameId(activeGameId)) recordEvidence(wordId, true);
+    if (!isNonVocabularyGame(activeGameId)) recordEvidence(wordId, true);
   }, [activeGameId, recordEvidence]);
   const handleGameWrong = useCallback((wordId: string) => {
-    if (!isMathGameId(activeGameId)) recordEvidence(wordId, false);
+    if (!isNonVocabularyGame(activeGameId)) recordEvidence(wordId, false);
   }, [activeGameId, recordEvidence]);
 
   const handleGameComplete = useCallback((result: GameResult) => {
@@ -110,7 +121,7 @@ export const GameSession: React.FC = () => {
       result.correct / totalAnswers >= 0.45,
     );
     setLevelAdvanced(
-      !isMathGameId(activeGameId) &&
+      !isNonVocabularyGame(activeGameId) &&
       totalAnswers >= 2 &&
       difficulty < 15 &&
       result.correct / totalAnswers >= 0.5,
@@ -120,7 +131,7 @@ export const GameSession: React.FC = () => {
       playerId: activePlayer.uid,
     };
 
-    if (!isMathGameId(activeGameId)) {
+    if (!isNonVocabularyGame(activeGameId)) {
       adaptDifficultyAfterTurn(activePlayer.uid, result.correct, result.wrong);
     }
     addRewards(activePlayer.uid, finalizedResult.coinsEarned, 0);

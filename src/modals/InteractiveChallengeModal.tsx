@@ -16,6 +16,10 @@ const CometDashGame = React.lazy(() => import('../games/MathArcadeGames').then(m
 const CookieCountGame = React.lazy(() => import('../games/MathArcadeGames').then(m => ({ default: m.CookieCountGame })));
 const NumberBridgeGame = React.lazy(() => import('../games/MathArcadeGames').then(m => ({ default: m.NumberBridgeGame })));
 const TreasureTrailGame = React.lazy(() => import('../games/MathArcadeGames').then(m => ({ default: m.TreasureTrailGame })));
+const BodyDetectiveGame = React.lazy(() => import('../games/SubjectArcadeGames').then(m => ({ default: m.BodyDetectiveGame })));
+const HabitatRescueGame = React.lazy(() => import('../games/SubjectArcadeGames').then(m => ({ default: m.HabitatRescueGame })));
+const SpaceExplorerGame = React.lazy(() => import('../games/SubjectArcadeGames').then(m => ({ default: m.SpaceExplorerGame })));
+const EcoMissionGame = React.lazy(() => import('../games/SubjectArcadeGames').then(m => ({ default: m.EcoMissionGame })));
 
 interface InteractiveChallengeModalProps {
   gameId: string;
@@ -58,6 +62,14 @@ export const InteractiveChallengeModal: React.FC<InteractiveChallengeModalProps>
         return <NumberBridgeGame {...gameProps} />;
       case 'treasure_trail':
         return <TreasureTrailGame {...gameProps} />;
+      case 'body_detective':
+        return <BodyDetectiveGame {...gameProps} />;
+      case 'habitat_rescue':
+        return <HabitatRescueGame {...gameProps} />;
+      case 'space_explorer':
+        return <SpaceExplorerGame {...gameProps} />;
+      case 'eco_mission':
+        return <EcoMissionGame {...gameProps} />;
       default:
         return <SafariGame {...gameProps} />;
     }

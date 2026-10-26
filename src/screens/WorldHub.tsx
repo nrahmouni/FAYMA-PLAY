@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft, BookOpen, Play, Sparkles } from 'lucide-react';
 import { GameMechanic, useGameStore } from '../store/gameStore';
@@ -6,7 +6,9 @@ import { useProfileStore } from '../store/profileStore';
 import { LANGUAGES } from '../data/languages';
 import { GAME_COPY } from '../data/gameCopy';
 import { MathGameId, MATH_GAME_COPY } from '../data/mathGameCopy';
+import { LearningGameId, LEARNING_GAME_COPY } from '../data/learningGameCopy';
 import { useSound } from '../hooks/useSound';
+import { Language } from '../types';
 
 const GAMES: Array<{ id: GameMechanic; art: string; color: string; icon?: string }> = [
   { id: 'safari', art: '/games/safari.svg', color: 'from-lime-100 to-emerald-100' },
@@ -23,12 +25,19 @@ const GAMES: Array<{ id: GameMechanic; art: string; color: string; icon?: string
   { id: 'cookie_count', art: '', icon: '🍪', color: 'from-amber-200 to-rose-200' },
   { id: 'number_bridge', art: '', icon: '🌉', color: 'from-cyan-200 to-blue-200' },
   { id: 'treasure_trail', art: '', icon: '🗺️', color: 'from-lime-200 to-yellow-200' },
+  { id: 'body_detective', art: '', icon: '🩺', color: 'from-rose-200 to-pink-200' },
+  { id: 'habitat_rescue', art: '', icon: '🐾', color: 'from-lime-200 to-emerald-200' },
+  { id: 'space_explorer', art: '', icon: '🪐', color: 'from-indigo-200 to-violet-200' },
+  { id: 'eco_mission', art: '', icon: '🌱', color: 'from-emerald-200 to-cyan-200' },
 ];
 
 const isMathGame = (id: GameMechanic): id is MathGameId =>
   id === 'comet_dash' || id === 'cookie_count' || id === 'number_bridge' || id === 'treasure_trail';
 
-const LEGACY_GAME_COPY_KEYS: Record<Exclude<GameMechanic, MathGameId>, keyof typeof GAME_COPY.es.gameNames> = {
+const isLearningGame = (id: GameMechanic): id is LearningGameId =>
+  id === 'body_detective' || id === 'habitat_rescue' || id === 'space_explorer' || id === 'eco_mission';
+
+const LEGACY_GAME_COPY_KEYS: Record<Exclude<GameMechanic, MathGameId | LearningGameId>, keyof typeof GAME_COPY.es.gameNames> = {
   safari: 'safari',
   word_train: 'train',
   garden_match: 'garden',
@@ -41,7 +50,38 @@ const LEGACY_GAME_COPY_KEYS: Record<Exclude<GameMechanic, MathGameId>, keyof typ
   word_sort: 'wordSort',
 };
 
+type GameSubject = 'all' | 'words' | 'math' | 'body' | 'animals' | 'space' | 'environment';
+
+const SUBJECT_LABELS: Record<Language, Record<GameSubject, string>> = {
+  es: { all: 'Todos', words: 'Palabras e idiomas', math: 'Matemáticas', body: 'Cuerpo humano', animals: 'Animales', space: 'Espacio', environment: 'Naturaleza' },
+  'nl-BE': { all: 'Alle', words: 'Woorden en talen', math: 'Wiskunde', body: 'Menselijk lichaam', animals: 'Dieren', space: 'Ruimte', environment: 'Natuur' },
+  fr: { all: 'Tout', words: 'Mots et langues', math: 'Mathématiques', body: 'Corps humain', animals: 'Animaux', space: 'Espace', environment: 'Nature' },
+  ar: { all: 'الكل', words: 'الكلمات واللغات', math: 'الرياضيات', body: 'جسم الإنسان', animals: 'الحيوانات', space: 'الفضاء', environment: 'الطبيعة' },
+};
+
+const GAME_SUBJECT: Record<GameMechanic, Exclude<GameSubject, 'all'>> = {
+  safari: 'words',
+  word_train: 'words',
+  garden_match: 'words',
+  word_picker: 'words',
+  sound_echo: 'words',
+  dino_picnic: 'words',
+  line_match: 'words',
+  draw_word: 'words',
+  letter_puzzle: 'words',
+  word_sort: 'words',
+  comet_dash: 'math',
+  cookie_count: 'math',
+  number_bridge: 'math',
+  treasure_trail: 'math',
+  body_detective: 'body',
+  habitat_rescue: 'animals',
+  space_explorer: 'space',
+  eco_mission: 'environment',
+};
+
 export const WorldHub: React.FC = () => {
+  const [activeSubject, setActiveSubject] = useState<GameSubject>('all');
   const language = useGameStore(state => state.language);
   const setScreen = useGameStore(state => state.setScreen);
   const setActiveWorld = useGameStore(state => state.setActiveWorld);
@@ -55,9 +95,16 @@ export const WorldHub: React.FC = () => {
       const mathCopy = MATH_GAME_COPY[language][game.id];
       return { ...game, name: mathCopy.name, description: mathCopy.description };
     }
+    if (isLearningGame(game.id)) {
+      const learningCopy = LEARNING_GAME_COPY[language][game.id];
+      return { ...game, name: learningCopy.name, description: learningCopy.description };
+    }
     const key = LEGACY_GAME_COPY_KEYS[game.id];
     return { ...game, name: copy.gameNames[key], description: copy.gameDescriptions[key] };
   });
+  const visibleGames = localizedGames.filter(
+    game => activeSubject === 'all' || GAME_SUBJECT[game.id] === activeSubject,
+  );
 
   const playGame = (gameId: GameMechanic) => {
     unlockAudio();
@@ -89,8 +136,26 @@ export const WorldHub: React.FC = () => {
         <span className="hidden text-4xl sm:block" aria-hidden="true">🎈</span>
       </header>
 
+      <nav className="mb-5 flex gap-2 overflow-x-auto pb-2" aria-label={language === 'es' ? 'Filtrar juegos por asignatura' : language === 'fr' ? 'Filtrer les jeux par matière' : language === 'ar' ? 'تصفية الألعاب حسب المادة' : 'Spellen filteren op vak'}>
+        {(['all', 'words', 'math', 'body', 'animals', 'space', 'environment'] as const).map(subject => (
+          <button
+            key={subject}
+            type="button"
+            aria-pressed={activeSubject === subject}
+            onClick={() => setActiveSubject(subject)}
+            className={`min-h-11 shrink-0 rounded-full border-2 px-4 text-sm font-black transition ${
+              activeSubject === subject
+                ? 'border-emerald-600 bg-emerald-600 text-white shadow-[0_3px_0_#328248]'
+                : 'border-white bg-white/90 text-slate-700 shadow-sm hover:-translate-y-0.5 hover:bg-emerald-50'
+            }`}
+          >
+            {subject === 'all' ? '🎮' : subject === 'words' ? '📚' : subject === 'math' ? '🔢' : subject === 'body' ? '🫀' : subject === 'animals' ? '🐾' : subject === 'space' ? '🚀' : '🌱'} {SUBJECT_LABELS[language][subject]}
+          </button>
+        ))}
+      </nav>
+
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label={`${copy.gamesIn} ${meta.nativeName}`}>
-        {localizedGames.map((game, index) => (
+        {visibleGames.map((game, index) => (
           <motion.button
             key={game.id}
             type="button"
