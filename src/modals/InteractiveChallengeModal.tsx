@@ -6,6 +6,8 @@ const SafariGame = React.lazy(() => import('../games/SafariGame').then(m => ({ d
 const GardenMatchGame = React.lazy(() => import('../games/GardenMatchGame').then(m => ({ default: m.GardenMatchGame })));
 const WordTrainGame = React.lazy(() => import('../games/WordTrainGame').then(m => ({ default: m.WordTrainGame })));
 const WordPickerGame = React.lazy(() => import('../games/WordPickerGame').then(m => ({ default: m.WordPickerGame })));
+const SoundEchoGame = React.lazy(() => import('../games/SoundEchoGame').then(m => ({ default: m.SoundEchoGame })));
+const DinoPicnicGame = React.lazy(() => import('../games/DinoPicnicGame').then(m => ({ default: m.DinoPicnicGame })));
 
 interface InteractiveChallengeModalProps {
   gameId: string;
@@ -28,6 +30,10 @@ export const InteractiveChallengeModal: React.FC<InteractiveChallengeModalProps>
         return <WordTrainGame {...gameProps} />;
       case 'word_picker':
         return <WordPickerGame {...gameProps} />;
+      case 'sound_echo':
+        return <SoundEchoGame {...gameProps} />;
+      case 'dino_picnic':
+        return <DinoPicnicGame {...gameProps} />;
       default:
         return <SafariGame {...gameProps} />;
     }

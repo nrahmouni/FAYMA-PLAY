@@ -12,6 +12,8 @@ const GAMES: Array<{ id: GameMechanic; emoji: string; art: string; color: string
   { id: 'word_train', emoji: '🚂', art: '/games/train.svg', color: 'from-sky-100 to-blue-100' },
   { id: 'garden_match', emoji: '🌼', art: '/games/garden.svg', color: 'from-amber-100 to-pink-100' },
   { id: 'word_picker', emoji: '🎈', art: '/games/balloons.svg', color: 'from-violet-100 to-pink-100' },
+  { id: 'sound_echo', emoji: '🎵', art: '/games/echo.svg', color: 'from-fuchsia-100 to-sky-100' },
+  { id: 'dino_picnic', emoji: '🦖', art: '/games/dino.svg', color: 'from-lime-100 to-yellow-100' },
 ];
 
 export const WorldHub: React.FC = () => {
@@ -31,14 +33,22 @@ export const WorldHub: React.FC = () => {
         ? copy.gameNames.train
         : game.id === 'garden_match'
           ? copy.gameNames.garden
-          : copy.gameNames.wordPicker,
+          : game.id === 'word_picker'
+            ? copy.gameNames.wordPicker
+            : game.id === 'sound_echo'
+              ? copy.gameNames.soundEcho
+              : copy.gameNames.dinoPicnic,
     description: game.id === 'safari'
       ? copy.gameDescriptions.safari
       : game.id === 'word_train'
         ? copy.gameDescriptions.train
         : game.id === 'garden_match'
           ? copy.gameDescriptions.garden
-          : copy.gameDescriptions.wordPicker,
+          : game.id === 'word_picker'
+            ? copy.gameDescriptions.wordPicker
+            : game.id === 'sound_echo'
+              ? copy.gameDescriptions.soundEcho
+              : copy.gameDescriptions.dinoPicnic,
   }));
 
   const playGame = (gameId: GameMechanic) => {

@@ -3,7 +3,7 @@ import { Screen, Language, DifficultyLevel, GameResult, PlayerProfile } from '..
 
 export type GameSessionPhase = 'CHALLENGE_PHASE' | 'RESULT_PHASE';
 
-export type GameMechanic = 'safari' | 'garden_match' | 'word_train' | 'word_picker';
+export type GameMechanic = 'safari' | 'garden_match' | 'word_train' | 'word_picker' | 'sound_echo' | 'dino_picnic';
 
 export interface WorldNode {
   id: string;
