@@ -5,19 +5,22 @@ interface MagicMemoryGameProps {
   language: Language;
 }
 
-const COPY: Record<Language, { title: string; hint: string; moves: string; start: string; found: string; again: string }> = {
-  es: { title: 'Memoria mágica', hint: 'Encuentra todas las parejas de criaturas iguales.', moves: 'Intentos', start: '¡Empezar!', found: '¡Encontraste todas las parejas!', again: 'Jugar otra vez' },
-  'nl-BE': { title: 'Magisch geheugen', hint: 'Zoek alle paren met dezelfde magische wezens.', moves: 'Pogingen', start: 'Start!', found: 'Je hebt alle paren gevonden!', again: 'Opnieuw spelen' },
-  fr: { title: 'Mémoire magique', hint: 'Retrouve toutes les paires de créatures identiques.', moves: 'Essais', start: 'Commencer !', found: 'Tu as trouvé toutes les paires !', again: 'Rejouer' },
-  ar: { title: 'الذاكرة السحرية', hint: 'اعثر على جميع أزواج المخلوقات المتشابهة.', moves: 'المحاولات', start: 'ابدأ!', found: 'لقد وجدت كل الأزواج!', again: 'العب مرة أخرى' },
+const COPY: Record<Language, { title: string; hint: string; moves: string; pairs: string; hiddenCard: string; found: string; again: string }> = {
+  es: { title: 'Memoria mágica', hint: 'Encuentra todas las parejas de criaturas iguales.', moves: 'Intentos', pairs: 'Parejas', hiddenCard: 'Carta boca abajo', found: '¡Encontraste todas las parejas!', again: 'Jugar otra vez' },
+  'nl-BE': { title: 'Magisch geheugen', hint: 'Zoek alle paren met dezelfde magische wezens.', moves: 'Pogingen', pairs: 'Paren', hiddenCard: 'Gesloten kaart', found: 'Je hebt alle paren gevonden!', again: 'Opnieuw spelen' },
+  fr: { title: 'Mémoire magique', hint: 'Retrouve toutes les paires de créatures identiques.', moves: 'Essais', pairs: 'Paires', hiddenCard: 'Carte cachée', found: 'Tu as trouvé toutes les paires !', again: 'Rejouer' },
+  ar: { title: 'الذاكرة السحرية', hint: 'اعثر على جميع أزواج المخلوقات المتشابهة.', moves: 'المحاولات', pairs: 'الأزواج', hiddenCard: 'بطاقة مقلوبة', found: 'لقد وجدت كل الأزواج!', again: 'العب مرة أخرى' },
 };
 
 const CREATURES = ['🦄', '🐉', '🧚', '🐸', '🦋', '🦉', '🐲', '🦊'];
 
 function createCards() {
-  return [...CREATURES, ...CREATURES]
-    .map((emoji, index) => ({ id: `${emoji}-${index}`, emoji }))
-    .sort(() => Math.random() - 0.5);
+  const cards = [...CREATURES, ...CREATURES].map((emoji, index) => ({ id: `${emoji}-${index}`, emoji }));
+  for (let index = cards.length - 1; index > 0; index--) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [cards[index], cards[randomIndex]] = [cards[randomIndex], cards[index]];
+  }
+  return cards;
 }
 
 export const MagicMemoryGame: React.FC<MagicMemoryGameProps> = ({ language }) => {
@@ -62,7 +65,23 @@ export const MagicMemoryGame: React.FC<MagicMemoryGameProps> = ({ language }) =>
       <header className="mb-5 rounded-2xl bg-gradient-to-r from-violet-100 to-pink-100 p-4 text-center">
         <h2 className="text-2xl font-black text-slate-900">{copy.title}</h2>
         <p className="mt-1 text-sm font-semibold text-slate-600">{copy.hint}</p>
-        <p className="mt-2 text-sm font-black text-violet-800">{copy.moves}: {moves}</p>
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-sm font-black text-violet-800">
+          <span>{copy.moves}: {moves}</span>
+          <span>{copy.pairs}: {matched.length / 2}/{cards.length / 2}</span>
+        </div>
+        <div
+          className="mx-auto mt-2 h-2 max-w-xs overflow-hidden rounded-full bg-white/80"
+          role="progressbar"
+          aria-label={copy.pairs}
+          aria-valuemin={0}
+          aria-valuemax={cards.length / 2}
+          aria-valuenow={matched.length / 2}
+        >
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-[width] duration-300"
+            style={{ width: `${(matched.length / cards.length) * 100}%` }}
+          />
+        </div>
       </header>
       <div className="grid grid-cols-4 gap-2 sm:gap-3" aria-label={copy.title}>
         {cards.map(card => {
@@ -71,8 +90,9 @@ export const MagicMemoryGame: React.FC<MagicMemoryGameProps> = ({ language }) =>
             <button
               key={card.id}
               type="button"
-              aria-label={revealed ? card.emoji : '？'}
+              aria-label={revealed ? card.emoji : copy.hiddenCard}
               aria-pressed={revealed}
+              disabled={locked || matched.includes(card.id)}
               onClick={() => flip(card.id)}
               className={`flex aspect-square min-h-16 items-center justify-center rounded-2xl border-4 text-3xl transition sm:text-5xl ${
                 matched.includes(card.id)

@@ -92,6 +92,7 @@ export const MagicWorldGame: React.FC<MagicWorldGameProps> = ({ language }) => {
   const progressRef = useRef(0);
   const startedAtRef = useRef(0);
   const pointerIdRef = useRef<number | null>(null);
+  const previousPointRef = useRef<Point | null>(null);
   const [phase, setPhase] = useState<'setup' | 'intro' | 'ready' | 'draw' | 'result' | 'podium'>('setup');
   const [playerCount, setPlayerCount] = useState(2);
   const [players, setPlayers] = useState<Player[]>([]);
@@ -118,7 +119,7 @@ export const MagicWorldGame: React.FC<MagicWorldGameProps> = ({ language }) => {
     });
     const obstacles = Array.from({ length: 4 + round * 2 }, (_, index) => {
       const along = length * (0.12 + (index / (3 + round * 2)) * 0.72);
-      return offsetPoint(path, along, (index % 2 === 0 ? 1 : -1) * width * 0.42);
+      return offsetPoint(path, along, (index % 2 === 0 ? 1 : -1) * width * 0.95);
     });
     const stars = Array.from({ length: 6 }, (_, index) => {
       const point = path.getPointAtLength(length * (0.08 + index * 0.145));
@@ -163,6 +164,7 @@ export const MagicWorldGame: React.FC<MagicWorldGameProps> = ({ language }) => {
     setResult({ won, reason, points, stars, seconds: elapsed });
     setMessage('');
     pointerIdRef.current = null;
+    previousPointRef.current = null;
     setPhase('result');
   };
 
@@ -183,6 +185,7 @@ export const MagicWorldGame: React.FC<MagicWorldGameProps> = ({ language }) => {
     }
     event.currentTarget.setPointerCapture(event.pointerId);
     pointerIdRef.current = event.pointerId;
+    previousPointRef.current = samplesRef.current[0];
     collectedRef.current = new Set();
     progressRef.current = 0;
     startedAtRef.current = Date.now();
@@ -197,42 +200,59 @@ export const MagicWorldGame: React.FC<MagicWorldGameProps> = ({ language }) => {
     if (phase !== 'draw' || pointerIdRef.current !== event.pointerId || !trackData) return;
     const point = getPoint(event);
     const samples = samplesRef.current;
-    let nearestIndex = progressRef.current;
-    let nearestDistance = Infinity;
-    const first = Math.max(0, progressRef.current - 4);
-    const last = Math.min(samples.length - 1, progressRef.current + 35);
-    for (let index = first; index <= last; index++) {
-      const currentDistance = distance(samples[index], point);
-      if (currentDistance < nearestDistance) {
-        nearestDistance = currentDistance;
-        nearestIndex = index;
+    const previousPoint = previousPointRef.current ?? point;
+    const steps = Math.max(1, Math.ceil(distance(previousPoint, point) / 8));
+    let nextProgress = progressRef.current;
+    const nextCollected = new Set(collectedRef.current);
+
+    for (let step = 1; step <= steps; step++) {
+      const fraction = step / steps;
+      const tracePoint = {
+        x: previousPoint.x + (point.x - previousPoint.x) * fraction,
+        y: previousPoint.y + (point.y - previousPoint.y) * fraction,
+      };
+      let nearestIndex = nextProgress;
+      let nearestDistance = Infinity;
+      const first = Math.max(0, nextProgress - 4);
+      const last = Math.min(samples.length - 1, nextProgress + 35);
+      for (let index = first; index <= last; index++) {
+        const currentDistance = distance(samples[index], tracePoint);
+        if (currentDistance < nearestDistance) {
+          nearestDistance = currentDistance;
+          nearestIndex = index;
+        }
       }
+      if (nearestDistance > trackData.width + 6) {
+        finish(false, copy.edge);
+        return;
+      }
+      nextProgress = Math.max(nextProgress, nearestIndex);
+      if (obstaclesRef.current.some(obstacle => distance(obstacle, tracePoint) < 24)) {
+        finish(false, copy.bomb);
+        return;
+      }
+      const starIndex = trackData.stars.findIndex((star, index) => !nextCollected.has(index) && distance(star, tracePoint) < 28);
+      if (starIndex >= 0) nextCollected.add(starIndex);
+      if (nextProgress >= samples.length - 6) break;
     }
-    if (nearestDistance > trackData.width + 6) {
-      finish(false, copy.edge);
-      return;
-    }
-    progressRef.current = Math.max(progressRef.current, nearestIndex);
-    const hitObstacle = obstaclesRef.current.some(obstacle => distance(obstacle, point) < 28);
-    if (hitObstacle) {
-      finish(false, copy.bomb);
-      return;
-    }
-    const starIndex = trackData.stars.findIndex((star, index) => !collectedRef.current.has(index) && distance(star, point) < 34);
-    if (starIndex >= 0) {
-      collectedRef.current.add(starIndex);
-      setCollected([...collectedRef.current]);
+
+    progressRef.current = nextProgress;
+    previousPointRef.current = point;
+    if (nextCollected.size !== collectedRef.current.size) {
+      collectedRef.current = nextCollected;
+      setCollected([...nextCollected]);
     }
     setTrail(current => {
       const lastPoint = current[current.length - 1];
       return distance(lastPoint, point) > 4 ? [...current, point] : current;
     });
-    if (progressRef.current >= samples.length - 6) finish(true, copy.goal);
+    if (nextProgress >= samples.length - 6) finish(true, copy.goal);
   };
 
   const handlePointerUp = (event: PointerEvent<SVGSVGElement>) => {
     if (phase !== 'draw' || pointerIdRef.current !== event.pointerId) return;
     pointerIdRef.current = null;
+    previousPointRef.current = null;
     setTrail([]);
     setMessage(copy.lifted);
     setPhase('ready');
@@ -369,7 +389,7 @@ export const MagicWorldGame: React.FC<MagicWorldGameProps> = ({ language }) => {
               <path d={TRACK} fill="none" stroke={theme.road} strokeWidth={2 * (trackData?.width ?? 46)} strokeLinecap="round" strokeLinejoin="round" />
               <path d={TRACK} fill="none" stroke="#ffffff" strokeWidth="4" strokeDasharray="4 24" strokeLinecap="round" opacity=".8" />
               <circle cx="90" cy="820" r="38" fill="#2ec4b6" stroke="white" strokeWidth="6" />
-              <text x="90" y="830" fontSize="30" textAnchor="middle" aria-hidden="true">▶</text>
+              <text x="90" y="832" fontSize="36" textAnchor="middle" aria-hidden="true">{player?.emoji || '👉'}</text>
               <text x="410" y="217" fontSize="72" textAnchor="middle" aria-hidden="true">🏁</text>
               {trackData?.obstacles.map((obstacle, index) => (
                 <text key={`obstacle-${index}`} x={obstacle.x} y={obstacle.y + 14} fontSize="42" textAnchor="middle" aria-hidden="true">
