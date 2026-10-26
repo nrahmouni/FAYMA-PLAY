@@ -98,14 +98,14 @@ export default function App() {
               </div>
 
               <h1 className="text-4xl font-black bg-gradient-to-r from-cyan-400 via-pink-400 to-amber-400 bg-clip-text text-transparent">
-                FAYMA PLAY
+                FAYMA WORLD
               </h1>
               <p className="text-xs uppercase font-extrabold tracking-widest text-cyan-400 mt-1 mb-4">
-                ARCADE DE APRENDIZAJE
+                4 PAÍSES • 4 IDIOMAS • 1 GRAN AVENTURA
               </p>
 
               <p className="text-sm text-slate-300 mb-8 leading-relaxed">
-                Una colección de aventuras arcade donde practicas idiomas mientras corres, luchas y exploras.
+                Un viaje educativo para niños: explora ciudades, aprende palabras y vive misiones en español, árabe, francés y flamenco.
               </p>
 
               <div className="space-y-3">
@@ -115,7 +115,7 @@ export default function App() {
                   className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white font-black text-base flex items-center justify-center gap-2 shadow-2xl hover:opacity-95 active:scale-98 transition cursor-pointer shadow-cyan-500/30"
                 >
                   <Play className="w-5 h-5 fill-current" />
-                  <span>Entrar a FAYMA PLAY</span>
+                  <span>Comenzar el viaje</span>
                 </button>
 
                 <button
