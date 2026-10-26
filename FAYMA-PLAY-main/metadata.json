@@ -1,6 +1,0 @@
-{
-  "name": "Juegofy",
-  "description": "Plataforma PWA educativa infantil de minijuegos para aprender español, árabe, flamenco y francés con multijugador local por turnos, SRS adaptativo y premios.",
-  "requestFramePermissions": ["camera"],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

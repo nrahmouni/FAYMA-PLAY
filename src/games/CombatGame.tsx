@@ -1,58 +1,50 @@
-import React, { useMemo, useState } from 'react';
-import { motion } from 'motion/react';
-import { GameProps, GameResult, Word } from '../types';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { GameProps, GameResult } from '../types';
 
-function makeResult(gameId: string, words: Word[], correct: number, wrong: number, startedAt: number): GameResult {
-  return { playerId: '', gameId, correct, wrong, timeMs: Date.now() - startedAt, coinsEarned: Math.max(5, correct * 8), wordsSeen: words.map(w => w.id) };
-}
-
+type Enemy = { x:number; y:number; hp:number; cooldown:number; kind:'grunt'|'boss' };
+type Orb = { x:number; y:number; wordIndex:number; taken:boolean };
+/** Acción arcade en tiempo real: movimiento, esquiva, ataques y objetivos de vocabulario. */
 export const CombatGame: React.FC<GameProps> = ({ words, onCorrect, onWrong, onComplete, difficulty }) => {
-  const deck = useMemo(() => words.slice(0, Math.max(1, Math.min(words.length, 8))), [words]);
-  const [index, setIndex] = useState(0);
-  const [hp, setHp] = useState(100);
-  const [playerHp, setPlayerHp] = useState(100);
-  const [correct, setCorrect] = useState(0);
-  const [wrong, setWrong] = useState(0);
-  const [busy, setBusy] = useState(false);
-  const [flash, setFlash] = useState<'hit' | 'miss' | null>(null);
-  const [startedAt] = useState(Date.now);
-  const current = deck[index];
-
-  const options = useMemo(() => {
-    if (!current) return [];
-    const others = deck.filter(w => w.id !== current.id);
-    const shuffled = [...others].sort((a,b) => (a.id + current.id).localeCompare(b.id + current.id));
-    return [current, ...shuffled.slice(0, 2)].sort((a,b) => (a.id + String(index)).localeCompare(b.id + String(index)));
-  }, [current, deck, index]);
-
-  const answer = (word: Word) => {
-    if (busy || !current) return;
-    setBusy(true);
-    if (word.id === current.id) {
-      const nextCorrect = correct + 1;
-      setCorrect(nextCorrect); setHp(v => Math.max(0, v - Math.ceil(100 / deck.length)));
-      setFlash('hit'); onCorrect(current.id);
-      window.setTimeout(() => {
-        setFlash(null);
-        if (index + 1 >= deck.length) onComplete(makeResult('combat', deck, nextCorrect, wrong, startedAt));
-        else { setIndex(v => v + 1); setBusy(false); }
-      }, 450);
-    } else {
-      const nextWrong = wrong + 1;
-      setWrong(nextWrong); setPlayerHp(v => Math.max(0, v - 15)); setFlash('miss'); onWrong(current.id);
-      window.setTimeout(() => { setFlash(null); setBusy(false); }, 450);
-    }
-  };
-
-  if (!current) return <p className="p-6 text-white">No hay palabras disponibles para este desafío.</p>;
-  return <div className="w-full max-w-xl mx-auto p-4 text-white">
-    <div className="flex justify-between text-xs font-black uppercase tracking-wider text-slate-300 mb-2"><span>⚔️ Arena de combate</span><span>Ronda {index + 1}/{deck.length} · Dificultad {difficulty}/5</span></div>
-    <div className={`relative overflow-hidden rounded-3xl border p-6 min-h-52 flex items-center justify-between bg-gradient-to-br from-indigo-950 via-slate-900 to-rose-950 ${flash === 'hit' ? 'border-emerald-400' : flash === 'miss' ? 'border-rose-400' : 'border-white/10'}`}>
-      <motion.div animate={flash === 'hit' ? { x: [0, 24, 0], rotate: [0, -8, 0] } : {}} className="text-6xl">🥷<div className="w-16 h-2 bg-slate-700 rounded-full mt-3 overflow-hidden"><div className="h-full bg-emerald-400" style={{width:`${playerHp}%`}}/></div></motion.div>
-      <div className="z-10 text-center rounded-2xl bg-slate-950/80 border border-white/10 p-4 max-w-[58%]"><p className="text-[10px] font-black uppercase text-amber-300">Traduce para atacar</p><h2 className="text-2xl sm:text-3xl font-black mt-2">{current.text}</h2><p className="text-xs text-slate-400 mt-1">Elige el significado correcto</p></div>
-      <motion.div animate={flash === 'hit' ? { x: [0, 8, -8, 0], rotate: [0, 12, -12, 0] } : flash === 'miss' ? { x: [0, -8, 8, 0] } : {}} className="text-6xl">👹<div className="w-16 h-2 bg-slate-700 rounded-full mt-3 overflow-hidden"><div className="h-full bg-rose-500" style={{width:`${hp}%`}}/></div></motion.div>
-    </div>
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">{options.map(w => <button key={w.id} disabled={busy} onClick={() => answer(w)} className="rounded-2xl border border-rose-300/30 border-b-4 border-b-rose-950 bg-gradient-to-br from-rose-600 to-red-800 p-4 font-extrabold shadow-lg active:translate-y-1 disabled:opacity-60">⚔️ {w.translation}</button>)}</div>
-    <p className="text-center text-xs text-slate-400 mt-3">Aciertos: {correct} · Errores: {wrong}</p>
-  </div>;
+  const canvasRef=useRef<HTMLCanvasElement>(null), raf=useRef(0);
+  const keys=useRef({left:false,right:false,up:false,down:false,attack:false,dodge:false});
+  const game=useRef({x:0,y:0,hp:100,score:0,elapsed:0,last:0,spawn:0,attack:0,dodge:0,invuln:0,done:false,correct:0,wrong:0,enemy:[] as Enemy[],orbs:[] as Orb[],wordCursor:0,started:0,bossSpawned:false});
+  const deck=useMemo(()=>words.slice(0,Math.max(1,Math.min(words.length,12))),[words]);
+  const [hud,setHud]=useState({hp:100,score:0,message:'Muévete, esquiva y ataca. Recoge los pergaminos verdes.'});
+  const finish=useCallback(()=>{const g=game.current;if(g.done)return;g.done=true;const result:GameResult={playerId:'',gameId:'combat',correct:g.correct,wrong:g.wrong,timeMs:Date.now()-g.started,coinsEarned:Math.max(5,g.score+g.correct*5),wordsSeen:deck.slice(0,g.correct).map(w=>w.id)};onComplete(result)},[deck,onComplete]);
+  useEffect(()=>{
+    const canvas=canvasRef.current,ctx=canvas?.getContext('2d');if(!canvas||!ctx)return;
+    const g=game.current;g.x=canvas.clientWidth*.5;g.y=canvas.clientHeight*.72;g.started=Date.now();g.last=performance.now();g.hp=100;g.done=false;g.elapsed=0;g.enemy=[];g.orbs=[];g.correct=0;g.wrong=0;g.score=0;g.spawn=500;g.wordCursor=0;g.bossSpawned=false;
+    const resize=()=>{const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);canvas.width=Math.max(1,r.width*d);canvas.height=Math.max(1,r.height*d);ctx.setTransform(d,0,0,d,0,0);g.x=Math.min(g.x,r.width);g.y=Math.min(g.y,r.height)};resize();window.addEventListener('resize',resize);
+    const down=(e:KeyboardEvent)=>{const k=e.key.toLowerCase();if(['arrowleft','arrowright','arrowup','arrowdown',' ','w','a','s','d','j','shift'].includes(k))e.preventDefault();if(k==='arrowleft'||k==='a')keys.current.left=true;if(k==='arrowright'||k==='d')keys.current.right=true;if(k==='arrowup'||k==='w')keys.current.up=true;if(k==='arrowdown'||k==='s')keys.current.down=true;if(k===' '||k==='j')keys.current.attack=true;if(k==='shift')keys.current.dodge=true};
+    const up=(e:KeyboardEvent)=>{const k=e.key.toLowerCase();if(k==='arrowleft'||k==='a')keys.current.left=false;if(k==='arrowright'||k==='d')keys.current.right=false;if(k==='arrowup'||k==='w')keys.current.up=false;if(k==='arrowdown'||k==='s')keys.current.down=false;if(k===' '||k==='j')keys.current.attack=false;if(k==='shift')keys.current.dodge=false};
+    window.addEventListener('keydown',down);window.addEventListener('keyup',up);
+    let lastHud=0;
+    const draw=(now:number)=>{
+      const dt=Math.min(34,now-g.last);g.last=now;const w=canvas.clientWidth,h=canvas.clientHeight;
+      if(!g.done){
+        g.elapsed+=dt;const speed=.22*dt; if(keys.current.left)g.x-=speed;if(keys.current.right)g.x+=speed;if(keys.current.up)g.y-=speed;if(keys.current.down)g.y+=speed;
+        g.x=Math.max(24,Math.min(w-24,g.x));g.y=Math.max(85,Math.min(h-28,g.y));g.attack=Math.max(0,g.attack-dt);g.dodge=Math.max(0,g.dodge-dt);g.invuln=Math.max(0,g.invuln-dt);g.spawn-=dt;
+        if(keys.current.dodge&&g.dodge===0){g.dodge=700;g.invuln=550}
+        if(keys.current.attack&&g.attack===0){g.attack=280;let hit=false;for(const e of g.enemy){if(Math.hypot(e.x-g.x,e.y-g.y)<(e.kind==='boss'?105:75)){e.hp-=e.kind==='boss'?18:40;hit=true;if(e.hp<=0){g.score+=e.kind==='boss'?30:8;if(e.kind==='boss'){setHud(v=>({...v,message:'¡Jefe derrotado! ¡Victoria!'}));finish()}}}}if(hit)setHud(v=>({...v,message:'¡Golpe conectado!'}))}
+        if(g.spawn<=0&&g.enemy.length<6){const boss=g.elapsed>26000&&!g.bossSpawned;g.enemy.push({x:40+Math.random()*(w-80),y:80+Math.random()*h*.22,hp:boss?180:60+ difficulty*8,cooldown:0,kind:boss?'boss':'grunt'});if(boss)g.bossSpawned=true;g.spawn=boss?999999:Math.max(450,1150-difficulty*100)}
+        if(g.elapsed>8000&&g.orbs.length<3&&Math.random()<.035){g.orbs.push({x:35+Math.random()*(w-70),y:95+Math.random()*(h-150),wordIndex:g.wordCursor%deck.length,taken:false})}
+        for(const e of g.enemy){const dx=g.x-e.x,dy=g.y-e.y,dist=Math.max(1,Math.hypot(dx,dy));e.x+=dx/dist*dt*(e.kind==='boss'?.035:.055);e.y+=dy/dist*dt*(e.kind==='boss'?.035:.055);e.cooldown-=dt;if(dist<36&&e.cooldown<=0&&g.invuln<=0){g.hp=Math.max(0,g.hp-(e.kind==='boss'?15:8));e.cooldown=850;g.invuln=450;g.wrong++;onWrong(deck[g.wordCursor%deck.length]?.id||'');setHud(v=>({...v,hp:g.hp,message:'¡Te han golpeado! Esquiva con MAYÚS o el botón.'}));if(g.hp<=0)finish()}}
+        g.enemy=g.enemy.filter(e=>e.hp>0);
+        for(const o of g.orbs){if(!o.taken&&Math.hypot(o.x-g.x,o.y-g.y)<38){o.taken=true;const word=deck[o.wordIndex];if(word){g.correct++;g.wordCursor++;g.score+=5;onCorrect(word.id);setHud(v=>({...v,message:`📜 ${word.text} = ${word.translation}`}))}}}g.orbs=g.orbs.filter(o=>!o.taken);
+        if(g.elapsed>60000)finish();
+      }
+      const bg=ctx.createLinearGradient(0,0,0,h);bg.addColorStop(0,'#111827');bg.addColorStop(1,'#312e81');ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+      ctx.strokeStyle='rgba(167,139,250,.12)';ctx.lineWidth=1;for(let x=0;x<w;x+=36){ctx.beginPath();ctx.moveTo(x,65);ctx.lineTo(x,h);ctx.stroke()}for(let y=70;y<h;y+=36){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+      ctx.fillStyle='rgba(2,6,23,.8)';ctx.fillRect(12,12,w-24,44);ctx.fillStyle='#fff';ctx.font='900 13px system-ui';ctx.textAlign='left';ctx.fillText(`⚔️ ${Math.floor(g.elapsed/1000)}s   ⭐ ${g.score}`,24,39);ctx.fillStyle='#334155';ctx.fillRect(w*.52,25,w*.4,14);ctx.fillStyle='#fb7185';ctx.fillRect(w*.52,25,w*.4*Math.max(0,g.hp/100),14);ctx.strokeStyle='#fff';ctx.strokeRect(w*.52,25,w*.4,14);
+      for(const o of g.orbs){ctx.fillStyle='#a3e635';ctx.beginPath();ctx.arc(o.x,o.y,15,0,Math.PI*2);ctx.fill();ctx.fillStyle='#1a2e05';ctx.font='bold 11px system-ui';ctx.textAlign='center';ctx.fillText('字',o.x,o.y+4)}
+      for(const e of g.enemy){ctx.fillStyle=e.kind==='boss'?'#a855f7':'#f43f5e';ctx.beginPath();ctx.arc(e.x,e.y,e.kind==='boss'?28:19,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 18px system-ui';ctx.textAlign='center';ctx.fillText(e.kind==='boss'?'👹':'👾',e.x,e.y+6);ctx.fillStyle='#334155';ctx.fillRect(e.x-22,e.y-(e.kind==='boss'?39:29),44,5);ctx.fillStyle='#4ade80';ctx.fillRect(e.x-22,e.y-(e.kind==='boss'?39:29),44*Math.max(0,e.hp/(e.kind==='boss'?180:60+difficulty*8)),5)}
+      ctx.save();ctx.translate(g.x,g.y);if(g.invuln>0&&Math.floor(now/80)%2===0)ctx.globalAlpha=.45;ctx.fillStyle='#22d3ee';ctx.shadowColor='#22d3ee';ctx.shadowBlur=15;ctx.beginPath();ctx.arc(0,0,20,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#ecfeff';ctx.font='24px system-ui';ctx.textAlign='center';ctx.fillText('🥷',0,8);if(g.attack>0){ctx.strokeStyle='#fde68a';ctx.lineWidth=7;ctx.beginPath();ctx.arc(0,0,56,-.9,.9);ctx.stroke()}ctx.restore();
+      if(g.done){ctx.fillStyle='rgba(2,6,23,.72)';ctx.fillRect(0,0,w,h);ctx.fillStyle='#fff';ctx.textAlign='center';ctx.font='900 26px system-ui';ctx.fillText(g.hp>0?'¡COMBATE TERMINADO!':'¡DERROTA!',w/2,h/2)}
+      if(now-lastHud>250){setHud(v=>({...v,hp:g.hp,score:g.score}));lastHud=now}
+      if(!g.done)raf.current=requestAnimationFrame(draw);
+    };raf.current=requestAnimationFrame(draw);
+    return()=>{cancelAnimationFrame(raf.current);window.removeEventListener('resize',resize);window.removeEventListener('keydown',down);window.removeEventListener('keyup',up)};
+  },[deck,difficulty,finish,onCorrect,onWrong]);
+  const hold=(key:keyof typeof keys.current,v:boolean)=>{keys.current[key]=v};
+  return <div className="w-full max-w-2xl mx-auto p-3 text-white select-none"><div className="flex justify-between items-center mb-3"><div><p className="text-xs uppercase tracking-widest font-black text-fuchsia-300">FAYMA ARENA · ACCIÓN</p><h2 className="text-xl font-black">Muévete, golpea y sobrevive</h2></div><div className="rounded-xl bg-slate-900 px-3 py-2 font-black">❤️ {hud.hp} · ⭐ {hud.score}</div></div><canvas ref={canvasRef} className="w-full h-[min(55vh,420px)] min-h-[300px] rounded-3xl border border-fuchsia-300/30 touch-none" aria-label="Arena de combate en tiempo real"/><div className="grid grid-cols-3 gap-2 mt-3"><button onPointerDown={()=>hold('left',true)} onPointerUp={()=>hold('left',false)} onPointerLeave={()=>hold('left',false)} className="rounded-xl bg-slate-800 py-3 font-black">◀</button><button onPointerDown={()=>hold('up',true)} onPointerUp={()=>hold('up',false)} onPointerLeave={()=>hold('up',false)} className="rounded-xl bg-slate-800 py-3 font-black">▲</button><button onPointerDown={()=>hold('right',true)} onPointerUp={()=>hold('right',false)} onPointerLeave={()=>hold('right',false)} className="rounded-xl bg-slate-800 py-3 font-black">▶</button><button onPointerDown={()=>hold('down',true)} onPointerUp={()=>hold('down',false)} onPointerLeave={()=>hold('down',false)} className="rounded-xl bg-slate-800 py-3 font-black">▼</button><button onPointerDown={()=>hold('attack',true)} onPointerUp={()=>hold('attack',false)} onPointerLeave={()=>hold('attack',false)} className="rounded-xl bg-rose-600 py-3 font-black">⚔️ ATACAR</button><button onPointerDown={()=>hold('dodge',true)} onPointerUp={()=>hold('dodge',false)} onPointerLeave={()=>hold('dodge',false)} className="rounded-xl bg-cyan-700 py-3 font-black">💨 ESQUIVAR</button></div><p className="text-center text-xs text-slate-300 mt-2">Teclado: WASD/flechas · Espacio/J ataca · Mayús esquiva. Los pergaminos verdes enseñan vocabulario sin pausar la acción.</p><p className="text-center text-sm font-bold text-fuchsia-200 mt-2 min-h-5">{hud.message}</p></div>;
 };

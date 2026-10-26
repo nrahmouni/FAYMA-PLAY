@@ -1,179 +1,38 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { GameProps } from '../types';
+import { GameProps, GameResult } from '../types';
 
-type FlyingItem = {
-  id: number; x: number; y: number; vx: number; vy: number; radius: number;
-  wordIndex: number; kind: 'fruit' | 'bomb'; sliced: boolean;
-};
-
-/**
- * FAYMA SLICE: gesture-based arcade. Slice flying fruit with a pointer swipe,
- * avoid bombs, and learn the word attached to each fruit without stopping for quizzes.
- */
-export const FruitNinjaGame: React.FC<GameProps> = ({ words, difficulty, onCorrect, onWrong, onComplete }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef(0);
-  const stateRef = useRef({
-    items: [] as FlyingItem[], last: 0, started: 0, spawn: 0, score: 0, sliced: 0,
-    missed: 0, done: false, cursor: { x: -100, y: -100 }, trail: [] as { x: number; y: number; t: number }[],
-    pointerDown: false, wordCursor: 0, lastSpawn: 0,
-  });
-  const [hud, setHud] = useState({ score: 0, time: 45, message: 'Desliza el dedo o el ratón para cortar frutas. ¡Evita las bombas!' });
-  const deck = useMemo(() => words.slice(0, Math.max(1, Math.min(words.length, 16))), [words]);
-
-  const finish = useCallback(() => {
-    const g = stateRef.current;
-    if (g.done) return;
-    g.done = true;
-    onComplete({
-      playerId: '',
-      gameId: 'fruit',
-      correct: g.sliced,
-      wrong: g.missed,
-      timeMs: Date.now() - g.started,
-      coinsEarned: Math.max(0, g.score + Math.floor(g.sliced / 2)),
-      wordsSeen: deck.slice(0, Math.min(g.wordCursor, deck.length)).map(w => w.id),
-    });
-  }, [deck, onComplete]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
-    if (!canvas || !ctx) return;
-    const g = stateRef.current;
-    g.started = Date.now();
-    g.last = performance.now();
-    const resize = () => {
-      const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.max(1, Math.floor(rect.width * dpr));
-      canvas.height = Math.max(1, Math.floor(rect.height * dpr));
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    resize();
-    window.addEventListener('resize', resize);
-
-    const pointer = (e: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      g.cursor = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-      if (e.type === 'pointerdown') g.pointerDown = true;
-      if (e.type === 'pointerup' || e.type === 'pointercancel' || e.type === 'pointerleave') g.pointerDown = false;
-    };
-    canvas.addEventListener('pointerdown', pointer);
-    canvas.addEventListener('pointermove', pointer);
-    canvas.addEventListener('pointerup', pointer);
-    canvas.addEventListener('pointercancel', pointer);
-    canvas.addEventListener('pointerleave', pointer);
-
-    const draw = (now: number) => {
-      const dt = Math.min(32, now - g.last);
-      g.last = now;
-      const w = canvas.clientWidth, h = canvas.clientHeight;
-      const elapsed = (Date.now() - g.started) / 1000;
-      const remaining = Math.max(0, 45 - elapsed);
-      if (!g.done) {
-        g.spawn -= dt;
-        if (g.spawn <= 0) {
-          const count = Math.random() < 0.24 ? 2 : 1;
-          for (let i = 0; i < count; i++) {
-            const wordIndex = g.wordCursor % deck.length;
-            g.items.push({
-              id: Math.random(), x: w * (.18 + Math.random() * .64), y: h + 35,
-              vx: (Math.random() - .5) * (1.5 + difficulty * .25),
-              vy: -(5.1 + Math.random() * 2.2 + difficulty * .3),
-              radius: 23 + Math.random() * 7, wordIndex,
-              kind: Math.random() < .13 ? 'bomb' : 'fruit', sliced: false,
-            });
-            g.wordCursor++;
-          }
-          g.spawn = Math.max(380, 950 - difficulty * 100);
-        }
-        for (const item of g.items) {
-          if (item.sliced) continue;
-          item.x += item.vx * dt * .12;
-          item.y += item.vy * dt * .12;
-          item.vy += .012 * dt;
-          if (item.y > h + 45) { item.sliced = true; if (item.kind === 'fruit') g.missed++; }
-          if (g.pointerDown && Math.hypot(item.x - g.cursor.x, item.y - g.cursor.y) < item.radius + 13) {
-            item.sliced = true;
-            if (item.kind === 'bomb') {
-              g.score = Math.max(0, g.score - 10);
-              g.missed++;
-              const word = deck[item.wordIndex % deck.length];
-              if (word) onWrong(word.id);
-              setHud(v => ({ ...v, message: '💣 ¡Bomba! Evítalas para mantener tu combo.' }));
-            } else {
-              const word = deck[item.wordIndex % deck.length];
-              g.score += 10;
-              g.sliced++;
-              if (word) onCorrect(word.id);
-              setHud(v => ({ ...v, message: word ? `+10 · ${word.text} — ${word.translation}` : '+10 · ¡Buen corte!' }));
-            }
-          }
-        }
-        g.items = g.items.filter(i => !i.sliced || now - g.last < 0);
-        g.trail.push({ ...g.cursor, t: now });
-        g.trail = g.trail.filter(p => now - p.t < 160);
-        if (remaining <= 0) finish();
-      }
-
-      const bg = ctx.createLinearGradient(0, 0, 0, h);
-      bg.addColorStop(0, '#101b46'); bg.addColorStop(.58, '#30266f'); bg.addColorStop(1, '#7c2d6a');
-      ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
-      // Decorative glowing orbs and stars.
-      for (let i = 0; i < 24; i++) {
-        const x = (i * 83 + 19) % w, y = (i * 47 + 25) % h;
-        ctx.fillStyle = i % 3 ? 'rgba(196,181,253,.17)' : 'rgba(253,224,71,.22)';
-        ctx.beginPath(); ctx.arc(x, y, 2 + i % 4, 0, Math.PI * 2); ctx.fill();
-      }
-      for (const item of g.items) {
-        if (item.sliced) continue;
-        ctx.save(); ctx.shadowBlur = 18; ctx.shadowColor = item.kind === 'bomb' ? '#fb7185' : '#86efac';
-        ctx.fillStyle = item.kind === 'bomb' ? '#be123c' : ['#f97316', '#ef4444', '#a3e635', '#38bdf8', '#c084fc'][item.wordIndex % 5];
-        ctx.beginPath(); ctx.arc(item.x, item.y, item.radius, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
-        if (item.kind === 'bomb') {
-          ctx.fillStyle = '#fff'; ctx.font = 'bold 25px system-ui'; ctx.textAlign = 'center'; ctx.fillText('💣', item.x, item.y + 9);
-        } else {
-          ctx.fillStyle = '#fff'; ctx.font = 'bold 11px system-ui'; ctx.textAlign = 'center';
-          ctx.fillText((deck[item.wordIndex % deck.length]?.text || '¡CORTE!').slice(0, 12), item.x, item.y + 4);
-        }
-        ctx.restore();
-      }
-      if (g.trail.length > 1) {
-        ctx.beginPath(); ctx.moveTo(g.trail[0].x, g.trail[0].y);
-        for (const p of g.trail.slice(1)) ctx.lineTo(p.x, p.y);
-        ctx.strokeStyle = '#e0f2fe'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.shadowBlur = 14; ctx.shadowColor = '#67e8f9'; ctx.stroke(); ctx.shadowBlur = 0;
-      }
-      ctx.fillStyle = 'rgba(2,6,23,.72)'; ctx.beginPath(); ctx.roundRect(12, 12, w - 24, 48, 14); ctx.fill();
-      ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; ctx.font = '900 14px system-ui'; ctx.fillText(`⭐ ${g.score} puntos`, 24, 41);
-      ctx.textAlign = 'right'; ctx.fillStyle = remaining < 10 ? '#fda4af' : '#fff'; ctx.fillText(`⏱ ${Math.ceil(remaining)} s`, w - 24, 41);
-      if (now - g.lastSpawn > 250) { setHud(v => ({ ...v, score: g.score, time: Math.ceil(remaining) })); g.lastSpawn = now; }
-      if (g.done) {
-        ctx.fillStyle = 'rgba(2,6,23,.68)'; ctx.fillRect(0, 0, w, h);
-        ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.font = '900 28px system-ui'; ctx.fillText('¡TIEMPO!', w / 2, h / 2 - 8);
-        ctx.font = 'bold 17px system-ui'; ctx.fillText(`Puntuación: ${g.score}`, w / 2, h / 2 + 25);
-      }
-      if (!g.done) rafRef.current = requestAnimationFrame(draw);
-    };
-    rafRef.current = requestAnimationFrame(draw);
-    return () => {
-      cancelAnimationFrame(rafRef.current);
-      window.removeEventListener('resize', resize);
-      canvas.removeEventListener('pointerdown', pointer);
-      canvas.removeEventListener('pointermove', pointer);
-      canvas.removeEventListener('pointerup', pointer);
-      canvas.removeEventListener('pointercancel', pointer);
-      canvas.removeEventListener('pointerleave', pointer);
-    };
-  }, [deck, difficulty, finish, onCorrect, onWrong]);
-
-  return <div className="w-full max-w-2xl mx-auto p-3 text-white select-none">
-    <div className="flex items-center justify-between mb-3 gap-3">
-      <div><div className="text-xs uppercase tracking-widest font-black text-fuchsia-300">FAYMA SLICE · ARCADE</div><div className="text-xl font-black">¡Corta frutas, evita bombas!</div></div>
-      <div className="rounded-xl bg-slate-900 px-3 py-2 text-center min-w-20"><div className="text-[10px] text-slate-400 uppercase">Puntos</div><div className="text-xl font-black">{hud.score}</div></div>
-    </div>
-    <canvas ref={canvasRef} className="w-full h-[min(58vh,440px)] min-h-[300px] rounded-3xl border border-fuchsia-300/30 shadow-2xl shadow-fuchsia-950/40 touch-none cursor-crosshair" aria-label="Corta las frutas deslizando el dedo o el ratón"/>
-    <p className="text-center text-xs text-slate-300 mt-3">Desliza por las frutas para cortarlas · Evita las bombas · ¡Tienes 45 segundos!</p>
-    <p className="text-center text-sm font-bold text-fuchsia-200 mt-2 min-h-5">{hud.message}</p>
-  </div>;
+type Fruit = {id:number;x:number;y:number;vx:number;vy:number;emoji:string;wordIndex:number;cut:boolean;radius:number};
+/** Fruit-slice arcade: corta objetos reales con un gesto táctil o del ratón. */
+export const FruitNinjaGame: React.FC<GameProps> = ({ words, onCorrect, onWrong, onComplete, difficulty }) => {
+  const canvasRef=useRef<HTMLCanvasElement>(null),raf=useRef(0),pointer=useRef<{x:number;y:number;down:boolean}>({x:0,y:0,down:false}),trail=useRef<{x:number;y:number;life:number}[]>([]);
+  const game=useRef({fruits:[] as Fruit[],last:0,spawn:0,score:0,correct:0,wrong:0,started:0,elapsed:0,done:false,cursor:0,missed:0});
+  const deck=useMemo(()=>words.slice(0,Math.max(1,Math.min(words.length,12))),[words]);
+  const [hud,setHud]=useState({score:0,message:'Desliza el dedo o el ratón sobre las frutas para cortarlas.'});
+  const finish=useCallback(()=>{const g=game.current;if(g.done)return;g.done=true;const result:GameResult={playerId:'',gameId:'fruit',correct:g.correct,wrong:g.wrong,timeMs:Date.now()-g.started,coinsEarned:g.score+g.correct*4,wordsSeen:deck.slice(0,g.correct).map(w=>w.id)};onComplete(result)},[deck,onComplete]);
+  useEffect(()=>{
+    const canvas=canvasRef.current,ctx=canvas?.getContext('2d');if(!canvas||!ctx)return;
+    const g=game.current;g.fruits=[];g.last=performance.now();g.spawn=0;g.score=0;g.correct=0;g.wrong=0;g.started=Date.now();g.elapsed=0;g.done=false;g.cursor=0;g.missed=0;
+    const resize=()=>{const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);canvas.width=Math.max(1,r.width*d);canvas.height=Math.max(1,r.height*d);ctx.setTransform(d,0,0,d,0,0)};resize();window.addEventListener('resize',resize);
+    const coords=(e:PointerEvent)=>{const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}};
+    const down=(e:PointerEvent)=>{canvas.setPointerCapture?.(e.pointerId);const p=coords(e);pointer.current={...p,down:true};trail.current.push({...p,life:180});};
+    const move=(e:PointerEvent)=>{const p=coords(e);if(pointer.current.down){const prev=pointer.current;trail.current.push({...p,life:220});for(const f of g.fruits){if(f.cut)continue;const dx=p.x-prev.x,dy=p.y-prev.y,len=dx*dx+dy*dy;const t=len?Math.max(0,Math.min(1,((f.x-prev.x)*dx+(f.y-prev.y)*dy)/len)):0;const nearX=prev.x+t*dx,nearY=prev.y+t*dy;if(Math.hypot(f.x-nearX,f.y-nearY)<f.radius+10){f.cut=true;if(f.emoji==='💣'){g.wrong++;g.score=Math.max(0,g.score-10);onWrong(deck[f.wordIndex]?.id||'');setHud(v=>({...v,message:'💥 ¡Bomba! Evita las bombas.'}));}else{const word=deck[f.wordIndex];g.score+=10;g.correct++;g.cursor++;if(word)onCorrect(word.id);setHud(v=>({...v,message:word?`+10 · ${word.text} = ${word.translation}`:'+10 puntos'}));}}}pointer.current={...p,down:true};}};
+    const up=()=>{pointer.current.down=false};
+    canvas.addEventListener('pointerdown',down);canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',up);canvas.addEventListener('pointercancel',up);
+    let lastHud=0;
+    const draw=(now:number)=>{
+      const dt=Math.min(34,now-g.last);g.last=now;const w=canvas.clientWidth,h=canvas.clientHeight;
+      if(!g.done){g.elapsed+=dt;g.spawn-=dt;if(g.spawn<=0){const count=Math.random()<.2?2:1;for(let i=0;i<count;i++){const bomb=Math.random()<.13;const wi=g.cursor%deck.length;g.fruits.push({id:Math.random(),x:45+Math.random()*(w-90),y:h+30,vx:(Math.random()-.5)*.22,vy:-(.45+Math.random()*.18+difficulty*.035),emoji:bomb?'💣':['🍉','🍎','🍓','🍌','🍊','🍍','🥝','🍒'][Math.floor(Math.random()*8)],wordIndex:wi,cut:false,radius:bomb?23:25})}g.spawn=Math.max(420,950-difficulty*90)}
+        for(const f of g.fruits){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vy+=.00072*dt;if(f.y>h+60&&!f.cut&&f.emoji!=='💣'){g.missed++;if(g.missed>=5)finish();f.cut=true}}
+        g.fruits=g.fruits.filter(f=>!f.cut&&f.y<h+80);trail.current=trail.current.map(p=>({...p,life:p.life-dt})).filter(p=>p.life>0);if(g.elapsed>45000)finish();}
+      const bg=ctx.createLinearGradient(0,0,0,h);bg.addColorStop(0,'#064e3b');bg.addColorStop(.58,'#022c22');bg.addColorStop(1,'#020617');ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+      for(let i=0;i<28;i++){ctx.fillStyle='rgba(74,222,128,.08)';ctx.beginPath();ctx.arc((i*71)%w,(i*97+g.elapsed*.03)%h,2+(i%3),0,Math.PI*2);ctx.fill()}
+      for(const f of g.fruits){ctx.save();ctx.translate(f.x,f.y);ctx.font=`${f.radius*1.8}px system-ui`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor=f.emoji==='💣'?'#fb7185':'#4ade80';ctx.shadowBlur=15;ctx.fillText(f.emoji,0,0);ctx.shadowBlur=0;if(f.emoji!=='💣'){const word=deck[f.wordIndex];ctx.font='bold 11px system-ui';const label=(word?.text||'').slice(0,13);const tw=ctx.measureText(label).width+12;ctx.fillStyle='rgba(2,6,23,.82)';ctx.beginPath();ctx.roundRect(-tw/2,f.radius+4,tw,22,7);ctx.fill();ctx.fillStyle='#d9f99d';ctx.fillText(label,0,f.radius+15)}ctx.restore()}
+      for(let i=1;i<trail.current.length;i++){const a=trail.current[i-1],b=trail.current[i];ctx.strokeStyle=`rgba(103,232,249,${Math.min(1,b.life/150)})`;ctx.lineWidth=4;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}
+      ctx.fillStyle='rgba(2,6,23,.72)';ctx.beginPath();ctx.roundRect(12,12,w-24,42,13);ctx.fill();ctx.fillStyle='white';ctx.font='900 13px system-ui';ctx.textAlign='left';ctx.fillText(`🍉 ${Math.floor(g.elapsed/1000)}s   ⭐ ${g.score}`,24,38);ctx.textAlign='right';ctx.fillText(`❌ ${g.missed}/5`,w-24,38);
+      if(g.done){ctx.fillStyle='rgba(2,6,23,.72)';ctx.fillRect(0,0,w,h);ctx.fillStyle='white';ctx.textAlign='center';ctx.font='900 25px system-ui';ctx.fillText(g.missed>=5?'¡FIN DE LA PARTIDA!':'¡BUEN CORTE!',w/2,h/2)}
+      if(now-lastHud>250){setHud(v=>({...v,score:g.score}));lastHud=now}if(!g.done)raf.current=requestAnimationFrame(draw);
+    };raf.current=requestAnimationFrame(draw);
+    return()=>{cancelAnimationFrame(raf.current);window.removeEventListener('resize',resize);canvas.removeEventListener('pointerdown',down);canvas.removeEventListener('pointermove',move);canvas.removeEventListener('pointerup',up);canvas.removeEventListener('pointercancel',up)};
+  },[deck,difficulty,finish,onCorrect,onWrong]);
+  return <div className="w-full max-w-2xl mx-auto p-3 text-white select-none"><div className="flex justify-between items-center mb-3"><div><p className="text-xs uppercase tracking-widest font-black text-lime-300">FAYMA SLICE · ARCADE</p><h2 className="text-xl font-black">¡Corta las frutas!</h2></div><div className="rounded-xl bg-slate-900 px-3 py-2 font-black">⭐ {hud.score}</div></div><canvas ref={canvasRef} className="w-full h-[min(58vh,440px)] min-h-[320px] rounded-3xl border border-lime-300/30 touch-none cursor-crosshair" aria-label="Corta frutas deslizando el dedo o el ratón"/><p className="text-center text-xs text-slate-300 mt-3">Desliza por las frutas para cortarlas. Evita las bombas y las frutas que caen. Cada fruta muestra una palabra para aprender mientras juegas.</p><p className="text-center text-sm font-bold text-lime-200 mt-2 min-h-5">{hud.message}</p></div>;
 };
