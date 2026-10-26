@@ -13,6 +13,7 @@ interface TurnResultModalProps {
   player: PlayerProfile;
   language: Language;
   missionCompleted?: boolean;
+  levelAdvanced?: boolean;
   isFinalTurn?: boolean;
   nextPlayerName?: string;
   onContinue: () => void;
@@ -23,6 +24,7 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
   player,
   language,
   missionCompleted = false,
+  levelAdvanced = false,
   isFinalTurn = false,
   nextPlayerName,
   onContinue,
@@ -41,10 +43,10 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
     turnAnnounced.current = true;
     playSuccess();
     const message = isFinalTurn
-      ? `${copy.goodWork.replace('{name}', player.displayName)} ${copy.finished}`
-      : `${copy.goodWork.replace('{name}', player.displayName)} ${copy.nextTurn.replace('{name}', nextPlayerName || '')}`;
+      ? `${copy.goodWork.replace('{name}', player.displayName)} ${copy.finishedTurn} ${levelAdvanced ? copy.nextLevel : ''} ${copy.finished}`
+      : `${copy.goodWork.replace('{name}', player.displayName)} ${copy.finishedTurn} ${levelAdvanced ? copy.nextLevel : ''} ${copy.nextTurn.replace('{name}', nextPlayerName || '')}`;
     speak(message, language);
-  }, [copy, isFinalTurn, language, nextPlayerName, playSuccess, player.displayName, speak]);
+  }, [copy, isFinalTurn, language, levelAdvanced, nextPlayerName, playSuccess, player.displayName, speak]);
 
   useEffect(() => {
     if (!missionCompleted || celebrationPlayed.current) return;

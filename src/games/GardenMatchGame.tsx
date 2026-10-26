@@ -16,7 +16,7 @@ interface FlowerCard {
 }
 
 export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, language, onCorrect, onWrong, onComplete }) => {
-  const roundWords = useMemo(() => words.slice(0, Math.min(difficulty + 2, words.length)), [difficulty, words]);
+  const roundWords = useMemo(() => words.slice(0, Math.min(difficulty + 1, 4, words.length)), [difficulty, words]);
   const cards = useMemo(() => shuffleArray(roundWords.flatMap<FlowerCard>(word => [
     { id: `${word.id}-picture`, wordId: word.id, kind: 'picture', content: word.imageUrl || '🌱' },
     { id: `${word.id}-word`, wordId: word.id, kind: 'word', content: word.text, language: word.language },
@@ -40,7 +40,7 @@ export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, langua
     setAttempts(count => count + 1);
     const timeout = window.setTimeout(() => {
       const matchedWord = roundWords.find(word => word.id === first.wordId);
-      if (matchedWord) recordAnswer(matchedWord, matched);
+      if (matchedWord) recordAnswer(matchedWord, matched, matchedWord, false);
       if (matched) {
         const nextMatched = [...matchedIds, first.id, second.id];
         setMatchedIds(nextMatched);
@@ -52,7 +52,7 @@ export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, langua
     return () => window.clearTimeout(timeout);
   }, [cards, finish, matchedIds, openIds, recordAnswer, roundWords]);
 
-  if (!roundWords.length) return <EmptyGame />;
+  if (!roundWords.length) return <EmptyGame language={language} />;
 
   const completedPairs = matchedIds.length / 2;
   return (
@@ -76,12 +76,10 @@ export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, langua
               whileTap={{ scale: 0.96 }}
               onClick={() => {
                 setOpenIds(ids => [...ids, card.id]);
-                if (card.kind === 'word') {
-                  const word = roundWords.find(item => item.id === card.wordId);
-                  if (word) speak(word.audioText || word.text, language);
-                }
+                const word = roundWords.find(item => item.id === card.wordId);
+                if (word) speak(word.audioText || word.text, language);
               }}
-              aria-label={open ? (card.kind === 'picture' ? card.content : card.content) : `Flor tapada ${index + 1}`}
+              aria-label={open ? card.content : `${copy.coveredFlower} ${index + 1}`}
               className={`flex aspect-square min-h-20 items-center justify-center rounded-2xl border-2 p-2 text-center shadow-sm transition sm:rounded-3xl ${
                 matchedIds.includes(card.id)
                   ? 'border-emerald-200 bg-emerald-50 text-emerald-800'

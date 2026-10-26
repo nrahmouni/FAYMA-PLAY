@@ -20,7 +20,7 @@ class SoundSynthesizer {
       }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume().catch(() => {});
+      this.ctx.resume().catch(error => console.warn('Audio playback could not start:', error));
     }
   }
 
@@ -35,7 +35,8 @@ class SoundSynthesizer {
     oscillator.type = 'sine';
     oscillator.frequency.setValueAtTime(notes[0], this.ctx.currentTime);
     gain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.018, this.ctx.currentTime + 0.8);
+    gain.gain.linearRampToValueAtTime(0.02, this.ctx.currentTime + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.5);
     oscillator.connect(gain);
     gain.connect(this.ctx.destination);
     oscillator.start();
@@ -48,6 +49,10 @@ class SoundSynthesizer {
       noteIndex = (noteIndex + 1) % notes.length;
       const now = this.ctx.currentTime;
       this.musicOscillator.frequency.setTargetAtTime(notes[noteIndex], now, 0.12);
+      this.musicGain?.gain.cancelScheduledValues(now);
+      this.musicGain?.gain.setValueAtTime(0.0001, now);
+      this.musicGain?.gain.linearRampToValueAtTime(0.02, now + 0.05);
+      this.musicGain?.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
     }, 600);
   }
 

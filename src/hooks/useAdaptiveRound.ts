@@ -104,12 +104,12 @@ export function useAdaptiveRound() {
 
   const adaptDifficultyAfterTurn = useCallback((playerUid: string, correct: number, wrong: number) => {
     const total = correct + wrong;
-    if (total < 3) return;
+    if (total < 2) return;
 
     const accuracy = correct / total;
-    if (accuracy >= 0.8) {
+    if (accuracy >= 0.5) {
       adjustDifficulty(playerUid, 1);
-    } else if (accuracy <= 0.4) {
+    } else if (accuracy <= 0.25) {
       adjustDifficulty(playerUid, -1);
     }
   }, [adjustDifficulty]);

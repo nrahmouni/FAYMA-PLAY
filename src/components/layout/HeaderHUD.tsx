@@ -1,5 +1,5 @@
 import React from 'react';
-import { Music2, Volume2, VolumeX } from 'lucide-react';
+import { ArrowLeft, Music2, Volume2, VolumeX } from 'lucide-react';
 import { useGameStore } from '../../store/gameStore';
 import { useProfileStore } from '../../store/profileStore';
 import { useSound } from '../../hooks/useSound';
@@ -60,6 +60,18 @@ export const HeaderHUD: React.FC = () => {
         )}
 
         <div className="flex shrink-0 items-center gap-2">
+          {currentScreen === 'GAME_SESSION' && (
+            <button
+              type="button"
+              onClick={() => setScreen('WORLD_HUB')}
+              className="flex h-10 items-center justify-center gap-1.5 rounded-2xl bg-rose-50 px-3 text-xs font-black text-rose-700 transition hover:bg-rose-100"
+              aria-label={copy.leaveGame}
+              title={copy.leaveGame}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span className="hidden sm:inline">{copy.leaveGame}</span>
+            </button>
+          )}
           <button
             type="button"
             onClick={toggleMute}

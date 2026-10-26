@@ -47,6 +47,23 @@ export const GAME_COPY: Record<Language, {
   appTagline: string;
   gamesIn: string;
   joiner: string;
+  safariVoiceGuide: string;
+  trainVoiceGuide: string;
+  gardenVoiceGuide: string;
+  sayWord: string;
+  orderSentence: string;
+  sentencePrompt: string;
+  checkOrder: string;
+  removeWord: string;
+  leaveGame: string;
+  wordLevel: string;
+  sentenceLevel: string;
+  levelCompleted: string;
+  nextLevel: string;
+  finishedTurn: string;
+  progressLabel: string;
+  optionLabel: string;
+  coveredFlower: string;
 }> = {
   es: {
     gameNames: { safari: 'Safari de palabras', train: 'Tren de palabras', garden: 'Jardín de parejas' },
@@ -95,6 +112,23 @@ export const GAME_COPY: Record<Language, {
     appTagline: '¡A aprender jugando!',
     gamesIn: 'Juegos en',
     joiner: ' y ',
+    safariVoiceGuide: 'Escucha la palabra y toca el dibujo que la representa.',
+    trainVoiceGuide: 'Escucha la palabra y toca el dibujo correcto.',
+    gardenVoiceGuide: 'Encuentra las parejas: toca dos flores para descubrirlas.',
+    sayWord: 'La palabra es',
+    orderSentence: 'Arrastra las palabras para ordenar la frase.',
+    sentencePrompt: 'Forma esta frase:',
+    checkOrder: 'Comprobar',
+    removeWord: 'Quitar',
+    leaveGame: 'Salir al menú de juegos',
+    wordLevel: 'Nivel de palabras',
+    sentenceLevel: 'Nivel de frases',
+    levelCompleted: '¡Nivel completado!',
+    nextLevel: '¡Siguiente nivel!',
+    finishedTurn: 'Has completado este juego.',
+    progressLabel: 'Progreso del juego',
+    optionLabel: 'Opción',
+    coveredFlower: 'Flor tapada',
   },
   fr: {
     gameNames: { safari: 'Safari des mots', train: 'Train des mots', garden: 'Jardin des paires' },
@@ -143,6 +177,23 @@ export const GAME_COPY: Record<Language, {
     appTagline: 'Apprendre en jouant !',
     gamesIn: 'Jeux en',
     joiner: ' et ',
+    safariVoiceGuide: 'Écoute le mot et touche le dessin correspondant.',
+    trainVoiceGuide: 'Écoute le mot et touche le bon dessin.',
+    gardenVoiceGuide: 'Trouve les paires : touche deux fleurs pour les découvrir.',
+    sayWord: 'Le mot est',
+    orderSentence: 'Fais glisser les mots pour former la phrase.',
+    sentencePrompt: 'Forme cette phrase :',
+    checkOrder: 'Vérifier',
+    removeWord: 'Retirer',
+    leaveGame: 'Retour aux jeux',
+    wordLevel: 'Niveau des mots',
+    sentenceLevel: 'Niveau des phrases',
+    levelCompleted: 'Niveau terminé !',
+    nextLevel: 'Niveau suivant !',
+    finishedTurn: 'Tu as terminé ce jeu.',
+    progressLabel: 'Progression du jeu',
+    optionLabel: 'Option',
+    coveredFlower: 'Fleur cachée',
   },
   'nl-BE': {
     gameNames: { safari: 'Woordensafari', train: 'Woordentrein', garden: 'Paren in de tuin' },
@@ -191,6 +242,23 @@ export const GAME_COPY: Record<Language, {
     appTagline: 'Leren door te spelen!',
     gamesIn: 'Spellen in',
     joiner: ' en ',
+    safariVoiceGuide: 'Luister naar het woord en tik op het bijpassende plaatje.',
+    trainVoiceGuide: 'Luister naar het woord en tik op het juiste plaatje.',
+    gardenVoiceGuide: 'Zoek de paren: tik op twee bloemen om ze te ontdekken.',
+    sayWord: 'Het woord is',
+    orderSentence: 'Sleep de woorden naar de juiste plek.',
+    sentencePrompt: 'Maak deze zin:',
+    checkOrder: 'Controleren',
+    removeWord: 'Weg',
+    leaveGame: 'Terug naar de spellen',
+    wordLevel: 'Woordenniveau',
+    sentenceLevel: 'Zinnenniveau',
+    levelCompleted: 'Niveau voltooid!',
+    nextLevel: 'Volgend niveau!',
+    finishedTurn: 'Je hebt dit spel voltooid.',
+    progressLabel: 'Spelvoortgang',
+    optionLabel: 'Keuze',
+    coveredFlower: 'Verborgen bloem',
   },
   ar: {
     gameNames: { safari: 'سفاري الكلمات', train: 'قطار الكلمات', garden: 'حديقة الأزواج' },
@@ -239,5 +307,22 @@ export const GAME_COPY: Record<Language, {
     appTagline: 'نتعلم ونلعب!',
     gamesIn: 'ألعاب باللغة',
     joiner: ' و',
+    safariVoiceGuide: 'استمع إلى الكلمة والمس الصورة المناسبة.',
+    trainVoiceGuide: 'استمع إلى الكلمة والمس الصورة الصحيحة.',
+    gardenVoiceGuide: 'ابحث عن الأزواج: المس زهرتين لاكتشافهما.',
+    sayWord: 'الكلمة هي',
+    orderSentence: 'اسحب الكلمات إلى ترتيبها الصحيح.',
+    sentencePrompt: 'رتّب هذه الجملة:',
+    checkOrder: 'تحقّق',
+    removeWord: 'إزالة',
+    leaveGame: 'العودة إلى الألعاب',
+    wordLevel: 'مستوى الكلمات',
+    sentenceLevel: 'مستوى الجمل',
+    levelCompleted: 'اكتمل المستوى!',
+    nextLevel: 'المستوى التالي!',
+    finishedTurn: 'لقد أكملت هذه اللعبة.',
+    progressLabel: 'تقدّم اللعبة',
+    optionLabel: 'خيار',
+    coveredFlower: 'زهرة مخفية',
   },
 };

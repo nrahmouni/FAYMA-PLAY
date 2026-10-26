@@ -8,13 +8,14 @@ import { useGameProgress } from './useGameProgress';
 import { useSpeech } from '../hooks/useSpeech';
 
 export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, onCorrect, onWrong, onComplete }) => {
-  const roundWords = useMemo(() => words.slice(0, Math.min(6, difficulty + 3)), [difficulty, words]);
+  const roundWords = useMemo(() => words.slice(0, Math.min(4, difficulty + 2)), [difficulty, words]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answerId, setAnswerId] = useState<string | null>(null);
   const { recordAnswer, finish } = useGameProgress('safari', { onCorrect, onWrong, onComplete });
   const { speak } = useSpeech();
   const copy = GAME_COPY[language];
   const question = roundWords[questionIndex];
+
   const options = useMemo(() => {
     if (!question) return [];
     const otherWords = words.filter(word => word.id !== question.id);
@@ -42,7 +43,8 @@ export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, o
       <div className="mb-5 flex items-center gap-2 overflow-hidden rounded-3xl bg-gradient-to-br from-lime-100 via-emerald-50 to-sky-100 p-4 sm:gap-5 sm:p-6">
         <div className="min-w-0 flex-1">
           <p className="text-xs font-black uppercase tracking-wider text-emerald-800">{copy.safariPrompt}</p>
-          <h2 className="mt-1 text-xl font-black leading-tight text-slate-900 sm:text-3xl">
+          <h2 className="mt-1 flex items-center gap-3 text-xl font-black leading-tight text-slate-900 sm:text-3xl">
+            <span className="text-4xl" aria-hidden="true">{question.imageUrl || '✨'}</span>
             <span className="text-emerald-700">{question.translation}</span>
           </h2>
           <p className="mt-2 text-sm font-semibold text-slate-600">{copy.safariHint}</p>
@@ -71,7 +73,7 @@ export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, o
               whileTap={{ scale: 0.96 }}
               onClick={() => {
                 setAnswerId(option.id);
-                recordAnswer(question, correct);
+                recordAnswer(question, correct, option);
               }}
               aria-label={`${option.imageUrl || ''}${revealed ? `: ${option.text}` : ''}`}
               lang={option.language}
@@ -84,7 +86,7 @@ export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, o
             >
               <span className="text-4xl sm:text-5xl" aria-hidden="true">{option.imageUrl || '✨'}</span>
               {revealed && <span className="mt-1 text-sm font-black text-emerald-800" lang={option.language}>{option.text}</span>}
-              <span className="sr-only">Opción {index + 1}</span>
+              <span className="sr-only">{copy.optionLabel} {index + 1}</span>
             </motion.button>
           );
         })}

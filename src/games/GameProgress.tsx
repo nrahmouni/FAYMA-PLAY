@@ -21,7 +21,7 @@ export const GameProgress: React.FC<GameProgressProps> = ({ current, total, labe
       <div
         className="h-2.5 overflow-hidden rounded-full bg-emerald-100"
         role="progressbar"
-        aria-label="Progreso del juego"
+        aria-label={GAME_COPY[language].progressLabel}
         aria-valuemin={0}
         aria-valuemax={total}
         aria-valuenow={Math.min(current, total)}

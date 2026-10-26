@@ -17,8 +17,8 @@ export function useGameProgress(
   const callbacks = useRef({ onCorrect, onWrong, onComplete });
   callbacks.current = { onCorrect, onWrong, onComplete };
 
-  const recordAnswer = useCallback((word: Word, isCorrect: boolean) => {
-    speechRef.current(word.audioText || word.text, word.language);
+  const recordAnswer = useCallback((word: Word, isCorrect: boolean, spokenWord: Word = word, shouldSpeak = true) => {
+    if (shouldSpeak) speechRef.current(spokenWord.audioText || spokenWord.text, spokenWord.language);
     if (isCorrect) {
       stats.current.correct += 1;
       playSuccess();

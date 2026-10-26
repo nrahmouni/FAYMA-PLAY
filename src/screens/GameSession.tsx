@@ -22,6 +22,7 @@ export const GameSession: React.FC = () => {
   const activeWorldNodeId = useGameStore(s => s.activeWorldNodeId);
   const worldNodes = useGameStore(s => s.worldNodes);
   const [missionCompleted, setMissionCompleted] = useState(false);
+  const [levelAdvanced, setLevelAdvanced] = useState(false);
 
   const profiles = useProfileStore(s => s.profiles);
   const { speak } = useSpeech();
@@ -39,8 +40,13 @@ export const GameSession: React.FC = () => {
     if (sessionPhase !== 'CHALLENGE_PHASE' || !activePlayer || announcedTurn.current === turnKey) return;
     announcedTurn.current = turnKey;
     playTurnStart();
-    speak(`${copy.ready.replace('{name}', activePlayer.displayName)} ${copy.startTurn}`, language);
-  }, [activePlayer?.displayName, copy, language, playTurnStart, sessionPhase, speak, turnKey]);
+    const guide = activeGameId === 'safari'
+      ? copy.safariVoiceGuide
+      : activeGameId === 'garden_match'
+        ? copy.gardenVoiceGuide
+        : difficulty >= 3 ? copy.orderSentence : copy.trainVoiceGuide;
+    speak(`${copy.ready.replace('{name}', activePlayer.displayName)} ${copy.startTurn} ${guide}`, language);
+  }, [activeGameId, activePlayer?.displayName, copy, difficulty, language, playTurnStart, sessionPhase, speak, turnKey]);
 
   const roundWords = useMemo(
     () => activePlayer ? selectRoundWords(activePlayer) : [],
@@ -73,6 +79,7 @@ export const GameSession: React.FC = () => {
       totalAnswers > 0 &&
       result.correct / totalAnswers >= 0.45,
     );
+    setLevelAdvanced(totalAnswers >= 2 && difficulty < 3 && result.correct / totalAnswers >= 0.5);
     const finalizedResult: GameResult = {
       ...result,
       playerId: activePlayer.uid,
@@ -81,10 +88,11 @@ export const GameSession: React.FC = () => {
     adaptDifficultyAfterTurn(activePlayer.uid, result.correct, result.wrong);
     addRewards(activePlayer.uid, finalizedResult.coinsEarned, 0);
     recordTurnResult(finalizedResult);
-  }, [activePlayer?.uid, activeWorldNodeId, worldNodes, language, adaptDifficultyAfterTurn, addRewards, recordTurnResult]);
+  }, [activePlayer?.uid, activeWorldNodeId, worldNodes, language, difficulty, adaptDifficultyAfterTurn, addRewards, recordTurnResult]);
 
   const handleContinueNextTurn = () => {
     setMissionCompleted(false);
+    setLevelAdvanced(false);
     advanceTurn(profiles.length);
   };
 
@@ -115,6 +123,7 @@ export const GameSession: React.FC = () => {
           player={activePlayer}
           language={language}
           missionCompleted={missionCompleted}
+          levelAdvanced={levelAdvanced}
           isFinalTurn={currentRound >= totalRounds && currentPlayerIndex >= profiles.length - 1}
           nextPlayerName={
             currentRound >= totalRounds && currentPlayerIndex >= profiles.length - 1
