@@ -12,6 +12,10 @@ const LineMatchGame = React.lazy(() => import('../games/LineMatchGame').then(m =
 const DrawWordGame = React.lazy(() => import('../games/DrawWordGame').then(m => ({ default: m.DrawWordGame })));
 const LetterPuzzleGame = React.lazy(() => import('../games/LetterPuzzleGame').then(m => ({ default: m.LetterPuzzleGame })));
 const WordSortGame = React.lazy(() => import('../games/WordSortGame').then(m => ({ default: m.WordSortGame })));
+const CometDashGame = React.lazy(() => import('../games/MathArcadeGames').then(m => ({ default: m.CometDashGame })));
+const CookieCountGame = React.lazy(() => import('../games/MathArcadeGames').then(m => ({ default: m.CookieCountGame })));
+const NumberBridgeGame = React.lazy(() => import('../games/MathArcadeGames').then(m => ({ default: m.NumberBridgeGame })));
+const TreasureTrailGame = React.lazy(() => import('../games/MathArcadeGames').then(m => ({ default: m.TreasureTrailGame })));
 
 interface InteractiveChallengeModalProps {
   gameId: string;
@@ -46,6 +50,14 @@ export const InteractiveChallengeModal: React.FC<InteractiveChallengeModalProps>
         return <LetterPuzzleGame {...gameProps} />;
       case 'word_sort':
         return <WordSortGame {...gameProps} />;
+      case 'comet_dash':
+        return <CometDashGame {...gameProps} />;
+      case 'cookie_count':
+        return <CookieCountGame {...gameProps} />;
+      case 'number_bridge':
+        return <NumberBridgeGame {...gameProps} />;
+      case 'treasure_trail':
+        return <TreasureTrailGame {...gameProps} />;
       default:
         return <SafariGame {...gameProps} />;
     }

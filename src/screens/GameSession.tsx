@@ -8,6 +8,11 @@ import { InteractiveChallengeModal } from '../modals/InteractiveChallengeModal';
 import { TurnResultModal } from '../modals/TurnResultModal';
 import { GameProps, GameResult } from '../types';
 import { GAME_COPY } from '../data/gameCopy';
+import { MathGameId, MATH_GAME_COPY } from '../data/mathGameCopy';
+
+function isMathGameId(value: string): value is MathGameId {
+  return value === 'comet_dash' || value === 'cookie_count' || value === 'number_bridge' || value === 'treasure_trail';
+}
 
 export const GameSession: React.FC = () => {
   const language = useGameStore(s => s.language);
@@ -41,7 +46,9 @@ export const GameSession: React.FC = () => {
     if (sessionPhase !== 'CHALLENGE_PHASE' || !activePlayer || announcedTurn.current === turnKey) return;
     announcedTurn.current = turnKey;
     playTurnStart();
-    const guide = activeGameId === 'safari'
+    const guide = isMathGameId(activeGameId)
+      ? MATH_GAME_COPY[language][activeGameId].voiceGuide
+      : activeGameId === 'safari'
       ? copy.safariVoiceGuide
       : activeGameId === 'garden_match'
         ? copy.gardenVoiceGuide
@@ -85,8 +92,12 @@ export const GameSession: React.FC = () => {
     handleAnswer(activePlayer.uid, wordId, isCorrect);
   }, [activePlayer?.uid, handleAnswer, turnKey]);
 
-  const handleGameCorrect = useCallback((wordId: string) => recordEvidence(wordId, true), [recordEvidence]);
-  const handleGameWrong = useCallback((wordId: string) => recordEvidence(wordId, false), [recordEvidence]);
+  const handleGameCorrect = useCallback((wordId: string) => {
+    if (!isMathGameId(activeGameId)) recordEvidence(wordId, true);
+  }, [activeGameId, recordEvidence]);
+  const handleGameWrong = useCallback((wordId: string) => {
+    if (!isMathGameId(activeGameId)) recordEvidence(wordId, false);
+  }, [activeGameId, recordEvidence]);
 
   const handleGameComplete = useCallback((result: GameResult) => {
     if (!activePlayer) return;
@@ -98,16 +109,23 @@ export const GameSession: React.FC = () => {
       totalAnswers > 0 &&
       result.correct / totalAnswers >= 0.45,
     );
-    setLevelAdvanced(totalAnswers >= 2 && difficulty < 15 && result.correct / totalAnswers >= 0.5);
+    setLevelAdvanced(
+      !isMathGameId(activeGameId) &&
+      totalAnswers >= 2 &&
+      difficulty < 15 &&
+      result.correct / totalAnswers >= 0.5,
+    );
     const finalizedResult: GameResult = {
       ...result,
       playerId: activePlayer.uid,
     };
 
-    adaptDifficultyAfterTurn(activePlayer.uid, result.correct, result.wrong);
+    if (!isMathGameId(activeGameId)) {
+      adaptDifficultyAfterTurn(activePlayer.uid, result.correct, result.wrong);
+    }
     addRewards(activePlayer.uid, finalizedResult.coinsEarned, 0);
     recordTurnResult(finalizedResult);
-  }, [activePlayer?.uid, activeWorldNodeId, worldNodes, language, difficulty, adaptDifficultyAfterTurn, addRewards, recordTurnResult]);
+  }, [activeGameId, activePlayer?.uid, activeWorldNodeId, worldNodes, language, difficulty, adaptDifficultyAfterTurn, addRewards, recordTurnResult]);
 
   const handleContinueNextTurn = () => {
     setMissionCompleted(false);
