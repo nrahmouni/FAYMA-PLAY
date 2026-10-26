@@ -168,8 +168,19 @@ export const MagicWorldGame: React.FC<MagicWorldGameProps> = ({ language }) => {
     setPhase('result');
   };
 
-  const getPoint = (event: PointerEvent<SVGSVGElement>): Point => {
-    const bounds = event.currentTarget.getBoundingClientRect();
+  const getPoint = (event: Pick<PointerEvent<SVGSVGElement>, 'clientX' | 'clientY'>): Point => {
+    const svg = svgRef.current;
+    const screenMatrix = svg?.getScreenCTM();
+    if (svg && screenMatrix) {
+      const screenPoint = svg.createSVGPoint();
+      screenPoint.x = event.clientX;
+      screenPoint.y = event.clientY;
+      const point = screenPoint.matrixTransform(screenMatrix.inverse());
+      return { x: point.x, y: point.y };
+    }
+
+    const bounds = svg?.getBoundingClientRect();
+    if (!bounds) return { x: 0, y: 0 };
     return {
       x: (event.clientX - bounds.left) * WIDTH / bounds.width,
       y: (event.clientY - bounds.top) * HEIGHT / bounds.height,
@@ -198,55 +209,69 @@ export const MagicWorldGame: React.FC<MagicWorldGameProps> = ({ language }) => {
 
   const handlePointerMove = (event: PointerEvent<SVGSVGElement>) => {
     if (phase !== 'draw' || pointerIdRef.current !== event.pointerId || !trackData) return;
-    const point = getPoint(event);
     const samples = samplesRef.current;
-    const previousPoint = previousPointRef.current ?? point;
-    const steps = Math.max(1, Math.ceil(distance(previousPoint, point) / 8));
-    let nextProgress = progressRef.current;
-    const nextCollected = new Set(collectedRef.current);
+    const coalescedEvents = event.nativeEvent.getCoalescedEvents?.() ?? [];
+    const pointerEvents = [...coalescedEvents];
+    const lastCoalescedEvent = pointerEvents[pointerEvents.length - 1];
+    if (!lastCoalescedEvent
+      || lastCoalescedEvent.clientX !== event.nativeEvent.clientX
+      || lastCoalescedEvent.clientY !== event.nativeEvent.clientY) {
+      pointerEvents.push(event.nativeEvent);
+    }
 
-    for (let step = 1; step <= steps; step++) {
-      const fraction = step / steps;
-      const tracePoint = {
-        x: previousPoint.x + (point.x - previousPoint.x) * fraction,
-        y: previousPoint.y + (point.y - previousPoint.y) * fraction,
-      };
-      let nearestIndex = nextProgress;
-      let nearestDistance = Infinity;
-      const first = Math.max(0, nextProgress - 4);
-      const last = Math.min(samples.length - 1, nextProgress + 35);
-      for (let index = first; index <= last; index++) {
-        const currentDistance = distance(samples[index], tracePoint);
-        if (currentDistance < nearestDistance) {
-          nearestDistance = currentDistance;
-          nearestIndex = index;
+    for (const pointerEvent of pointerEvents) {
+      const point = getPoint(pointerEvent);
+      const previousPoint = previousPointRef.current ?? point;
+      const steps = Math.max(1, Math.ceil(distance(previousPoint, point) / 8));
+      let nextProgress = progressRef.current;
+      const nextCollected = new Set(collectedRef.current);
+
+      for (let step = 1; step <= steps; step++) {
+        const fraction = step / steps;
+        const tracePoint = {
+          x: previousPoint.x + (point.x - previousPoint.x) * fraction,
+          y: previousPoint.y + (point.y - previousPoint.y) * fraction,
+        };
+        let nearestIndex = nextProgress;
+        let nearestDistance = Infinity;
+        const first = Math.max(0, nextProgress - 4);
+        const last = Math.min(samples.length - 1, nextProgress + 35);
+        for (let index = first; index <= last; index++) {
+          const currentDistance = distance(samples[index], tracePoint);
+          if (currentDistance < nearestDistance) {
+            nearestDistance = currentDistance;
+            nearestIndex = index;
+          }
         }
+        if (nearestDistance > trackData.width + 6) {
+          finish(false, copy.edge);
+          return;
+        }
+        nextProgress = Math.max(nextProgress, nearestIndex);
+        if (obstaclesRef.current.some(obstacle => distance(obstacle, tracePoint) < 24)) {
+          finish(false, copy.bomb);
+          return;
+        }
+        const starIndex = trackData.stars.findIndex((star, index) => !nextCollected.has(index) && distance(star, tracePoint) < 28);
+        if (starIndex >= 0) nextCollected.add(starIndex);
+        if (nextProgress >= samples.length - 6) break;
       }
-      if (nearestDistance > trackData.width + 6) {
-        finish(false, copy.edge);
-        return;
-      }
-      nextProgress = Math.max(nextProgress, nearestIndex);
-      if (obstaclesRef.current.some(obstacle => distance(obstacle, tracePoint) < 24)) {
-        finish(false, copy.bomb);
-        return;
-      }
-      const starIndex = trackData.stars.findIndex((star, index) => !nextCollected.has(index) && distance(star, tracePoint) < 28);
-      if (starIndex >= 0) nextCollected.add(starIndex);
-      if (nextProgress >= samples.length - 6) break;
-    }
 
-    progressRef.current = nextProgress;
-    previousPointRef.current = point;
-    if (nextCollected.size !== collectedRef.current.size) {
-      collectedRef.current = nextCollected;
-      setCollected([...nextCollected]);
+      progressRef.current = nextProgress;
+      previousPointRef.current = point;
+      if (nextCollected.size !== collectedRef.current.size) {
+        collectedRef.current = nextCollected;
+        setCollected([...nextCollected]);
+      }
+      setTrail(current => {
+        const lastPoint = current[current.length - 1];
+        return distance(lastPoint, point) > 4 ? [...current, point] : current;
+      });
+      if (nextProgress >= samples.length - 6) {
+        finish(true, copy.goal);
+        return;
+      }
     }
-    setTrail(current => {
-      const lastPoint = current[current.length - 1];
-      return distance(lastPoint, point) > 4 ? [...current, point] : current;
-    });
-    if (nextProgress >= samples.length - 6) finish(true, copy.goal);
   };
 
   const handlePointerUp = (event: PointerEvent<SVGSVGElement>) => {
