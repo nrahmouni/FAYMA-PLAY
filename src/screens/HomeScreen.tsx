@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Gamepad2, Play, ShieldCheck, ShoppingBag, Sparkles, Users } from 'lucide-react';
+import { ArrowRight, Gamepad2, Play, ShieldCheck, ShoppingBag, Sparkles, Users, BookOpen } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
 import { useProfileStore } from '../store/profileStore';
 import { LANGUAGES } from '../data/languages';
@@ -155,6 +155,22 @@ export const HomeScreen: React.FC = () => {
           </button>
         </div>
       </section>
+
+      <button
+        type="button"
+        onClick={() => setScreen('LEARN_FLEMISH')}
+        className="group grid w-full items-center gap-4 overflow-hidden rounded-[2rem] border-2 border-white bg-gradient-to-r from-emerald-100 via-lime-50 to-yellow-100 p-5 text-left shadow-[0_16px_36px_rgba(54,125,76,.12)] transition hover:-translate-y-1 sm:grid-cols-[auto_1fr_auto] sm:p-7"
+      >
+        <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-white text-4xl shadow-sm" aria-hidden="true">🦁</span>
+        <span>
+          <span className="block text-xs font-black uppercase tracking-[.18em] text-emerald-800">Nuevo · Aprende a tu ritmo</span>
+          <span className="mt-1 block text-xl font-black text-slate-900 sm:text-2xl">¡Descubre el flamenco!</span>
+          <span className="mt-1 block text-sm leading-6 text-slate-700">Más de 100 palabras, frases, audio y juegos para explorar el neerlandés de Flandes.</span>
+        </span>
+        <span className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 text-sm font-black text-white shadow-sm transition group-hover:bg-emerald-700">
+          <BookOpen className="h-4 w-4" /> Empezar <ArrowRight className="h-4 w-4" />
+        </span>
+      </button>
 
       <section className="grid gap-4 md:grid-cols-3">
         <div className="rounded-[2rem] border border-indigo-200 bg-white/80 p-4 shadow-[0_20px_40px_rgba(59,130,246,0.12)]">

@@ -208,26 +208,13 @@
 
   .fayma-game-world {
     width: 100%;
-    perspective: 1100px;
+    max-width: 72rem;
+    margin-inline: auto;
+    perspective: none;
   }
 
   .fayma-game-world::before {
-    position: absolute;
-    z-index: -1;
-    right: -12%;
-    bottom: -12%;
-    left: -12%;
-    height: 50%;
-    background-image:
-      linear-gradient(rgba(103, 232, 249, .09) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(103, 232, 249, .09) 1px, transparent 1px);
-    background-size: 34px 34px;
-    content: '';
-    mask-image: linear-gradient(transparent, #000 38%, transparent);
-    opacity: .45;
-    pointer-events: none;
-    transform: rotateX(65deg) translateZ(-120px) scale(1.3);
-    transform-origin: center bottom;
+    display: none;
   }
 
   .fayma-game-world::after {
@@ -238,7 +225,7 @@
     width: min(70vw, 36rem);
     aspect-ratio: 1;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(99, 102, 241, .12), transparent 68%);
+    background: radial-gradient(circle, rgba(134, 239, 172, .16), transparent 68%);
     content: '';
     pointer-events: none;
     transform: translateX(-50%);

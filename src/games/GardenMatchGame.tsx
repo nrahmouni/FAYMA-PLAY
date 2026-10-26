@@ -1,0 +1,90 @@
+import React, { useEffect, useMemo, useState } from 'react';
+import { motion } from 'motion/react';
+import { GameProps } from '../types';
+import { shuffleArray } from '../lib/utils';
+import { GameProgress, EmptyGame } from './GameProgress';
+import { useGameProgress } from './useGameProgress';
+
+interface FlowerCard {
+  id: string;
+  wordId: string;
+  kind: 'picture' | 'word';
+  content: string;
+  language?: string;
+}
+
+export const GardenMatchGame: React.FC<GameProps> = ({ words, onCorrect, onWrong, onComplete }) => {
+  const roundWords = useMemo(() => words.slice(0, Math.min(5, words.length)), [words]);
+  const cards = useMemo(() => shuffleArray(roundWords.flatMap<FlowerCard>(word => [
+    { id: `${word.id}-picture`, wordId: word.id, kind: 'picture', content: word.imageUrl || '🌱' },
+    { id: `${word.id}-word`, wordId: word.id, kind: 'word', content: word.text, language: word.language },
+  ])), [roundWords]);
+  const [openIds, setOpenIds] = useState<string[]>([]);
+  const [matchedIds, setMatchedIds] = useState<string[]>([]);
+  const [attempts, setAttempts] = useState(0);
+  const [locked, setLocked] = useState(false);
+  const { recordAnswer, finish } = useGameProgress('garden_match', { onCorrect, onWrong, onComplete });
+
+  useEffect(() => {
+    if (openIds.length !== 2) return;
+    const [firstId, secondId] = openIds;
+    const first = cards.find(card => card.id === firstId);
+    const second = cards.find(card => card.id === secondId);
+    if (!first || !second) return;
+    const matched = first.wordId === second.wordId && first.kind !== second.kind;
+    setLocked(true);
+    setAttempts(count => count + 1);
+    const timeout = window.setTimeout(() => {
+      const matchedWord = roundWords.find(word => word.id === first.wordId);
+      if (matchedWord) recordAnswer(matchedWord, matched);
+      if (matched) {
+        const nextMatched = [...matchedIds, first.id, second.id];
+        setMatchedIds(nextMatched);
+        if (nextMatched.length === cards.length) finish(roundWords.map(word => word.id));
+      }
+      setOpenIds([]);
+      setLocked(false);
+    }, matched ? 450 : 900);
+    return () => window.clearTimeout(timeout);
+  }, [cards, finish, matchedIds, openIds, recordAnswer, roundWords]);
+
+  if (!roundWords.length) return <EmptyGame />;
+
+  const completedPairs = matchedIds.length / 2;
+  return (
+    <section className="mx-auto w-full max-w-3xl rounded-[2rem] bg-[#fffaf4] p-4 shadow-[0_18px_45px_rgba(150,97,58,.13)] ring-1 ring-amber-100 sm:p-6">
+      <GameProgress current={completedPairs} total={roundWords.length} label="Flores que ya crecieron" icon="🌼" />
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-3xl bg-gradient-to-r from-amber-100 via-pink-50 to-lime-100 p-4">
+        <div>
+          <h2 className="text-xl font-black text-slate-900 sm:text-2xl">¡Despierta el jardín!</h2>
+          <p className="mt-1 text-sm font-semibold text-slate-600">Busca una flor y su palabra gemela.</p>
+        </div>
+        <div className="rounded-2xl bg-white/80 px-3 py-2 text-sm font-extrabold text-amber-800">Intentos: {attempts}</div>
+      </div>
+      <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-5 sm:gap-3">
+        {cards.map((card, index) => {
+          const open = openIds.includes(card.id) || matchedIds.includes(card.id);
+          return (
+            <motion.button
+              key={card.id}
+              type="button"
+              disabled={locked || matchedIds.includes(card.id) || openIds.includes(card.id)}
+              whileTap={{ scale: 0.96 }}
+              onClick={() => setOpenIds(ids => [...ids, card.id])}
+              aria-label={open ? (card.kind === 'picture' ? card.content : card.content) : `Flor tapada ${index + 1}`}
+              className={`flex aspect-square min-h-20 items-center justify-center rounded-2xl border-2 p-2 text-center shadow-sm transition sm:rounded-3xl ${
+                matchedIds.includes(card.id)
+                  ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                  : open ? 'border-amber-300 bg-white text-slate-800' : 'border-white bg-gradient-to-br from-pink-200 to-amber-200 text-5xl shadow-[0_5px_0_#e8c9a0] hover:-translate-y-1'
+              }`}
+            >
+              {open
+                ? <span className={card.kind === 'picture' ? 'text-4xl sm:text-5xl' : 'text-base font-black sm:text-lg'} lang={card.language}>{card.kind === 'picture' ? card.content : card.content}</span>
+                : <span aria-hidden="true">🌷</span>}
+            </motion.button>
+          );
+        })}
+      </div>
+    </section>
+  );
+};

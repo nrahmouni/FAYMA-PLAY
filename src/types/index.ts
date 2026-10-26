@@ -75,6 +75,7 @@ export type Screen =
   | 'PLAYER_SETUP' 
   | 'HOME' 
   | 'WORLD_HUB' 
+  | 'LEARN_FLEMISH'
   | 'PASSPORT'
   | 'GAME_SESSION' 
   | 'PODIUM' 

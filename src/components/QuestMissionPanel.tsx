@@ -4,53 +4,23 @@ import { Compass, Star, Sparkles, Trophy } from 'lucide-react';
 import { DifficultyLevel, PlayerProfile } from '../types';
 
 const MISSION_COPY: Record<string, { title: string; objective: string; reward: string; accent: string }> = {
-  combat: {
-    title: 'Rescate de la ciudad',
-    objective: 'Protege a tus compañeros y aprende palabras del mundo real mientras esquivas los peligros.',
-    reward: 'Insignia del héroe',
-    accent: 'from-fuchsia-500 to-violet-600',
+  safari: {
+    title: 'Safari de palabras',
+    objective: 'Acompaña a Lila por la selva y descubre dibujos nuevos mientras practicas otro idioma.',
+    reward: 'Pegatina de explorador',
+    accent: 'from-lime-400 to-emerald-500',
   },
-  drive: {
-    title: 'Carrera de palabras',
-    objective: 'Recoge palabras útiles en cada carril y avanza por la ruta más rápida.',
-    reward: 'Medalla del explorador',
-    accent: 'from-cyan-500 to-blue-600',
+  garden_match: {
+    title: 'Jardín de parejas',
+    objective: 'Voltea las flores, encuentra las parejas y ayuda a que el jardín crezca.',
+    reward: 'Flor brillante',
+    accent: 'from-amber-300 to-pink-400',
   },
-  fruit: {
-    title: 'Mercado mágico',
-    objective: 'Corta solo lo correcto y construye una racha para ganar más puntos.',
-    reward: 'Bastón del chef',
-    accent: 'from-amber-400 to-rose-500',
-  },
-  drag_match: {
-    title: 'Ruta del mapa',
-    objective: 'Relaciona cada palabra con su lugar perfecto para descubrir el paisaje.',
-    reward: 'Mapa del viajero',
-    accent: 'from-sky-500 to-indigo-600',
-  },
-  slingshot: {
-    title: 'Torre del reto',
-    objective: 'Apunta con calma, calcula cada tirada y construye tu dominio del vocabulario.',
-    reward: 'Bola de luz',
-    accent: 'from-orange-400 to-pink-500',
-  },
-  memory: {
-    title: 'Museo de recuerdos',
-    objective: 'Encuentra las parejas y fortalece la memoria visual con palabras útiles.',
-    reward: 'Lente de sabiduría',
-    accent: 'from-violet-500 to-indigo-600',
-  },
-  sentence_builder: {
-    title: 'Taller de frases',
-    objective: 'Construye frases correctas para hablar con confianza en cada aventura.',
-    reward: 'Diploma de comunicación',
-    accent: 'from-emerald-500 to-cyan-600',
-  },
-  bubble_popper: {
-    title: 'Burbuja mágica',
-    objective: 'Combina palabras de color y deja el campo despejado antes de que termine el tiempo.',
-    reward: 'Cristal del cielo',
-    accent: 'from-pink-500 to-violet-600',
+  word_train: {
+    title: 'Tren de palabras',
+    objective: 'Completa frases sencillas y ayuda a Chispa a llevar cada palabra a su destino.',
+    reward: 'Estrella viajera',
+    accent: 'from-sky-400 to-blue-500',
   },
 };
 

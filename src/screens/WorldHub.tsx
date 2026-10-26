@@ -8,12 +8,10 @@ import { VOCABULARY_BANK } from '../data/vocabulary';
 import { ThemeVocabularyBanner } from '../components/ThemeVocabularyBanner';
 import { Language } from '../types';
 
-const ARCADE_GAMES: { id: GameMechanic; name: string; description: string; icon: string; accent: string }[] = [
-  { id: 'drive', name: 'CITY RUNNER', description: 'Corre por la ciudad, recoge palabras y supera la ruta segura.', icon: '🚗', accent: 'from-cyan-400 to-blue-600' },
-  { id: 'sentence_builder', name: 'SENTENCE BUILDER', description: 'Construye frases útiles para hablar con confianza en cada aventura.', icon: '🏗️', accent: 'from-emerald-400 to-cyan-700' },
-  { id: 'drag_match', name: 'MAP MATCH', description: 'Relaciona cada palabra con el lugar correcto del mapa del país.', icon: '🗺️', accent: 'from-sky-400 to-indigo-600' },
-  { id: 'memory', name: 'MEMORY QUEST', description: 'Encuentra las parejas y fortalece la memoria visual del vocabulario.', icon: '🧠', accent: 'from-violet-400 to-indigo-700' },
-  { id: 'bubble_popper', name: 'BUBBLE POPPER', description: 'Combina Burbujas del mismo color y despeja el tablero con palabras.', icon: '🫧', accent: 'from-pink-400 to-violet-700' },
+const ARCADE_GAMES: { id: GameMechanic; name: string; description: string; icon: string; accent: string; artwork: string }[] = [
+  { id: 'safari', name: 'Safari de palabras', description: 'Explora la selva y encuentra el animal o el objeto que te pide Lila.', icon: '🦒', accent: 'from-lime-300 to-emerald-400', artwork: '/games/safari.svg' },
+  { id: 'word_train', name: 'Tren de palabras', description: 'Ayuda a Chispa a completar frases y llevar cada palabra a su destino.', icon: '🚂', accent: 'from-sky-300 to-blue-400', artwork: '/games/train.svg' },
+  { id: 'garden_match', name: 'Jardín de parejas', description: 'Gira las flores, encuentra las parejas y haz crecer el jardín.', icon: '🌼', accent: 'from-amber-200 to-pink-300', artwork: '/games/garden.svg' },
 ];
 
 const WORLD_STORIES: Record<Language, { title: string; story: string; reward: string; accent: string }> = {
@@ -223,14 +221,14 @@ export const WorldHub: React.FC = () => {
             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[.2em] text-indigo-700">
               <Gamepad2 className="h-4 w-4" /> Modo aventura
             </div>
-            <h2 className="mt-1 text-2xl font-black text-slate-900 sm:text-3xl">5 juegos definitivos. Una gran misión.</h2>
+            <h2 className="mt-1 text-2xl font-black text-slate-900 sm:text-3xl">¡Tres juegos nuevos para aprender jugando!</h2>
           </div>
           <span className="hidden rounded-full border border-indigo-200 bg-white/70 px-3 py-1.5 text-[10px] font-black uppercase tracking-[.18em] text-slate-600 sm:block">
-            5 experiencias premium
+            Para peques exploradores
           </span>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {ARCADE_GAMES.map((game, index) => (
             <motion.button
               key={game.id}
@@ -241,19 +239,19 @@ export const WorldHub: React.FC = () => {
               whileHover={{ y: -5, rotateX: 2 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => startArcadeGame(game.id)}
-              className="fayma-game-card group relative overflow-hidden rounded-2xl border border-indigo-200 p-4 text-left"
+              className="fayma-game-card group relative overflow-hidden rounded-[1.75rem] border-2 border-white bg-white p-4 text-left shadow-[0_12px_28px_rgba(64,115,62,.12)] sm:p-5"
             >
-              <span className={`absolute -right-8 -top-10 h-28 w-28 rounded-full bg-gradient-to-br ${game.accent} opacity-20 blur-2xl transition group-hover:opacity-40`} />
-              <div className="relative flex items-start justify-between">
-                <span className={`fayma-game-icon bg-gradient-to-br ${game.accent}`}>{game.icon}</span>
-                <span className="rounded-full border border-indigo-200 bg-white/80 px-2 py-1 text-[9px] font-black uppercase tracking-widest text-slate-600">
-                  JUGAR
-                </span>
+              <div className={`relative -mx-1 -mt-1 mb-4 overflow-hidden rounded-2xl bg-gradient-to-br ${game.accent}`}>
+                <img src={game.artwork} alt="" className="h-36 w-full object-contain transition-transform duration-300 group-hover:scale-105 sm:h-40" />
+                <span className="absolute right-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-black text-emerald-800 shadow-sm">¡JUGAR!</span>
               </div>
-              <h3 className="relative mt-4 text-sm font-black tracking-wide text-slate-900">{game.name}</h3>
-              <p className="relative mt-1 min-h-10 text-xs leading-5 text-slate-600">{game.description}</p>
-              <div className="relative mt-3 flex items-center gap-1 text-[10px] font-bold text-indigo-700">
-                <Sparkles className="h-3 w-3" /> Aprende mientras juegas
+              <div className="flex items-center gap-2">
+                <span className="text-2xl" aria-hidden="true">{game.icon}</span>
+                <h3 className="text-lg font-black text-slate-900">{game.name}</h3>
+              </div>
+              <p className="mt-2 min-h-12 text-sm leading-6 text-slate-600">{game.description}</p>
+              <div className="mt-3 flex items-center gap-1.5 text-xs font-bold text-emerald-700">
+                <Sparkles className="h-4 w-4" /> Sin prisas, ¡a tu ritmo!
               </div>
             </motion.button>
           ))}
@@ -276,14 +274,6 @@ export const WorldHub: React.FC = () => {
           <div className="relative z-10 space-y-8 sm:space-y-10">
             {nodes.map((node, index) => {
               const locked = !node.unlocked;
-              const gameNames: Record<string, string> = {
-                drive: 'CITY RUNNER',
-                drag_match: 'MAP MATCH',
-                memory: 'MEMORY QUEST',
-                sentence_builder: 'SENTENCE BUILDER',
-                bubble_popper: 'BUBBLE POPPER',
-              };
-
               return (
                 <motion.div
                   key={node.id}
@@ -308,7 +298,7 @@ export const WorldHub: React.FC = () => {
                       <span className="text-xl">{node.icon}</span>
                       <h3 className="text-sm font-black text-slate-900 sm:text-base">{node.name}</h3>
                     </div>
-                    <p className="mt-1 text-xs font-bold text-indigo-700">{gameNames[node.gameId] ?? node.gameName}</p>
+                    <p className="mt-1 text-xs font-bold text-emerald-700">{node.gameName}</p>
                     <div className={`mt-2 flex items-center gap-1.5 ${index % 2 ? 'sm:justify-end' : ''}`}>
                       {[1, 2, 3, 4, 5].map(star => (
                         <span key={star} className={`text-xs ${star <= node.minDifficulty ? 'text-amber-400' : 'text-slate-300'}`}>★</span>

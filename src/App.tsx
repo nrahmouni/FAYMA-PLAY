@@ -15,6 +15,7 @@ import { HomeScreen } from './screens/HomeScreen';
 import { AuthScreen } from './screens/AuthScreen';
 import { PlayerSetup } from './screens/PlayerSetup';
 import { WorldHub } from './screens/WorldHub';
+import { FlemishLearningScreen } from './screens/FlemishLearningScreen';
 import { PassportScreen } from './screens/PassportScreen';
 import { GameSession } from './screens/GameSession';
 import { PodiumScreen } from './screens/PodiumScreen';
@@ -52,6 +53,9 @@ export default function App() {
       } else {
         setMascotMessage('Bonjour! ¡Practica la lengua del arte y la gastronomía!');
       }
+    } else if (currentScreen === 'LEARN_FLEMISH') {
+      setMascotMood('happy');
+      setMascotMessage('¡Vamos a aprender palabras flamencas! Escucha, repite y juega a tu ritmo.');
     } else if (currentScreen === 'GAME_SESSION') {
       if (sessionPhase === 'CHALLENGE_PHASE') {
         setMascotMood('idle');
@@ -144,6 +148,8 @@ export default function App() {
         return <HomeScreen />;
       case 'WORLD_HUB':
         return <WorldHub />;
+      case 'LEARN_FLEMISH':
+        return <FlemishLearningScreen />;
       case 'PASSPORT':
         return <PassportScreen />;
       case 'GAME_SESSION':
@@ -183,7 +189,7 @@ export default function App() {
       </main>
 
       {/* Reactive Animated Companion Mascot (Hidden in BOOT) */}
-      {currentScreen !== 'BOOT' && (
+      {currentScreen !== 'BOOT' && currentScreen !== 'GAME_SESSION' && (
         <MascotBuddy
           mood={mascotMood}
           customMessage={mascotMessage}

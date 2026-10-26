@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volume2, VolumeX, Sparkles, Coins, Gem, Home, Compass, ShoppingBag, Users } from 'lucide-react';
+import { Volume2, VolumeX, Sparkles, Coins, Gem, Home, Compass, ShoppingBag, Users, BookOpen } from 'lucide-react';
 import { useGameStore } from '../../store/gameStore';
 import { useProfileStore } from '../../store/profileStore';
 import { useSound } from '../../hooks/useSound';
@@ -94,6 +94,19 @@ export const HeaderHUD: React.FC = () => {
             >
               <Compass className="w-4 h-4" />
               <span className="hidden md:inline">Mundos</span>
+            </button>
+
+            <button
+              onClick={() => setScreen('LEARN_FLEMISH')}
+              aria-label="Aprender flamenco"
+              className={`hidden md:flex p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold transition items-center gap-1.5 ${
+                currentScreen === 'LEARN_FLEMISH'
+                  ? 'bg-emerald-500/20 text-emerald-700 border border-emerald-500/40'
+                  : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-50'
+              }`}
+            >
+              <BookOpen className="w-4 h-4" />
+              <span className="hidden lg:inline">Aprender</span>
             </button>
 
             <button
