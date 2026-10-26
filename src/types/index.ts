@@ -1,4 +1,4 @@
-export type Language = 'ar' | 'nl-BE' | 'fr';
+export type Language = 'ar' | 'nl-BE' | 'fr' | 'es';
 
 export type DifficultyLevel = 1 | 2 | 3 | 4 | 5;
 

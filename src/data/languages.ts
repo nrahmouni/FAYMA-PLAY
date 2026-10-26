@@ -1,6 +1,19 @@
 import { Language, LanguageMeta } from '../types';
 
 export const LANGUAGES: Record<Language, LanguageMeta> = {
+  es: {
+    code: 'es',
+    name: 'Español',
+    nativeName: 'Español',
+    flag: '🇪🇸',
+    themeColor: '#ef4444', // Red & Gold
+    accentColor: '#f59e0b',
+    bgGradient: 'from-red-950/40 via-slate-950 to-amber-950/30',
+    voiceLang: 'es-ES',
+    voiceFallbacks: ['es', 'es-MX', 'es-US', 'es-419'],
+    dir: 'ltr',
+    description: '¡Aprende palabras geniales en español jugando con amigos!',
+  },
   ar: {
     code: 'ar',
     name: 'Árabe',

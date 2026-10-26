@@ -43,6 +43,63 @@ interface GameState {
 }
 
 const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
+  es: [
+    {
+      id: 'es_w1',
+      theme: 'saludos',
+      name: 'Isla de la Bienvenida',
+      icon: '🏝️',
+      gameId: 'drag_match',
+      gameName: 'Arrastre Rápido',
+      minDifficulty: 1,
+      unlocked: true,
+      completed: false,
+    },
+    {
+      id: 'es_w2',
+      theme: 'animales',
+      name: 'Safari de Mascotas',
+      icon: '🐾',
+      gameId: 'memory',
+      gameName: 'Memoria Mágica',
+      minDifficulty: 1,
+      unlocked: true,
+      completed: false,
+    },
+    {
+      id: 'es_w3',
+      theme: 'comida',
+      name: 'Feria de Sabores',
+      icon: '🍎',
+      gameId: 'bubble_popper',
+      gameName: 'Burbujas Risueñas',
+      minDifficulty: 2,
+      unlocked: true,
+      completed: false,
+    },
+    {
+      id: 'es_w4',
+      theme: 'colores',
+      name: 'Arcoíris Encantado',
+      icon: '🌈',
+      gameId: 'slingshot',
+      gameName: 'Tirachinas de Colores',
+      minDifficulty: 2,
+      unlocked: true,
+      completed: false,
+    },
+    {
+      id: 'es_w5',
+      theme: 'viajes',
+      name: 'Castillo del Espacio',
+      icon: '🚀',
+      gameId: 'sentence_builder',
+      gameName: 'Constructor de Frases',
+      minDifficulty: 3,
+      unlocked: true,
+      completed: false,
+    },
+  ],
   ar: [
     {
       id: 'ar_w1',
@@ -218,7 +275,7 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
 
 export const useGameStore = create<GameState>((set, get) => ({
   currentScreen: 'BOOT',
-  language: 'ar',
+  language: 'es',
   totalRounds: 3,
   currentRound: 1,
   currentPlayerIndex: 0,

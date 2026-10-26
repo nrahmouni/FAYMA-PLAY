@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Volume2, Sparkles, ArrowRight, BookOpen } from 'lucide-react';
 import { Word, Language, PlayerProfile } from '../types';
@@ -25,33 +25,39 @@ export const SmartLearningModal: React.FC<SmartLearningModalProps> = ({
   const isArabic = language === 'ar';
   const currentWord = words[selectedWordIdx] || words[0];
 
+  useEffect(() => {
+    if (currentWord) {
+      speak(currentWord.audioText || currentWord.text, language);
+    }
+  }, [selectedWordIdx, currentWord, language, speak]);
+
   const handlePlayVoice = (word: Word) => {
     playCardFlip();
     speak(word.audioText || word.text, language);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn">
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="w-full max-w-xl rounded-3xl glass-panel p-6 sm:p-8 shadow-2xl border-2 border-cyan-400/40 relative overflow-hidden"
+        className="w-full max-w-xl rounded-3xl glass-panel p-5 sm:p-8 shadow-2xl border-3 border-cyan-400/50 relative overflow-hidden"
       >
-        {/* Top Header */}
+        {/* Child Friendly Header */}
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2 text-cyan-400 font-extrabold text-xs uppercase tracking-wider">
-            <BookOpen className="w-4 h-4" />
-            <span>Fase 1: Descubrimiento de Vocabulario</span>
+          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 font-black text-xs uppercase tracking-wider border border-cyan-500/30">
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>Paso 1: ¡Aprende la palabra!</span>
           </div>
 
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-xs text-slate-300 font-bold border border-white/5">
-            <span>Turno de</span>
-            <span className="text-amber-400">{player.displayName}</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-amber-500/20 text-xs text-amber-300 font-black border border-amber-500/30">
+            <span>🎮 Le toca a:</span>
+            <span className="text-white text-sm">{player.displayName}</span>
           </div>
         </div>
 
-        {/* Word Tabs */}
-        <div className="flex gap-2 mb-5">
+        {/* Word Tabs: Big Friendly Buttons */}
+        <div className="flex gap-2 mb-4">
           {words.map((w, idx) => (
             <button
               key={w.id}
@@ -59,28 +65,28 @@ export const SmartLearningModal: React.FC<SmartLearningModalProps> = ({
                 setSelectedWordIdx(idx);
                 handlePlayVoice(w);
               }}
-              className={`flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 border ${
+              className={`flex-1 py-3 px-2 rounded-2xl text-sm font-black transition flex items-center justify-center gap-2 border-2 cursor-pointer ${
                 selectedWordIdx === idx
-                  ? 'bg-cyan-500/20 text-cyan-300 border-cyan-400 shadow-lg'
-                  : 'glass-card text-slate-400 hover:text-white border-white/5'
+                  ? 'bg-cyan-500/30 text-white border-cyan-400 shadow-xl scale-102'
+                  : 'glass-card text-slate-300 hover:text-white border-white/10'
               }`}
             >
-              <span>{w.imageUrl || '✨'}</span>
-              <span className="truncate max-w-[80px]">{w.translation}</span>
+              <span className="text-2xl select-none">{w.imageUrl || '✨'}</span>
+              <span className="truncate max-w-[90px]">{w.text}</span>
             </button>
           ))}
         </div>
 
-        {/* Hero Presentation Card */}
+        {/* Big Presentation Card */}
         {currentWord && (
-          <div className="w-full rounded-2xl glass-card p-6 flex flex-col items-center justify-center text-center border border-white/10 relative my-2">
-            <span className="text-5xl sm:text-6xl mb-3 select-none filter drop-shadow">
+          <div className="w-full rounded-3xl glass-card p-6 flex flex-col items-center justify-center text-center border-2 border-white/15 relative my-2 shadow-inner">
+            <span className="text-6xl sm:text-7xl mb-2 select-none filter drop-shadow animate-float">
               {currentWord.imageUrl || '🌟'}
             </span>
 
-            {/* Native word */}
+            {/* Word in Target Language */}
             <h2
-              className={`font-black text-slate-100 mb-1 select-none ${
+              className={`font-black text-slate-100 mb-1 select-none tracking-wide ${
                 isArabic ? 'text-4xl sm:text-5xl font-arabic py-2' : 'text-3xl sm:text-4xl'
               }`}
               dir={isArabic ? 'rtl' : 'ltr'}
@@ -88,50 +94,38 @@ export const SmartLearningModal: React.FC<SmartLearningModalProps> = ({
               {currentWord.text}
             </h2>
 
-            {/* Phonetic Badge */}
-            {currentWord.phonetic && (
-              <div className="px-3 py-1 rounded-full bg-slate-900/90 text-cyan-300 text-xs sm:text-sm font-mono border border-cyan-500/20 mb-3">
-                /{currentWord.phonetic}/
-              </div>
-            )}
-
-            {/* Meaning */}
-            <p className="text-lg sm:text-xl font-bold text-slate-200">
+            {/* Meaning in Spanish */}
+            <p className="text-xl sm:text-2xl font-black text-amber-300 mt-1">
               {currentWord.translation}
             </p>
 
-            {/* Example sentence if present */}
-            {currentWord.exampleSentence && (
-              <div className="mt-3 p-2.5 rounded-xl bg-slate-900/60 w-full text-xs text-slate-300 border border-white/5">
-                <span className="font-arabic font-bold text-cyan-300 block mb-0.5">
-                  {currentWord.exampleSentence}
-                </span>
-                <span className="text-slate-400 italic">
-                  "{currentWord.exampleTranslation}"
-                </span>
+            {/* Phonetic transcription badge */}
+            {currentWord.phonetic && (
+              <div className="px-3 py-1 rounded-full bg-slate-900/90 text-cyan-300 text-xs sm:text-sm font-mono border border-cyan-500/20 mt-2">
+                Suena como: <strong>{currentWord.phonetic}</strong>
               </div>
             )}
 
-            {/* Audio Button */}
+            {/* Big Loudspeaker Listen Button */}
             <button
               type="button"
               onClick={() => handlePlayVoice(currentWord)}
-              className="mt-4 flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-cyan-500 text-slate-950 font-black hover:bg-cyan-400 active:scale-95 transition shadow-lg shadow-cyan-500/20"
+              className="mt-4 flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-cyan-400 text-slate-950 font-black text-sm sm:text-base hover:bg-cyan-300 active:scale-95 transition shadow-xl shadow-cyan-400/30 cursor-pointer"
             >
-              <Volume2 className={`w-4 h-4 ${isSpeaking ? 'animate-bounce' : ''}`} />
-              <span>Escuchar Pronunciación</span>
+              <Volume2 className={`w-5 h-5 ${isSpeaking ? 'animate-bounce text-slate-950' : ''}`} />
+              <span>{isSpeaking ? '¡Escuchando...!' : '🔊 ¡Toca para Escuchar!'}</span>
             </button>
           </div>
         )}
 
-        {/* Ready / Start Challenge Button */}
+        {/* Big Start Challenge Button */}
         <button
           type="button"
           onClick={onReady}
-          className="w-full mt-6 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white font-black text-base flex items-center justify-center gap-2 shadow-xl hover:opacity-95 active:scale-98 transition cursor-pointer"
+          className="w-full mt-4 py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 hover:from-emerald-300 hover:to-cyan-400 text-slate-950 font-black text-lg flex items-center justify-center gap-2 shadow-2xl active:scale-97 transition cursor-pointer"
         >
-          <span>¡Estoy Listo para el Desafío!</span>
-          <ArrowRight className="w-5 h-5" />
+          <span>¡ESTOY LISTO PARA JUGAR! 🚀</span>
+          <ArrowRight className="w-6 h-6" />
         </button>
       </motion.div>
     </div>

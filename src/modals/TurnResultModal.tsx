@@ -126,10 +126,10 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
         <button
           type="button"
           onClick={onContinue}
-          className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white font-black text-base flex items-center justify-center gap-2 shadow-xl hover:opacity-95 active:scale-98 transition cursor-pointer"
+          className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 hover:from-emerald-300 hover:to-cyan-400 text-slate-950 font-black text-lg flex items-center justify-center gap-2 shadow-2xl active:scale-97 transition cursor-pointer"
         >
-          <span>Continuar Siguiente Turno</span>
-          <ArrowRight className="w-5 h-5" />
+          <span>¡SIGUIENTE JUGADOR! 🚀</span>
+          <ArrowRight className="w-6 h-6" />
         </button>
       </motion.div>
     </div>

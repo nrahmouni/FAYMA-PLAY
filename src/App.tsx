@@ -42,7 +42,9 @@ export default function App() {
       setMascotMessage('¡Bienvenido a Juegofy! Elige tu mundo para empezar.');
     } else if (currentScreen === 'WORLD_HUB') {
       setMascotMood('thinking');
-      if (language === 'ar') {
+      if (language === 'es') {
+        setMascotMessage('¡Hola! ¡Vamos a aprender palabras súper divertidas en español!');
+      } else if (language === 'ar') {
         setMascotMessage('مَرْحَبًا! ¡El mundo árabe tiene retos fascinantes!');
       } else if (language === 'nl-BE') {
         setMascotMessage('Goeiedag! ¡Explora los canales y dulces de Flandes!');

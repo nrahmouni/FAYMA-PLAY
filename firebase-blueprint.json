@@ -24,7 +24,7 @@
       "type": "object",
       "properties": {
         "id": { "type": "string", "maxLength": 128 },
-        "language": { "type": "string", "enum": ["ar", "nl-BE", "fr"] },
+        "language": { "type": "string", "enum": ["ar", "nl-BE", "fr", "es"] },
         "worldId": { "type": "string", "maxLength": 64 },
         "rounds": { "type": "number" },
         "currentRound": { "type": "number" },
