@@ -44,7 +44,7 @@ export const GameSession: React.FC = () => {
       ? copy.safariVoiceGuide
       : activeGameId === 'garden_match'
         ? copy.gardenVoiceGuide
-        : difficulty >= 3 ? copy.orderSentence : copy.trainVoiceGuide;
+        : difficulty >= 13 ? copy.orderSentence : copy.trainVoiceGuide;
     speak(`${copy.ready.replace('{name}', activePlayer.displayName)} ${copy.startTurn} ${guide}`, language);
   }, [activeGameId, activePlayer?.displayName, copy, difficulty, language, playTurnStart, sessionPhase, speak, turnKey]);
 
@@ -79,7 +79,7 @@ export const GameSession: React.FC = () => {
       totalAnswers > 0 &&
       result.correct / totalAnswers >= 0.45,
     );
-    setLevelAdvanced(totalAnswers >= 2 && difficulty < 3 && result.correct / totalAnswers >= 0.5);
+    setLevelAdvanced(totalAnswers >= 2 && difficulty < 15 && result.correct / totalAnswers >= 0.5);
     const finalizedResult: GameResult = {
       ...result,
       playerId: activePlayer.uid,

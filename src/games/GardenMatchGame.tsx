@@ -16,7 +16,10 @@ interface FlowerCard {
 }
 
 export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, language, onCorrect, onWrong, onComplete }) => {
-  const roundWords = useMemo(() => words.slice(0, Math.min(difficulty + 1, 4, words.length)), [difficulty, words]);
+  const roundWords = useMemo(
+    () => words.slice(0, Math.min(6, 2 + Math.floor((difficulty - 1) / 3), words.length)),
+    [difficulty, words],
+  );
   const cards = useMemo(() => shuffleArray(roundWords.flatMap<FlowerCard>(word => [
     { id: `${word.id}-picture`, wordId: word.id, kind: 'picture', content: word.imageUrl || '🌱' },
     { id: `${word.id}-word`, wordId: word.id, kind: 'word', content: word.text, language: word.language },

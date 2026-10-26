@@ -1,6 +1,7 @@
 import { Word } from '../types';
+import { EVERYDAY_VOCABULARY } from './everydayVocabulary';
 
-export const VOCABULARY_BANK: Word[] = [
+const BASE_VOCABULARY: Word[] = [
   // --- ÁRABE (ar) ---
   {
     id: 'ar_1',
@@ -777,3 +778,5 @@ export const VOCABULARY_BANK: Word[] = [
     exampleTranslation: 'El color de los bosques',
   },
 ];
+
+export const VOCABULARY_BANK: Word[] = [...BASE_VOCABULARY, ...EVERYDAY_VOCABULARY];

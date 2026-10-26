@@ -31,7 +31,7 @@ interface GameState {
   sessionPhase: GameSessionPhase;
   scores: Record<string, number>; // playerUid -> total score
   results: GameResult[];
-  difficulties: Record<string, DifficultyLevel>; // playerUid -> 1-5
+  difficulties: Record<string, DifficultyLevel>; // playerUid -> 1-15
   currentTurnResult: GameResult | null;
   worldNodes: Record<Language, WorldNode[]>;
 
@@ -101,6 +101,23 @@ function loadSavedWorlds(): Record<Language, WorldNode[]> {
   }
 }
 
+function isDifficultyLevel(value: unknown): value is DifficultyLevel {
+  return typeof value === 'number' && Number.isInteger(value) && value >= 1 && value <= 15;
+}
+
+function loadSavedDifficulties(): Record<string, DifficultyLevel> {
+  try {
+    if (typeof localStorage === 'undefined') return {};
+    const saved: unknown = JSON.parse(localStorage.getItem('fayma-play-player-levels') || '{}');
+    if (!saved || typeof saved !== 'object' || Array.isArray(saved)) return {};
+    return Object.fromEntries(
+      Object.entries(saved).filter((entry): entry is [string, DifficultyLevel] => isDifficultyLevel(entry[1])),
+    );
+  } catch (error) {
+    console.warn('Could not load saved player levels:', error);
+    return {};
+  }
+}
 
 export const useGameStore = create<GameState>((set, get) => ({
   currentScreen: 'BOOT',
@@ -115,7 +132,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   sessionPhase: 'CHALLENGE_PHASE',
   scores: {},
   results: [],
-  difficulties: {},
+  difficulties: loadSavedDifficulties(),
   currentTurnResult: null,
   worldNodes: loadSavedWorlds(),
 
@@ -133,12 +150,12 @@ export const useGameStore = create<GameState>((set, get) => ({
   setSessionPhase: (phase) => set({ sessionPhase: phase }),
 
   startSession: (players) => {
-    const { activeWorldDifficulty } = get();
+    const { activeWorldDifficulty, difficulties } = get();
     const initialScores: Record<string, number> = {};
     const initialDiffs: Record<string, DifficultyLevel> = {};
     players.forEach(p => {
       initialScores[p.uid] = 0;
-      initialDiffs[p.uid] = activeWorldDifficulty || 1;
+      initialDiffs[p.uid] = difficulties[p.uid] || activeWorldDifficulty || 1;
     });
 
     set({
@@ -213,13 +230,16 @@ export const useGameStore = create<GameState>((set, get) => ({
   adjustDifficulty: (playerUid, delta) => {
     const { difficulties } = get();
     const current = difficulties[playerUid] || 1;
-    const next = Math.min(3, Math.max(1, current + delta)) as DifficultyLevel;
-    set({
-      difficulties: {
-        ...difficulties,
-        [playerUid]: next,
-      },
-    });
+    const next = Math.min(15, Math.max(1, current + delta)) as DifficultyLevel;
+    const updatedDifficulties = { ...difficulties, [playerUid]: next };
+    set({ difficulties: updatedDifficulties });
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('fayma-play-player-levels', JSON.stringify(updatedDifficulties));
+      }
+    } catch (error) {
+      console.warn('Could not save player levels:', error);
+    }
   },
 
   resetSession: () => set({

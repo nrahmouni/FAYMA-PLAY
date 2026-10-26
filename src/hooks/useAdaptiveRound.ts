@@ -25,15 +25,13 @@ export function useAdaptiveRound() {
     if (!worldPool.length) return [];
 
     const difficulty = difficulties[player.uid] || 1;
-    const beginnerWords = worldPool.filter(word =>
-      ['animales', 'comida', 'colores'].includes(word.theme) && !word.text.trim().includes(' '),
-    );
-    const singleWords = worldPool.filter(word => !word.text.trim().includes(' '));
-    const practicePool = difficulty === 1 && beginnerWords.length >= 3
-      ? beginnerWords
-      : difficulty <= 2 && singleWords.length >= 3
-        ? singleWords
-        : worldPool;
+    const unlockedWords = worldPool.filter((word, index) => {
+      const learningLevel = word.learningLevel ?? Math.min(8, Math.floor(index / 2) + 1);
+      return learningLevel <= difficulty;
+    });
+    const practicePool = difficulty < 13
+      ? unlockedWords.filter(word => !word.text.trim().includes(' '))
+      : unlockedWords;
     const newOrLearning: Word[] = [];
     const reviewWords: Word[] = [];
     const masteredWords: Word[] = [];
@@ -56,12 +54,10 @@ export function useAdaptiveRound() {
     const shuffledReview = shuffleArray(reviewWords);
     const shuffledMastered = shuffleArray(masteredWords);
 
-    // Child-friendly sessions: start with a short, encouraging deck of 4-6 words
-    // so levels feel readable, fair, and actually teach the target vocabulary.
-    const targetCount = Math.min(6, difficulty + 2, practicePool.length);
+    const targetCount = Math.min(6, 2 + Math.floor((difficulty - 1) / 3), practicePool.length);
 
     if (shuffledNew.length > 0) {
-      selected.push(...shuffledNew.slice(0, Math.min(3, targetCount)));
+      selected.push(...shuffledNew.slice(0, targetCount));
     }
 
     if (shuffledReview.length > 0 && selected.length < targetCount) {

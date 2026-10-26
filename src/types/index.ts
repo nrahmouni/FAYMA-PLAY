@@ -1,6 +1,9 @@
 export type Language = 'ar' | 'nl-BE' | 'fr' | 'es';
 
-export type DifficultyLevel = 1 | 2 | 3 | 4 | 5;
+export type DifficultyLevel =
+  | 1 | 2 | 3 | 4 | 5
+  | 6 | 7 | 8 | 9 | 10
+  | 11 | 12 | 13 | 14 | 15;
 
 export type MasteryLevel = 'new' | 'learning' | 'review' | 'mastered';
 
@@ -15,6 +18,7 @@ export interface Word {
   audioText?: string;      // Texto alternativo si el TTS requiere diacríticos
   exampleSentence?: string;
   exampleTranslation?: string;
+  learningLevel?: DifficultyLevel;
 }
 
 export interface WordMastery {

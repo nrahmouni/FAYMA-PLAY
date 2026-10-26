@@ -13,6 +13,7 @@ export const HeaderHUD: React.FC = () => {
   const language = useGameStore(state => state.language);
   const currentRound = useGameStore(state => state.currentRound);
   const totalRounds = useGameStore(state => state.totalRounds);
+  const difficulties = useGameStore(state => state.difficulties);
   const currentPlayerIndex = useGameStore(state => state.currentPlayerIndex);
   const profiles = useProfileStore(state => state.profiles);
   const activePlayer = profiles[currentPlayerIndex] || profiles[0];
@@ -53,6 +54,8 @@ export const HeaderHUD: React.FC = () => {
 
         {currentScreen === 'GAME_SESSION' && (
           <div className="min-w-0 rounded-full bg-sky-50 px-3 py-2 text-center text-xs font-extrabold text-sky-900 ring-1 ring-sky-100">
+            <span>{copy.wordLevel} {difficulties[activePlayer?.uid || ''] || 1}/15</span>
+            <span className="mx-1.5 text-sky-300">·</span>
             <span>{copy.round} {currentRound}/{totalRounds}</span>
             <span className="mx-1.5 text-sky-300">·</span>
             <span className="truncate">{activePlayer?.displayName}</span>

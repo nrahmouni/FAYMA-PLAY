@@ -44,9 +44,9 @@ interface PhraseToken {
 }
 
 export const WordTrainGame: React.FC<GameProps> = ({ words, difficulty, language, onCorrect, onWrong, onComplete }) => {
-  const isPhraseLevel = difficulty >= 3;
+  const isPhraseLevel = difficulty >= 13;
   const roundWords = useMemo(
-    () => words.slice(0, isPhraseLevel ? PHRASES[language].length : Math.min(3, difficulty + 1)),
+    () => words.slice(0, isPhraseLevel ? PHRASES[language].length : Math.min(6, 2 + Math.floor((difficulty - 1) / 3))),
     [difficulty, isPhraseLevel, language, words],
   );
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -66,7 +66,7 @@ export const WordTrainGame: React.FC<GameProps> = ({ words, difficulty, language
   );
   const options = useMemo(() => {
     if (!question || isPhraseLevel) return [];
-    const distractors = shuffleArray(words.filter(word => word.id !== question.id)).slice(0, difficulty);
+    const distractors = shuffleArray(words.filter(word => word.id !== question.id)).slice(0, Math.min(5, Math.ceil(difficulty / 3)));
     return shuffleArray([question, ...distractors]);
   }, [difficulty, isPhraseLevel, question, words]);
 

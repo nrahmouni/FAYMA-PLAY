@@ -8,7 +8,10 @@ import { useGameProgress } from './useGameProgress';
 import { useSpeech } from '../hooks/useSpeech';
 
 export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, onCorrect, onWrong, onComplete }) => {
-  const roundWords = useMemo(() => words.slice(0, Math.min(4, difficulty + 2)), [difficulty, words]);
+  const roundWords = useMemo(
+    () => words.slice(0, Math.min(6, 2 + Math.floor((difficulty - 1) / 3))),
+    [difficulty, words],
+  );
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answerId, setAnswerId] = useState<string | null>(null);
   const { recordAnswer, finish } = useGameProgress('safari', { onCorrect, onWrong, onComplete });
@@ -19,7 +22,7 @@ export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, o
   const options = useMemo(() => {
     if (!question) return [];
     const otherWords = words.filter(word => word.id !== question.id);
-    return shuffleArray([question, ...shuffleArray(otherWords).slice(0, Math.min(3, difficulty))]);
+    return shuffleArray([question, ...shuffleArray(otherWords).slice(0, Math.min(5, Math.ceil(difficulty / 3)))]);
   }, [difficulty, question, words]);
 
   useEffect(() => {

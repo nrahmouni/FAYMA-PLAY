@@ -2,9 +2,8 @@ import { useRef, useCallback, useState, useEffect } from 'react';
 
 class SoundSynthesizer {
   private ctx: AudioContext | null = null;
-  private musicOscillator: OscillatorNode | null = null;
-  private musicGain: GainNode | null = null;
   private musicTimer: number | null = null;
+  private musicGain: GainNode | null = null;
   public isMuted: boolean = false;
   public musicEnabled: boolean = true;
 
@@ -25,35 +24,28 @@ class SoundSynthesizer {
   }
 
   public startBackgroundMusic() {
-    if (this.isMuted || !this.musicEnabled || this.musicOscillator) return;
+    if (this.isMuted || !this.musicEnabled || this.musicTimer !== null) return;
     this.init();
     if (!this.ctx) return;
 
-    const notes = [523.25, 659.25, 587.33, 783.99, 659.25, 587.33, 523.25, 392];
-    const oscillator = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
-    oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(notes[0], this.ctx.currentTime);
-    gain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.02, this.ctx.currentTime + 0.05);
-    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.5);
-    oscillator.connect(gain);
+    gain.gain.setValueAtTime(0.055, this.ctx.currentTime);
     gain.connect(this.ctx.destination);
-    oscillator.start();
-    this.musicOscillator = oscillator;
     this.musicGain = gain;
 
+    const melody = [523.25, 659.25, 783.99, 659.25, 587.33, 698.46, 880, 698.46, 783.99, 1046.5, 880, 783.99];
     let noteIndex = 0;
     this.musicTimer = window.setInterval(() => {
-      if (!this.ctx || !this.musicOscillator) return;
-      noteIndex = (noteIndex + 1) % notes.length;
+      if (!this.ctx || !this.musicGain) return;
       const now = this.ctx.currentTime;
-      this.musicOscillator.frequency.setTargetAtTime(notes[noteIndex], now, 0.12);
-      this.musicGain?.gain.cancelScheduledValues(now);
-      this.musicGain?.gain.setValueAtTime(0.0001, now);
-      this.musicGain?.gain.linearRampToValueAtTime(0.02, now + 0.05);
-      this.musicGain?.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
-    }, 600);
+      const note = melody[noteIndex % melody.length];
+      this.playMusicNote(note, now, 0.7);
+      if (noteIndex % 4 === 0) this.playMusicNote(note / 2, now, 0.35);
+      noteIndex += 1;
+    }, 300);
+    const now = this.ctx.currentTime;
+    this.playMusicNote(melody[0], now, 0.7);
+    this.playMusicNote(melody[2], now, 0.4);
   }
 
   public stopBackgroundMusic() {
@@ -61,24 +53,26 @@ class SoundSynthesizer {
       window.clearInterval(this.musicTimer);
       this.musicTimer = null;
     }
-    if (this.musicGain && this.ctx) {
-      this.musicGain.gain.setTargetAtTime(0.0001, this.ctx.currentTime, 0.04);
-    }
-    if (this.musicOscillator) {
-      const oscillator = this.musicOscillator;
-      const gain = this.musicGain;
-      window.setTimeout(() => {
-        try {
-          oscillator.stop();
-          oscillator.disconnect();
-          gain?.disconnect();
-        } catch {
-          // The oscillator may already have stopped during page teardown.
-        }
-      }, 180);
-      this.musicOscillator = null;
-      this.musicGain = null;
-    }
+    if (!this.musicGain || !this.ctx) return;
+    const gain = this.musicGain;
+    gain.gain.setTargetAtTime(0.0001, this.ctx.currentTime, 0.025);
+    this.musicGain = null;
+    window.setTimeout(() => gain.disconnect(), 180);
+  }
+
+  private playMusicNote(frequency: number, startAt: number, volume: number) {
+    if (!this.ctx || !this.musicGain) return;
+    const oscillator = this.ctx.createOscillator();
+    const envelope = this.ctx.createGain();
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime(frequency, startAt);
+    envelope.gain.setValueAtTime(0.0001, startAt);
+    envelope.gain.linearRampToValueAtTime(volume, startAt + 0.025);
+    envelope.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.24);
+    oscillator.connect(envelope);
+    envelope.connect(this.musicGain);
+    oscillator.start(startAt);
+    oscillator.stop(startAt + 0.26);
   }
 
   public playSuccess() {
