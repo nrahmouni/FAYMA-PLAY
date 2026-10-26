@@ -5,8 +5,10 @@ import { Language } from '../types';
 const MagicWorldGame = React.lazy(() => import('./MagicWorldGame').then(module => ({ default: module.MagicWorldGame })));
 const MagicMemoryGame = React.lazy(() => import('./MagicMemoryGame').then(module => ({ default: module.MagicMemoryGame })));
 const StarCatchGame = React.lazy(() => import('./StarCatchGame').then(module => ({ default: module.StarCatchGame })));
+const ColorEchoGame = React.lazy(() => import('./ColorEchoGame').then(module => ({ default: module.ColorEchoGame })));
+const MoleDashGame = React.lazy(() => import('./MoleDashGame').then(module => ({ default: module.MoleDashGame })));
 
-type OriginalGameId = 'magic-world' | 'magic-memory' | 'star-catch';
+type OriginalGameId = 'magic-world' | 'magic-memory' | 'star-catch' | 'color-echo' | 'mole-dash';
 
 const COPY: Record<Language, {
   title: string;
@@ -24,6 +26,8 @@ const COPY: Record<Language, {
       'magic-world': { title: 'Mundo Mágico', description: 'Sigue el camino, esquiva obstáculos y recoge estrellas con tus amigos.', icon: '🦄', color: 'from-sky-200 via-cyan-100 to-emerald-100' },
       'magic-memory': { title: 'Memoria mágica', description: 'Encuentra las parejas de criaturas mágicas y entrena tu memoria.', icon: '🪄', color: 'from-violet-200 via-fuchsia-100 to-pink-100' },
       'star-catch': { title: 'Atrapaestrellas', description: '¡Toca tantas estrellas fugaces como puedas antes de que se acabe el tiempo!', icon: '🌟', color: 'from-amber-200 via-yellow-100 to-orange-100' },
+      'color-echo': { title: 'Eco de colores', description: 'Observa los colores y repite la secuencia. ¿Hasta qué nivel llegarás?', icon: '🎨', color: 'from-sky-200 via-violet-100 to-fuchsia-100' },
+      'mole-dash': { title: '¡Topo al hoyo!', description: 'Atrapa los topos antes de que se escondan y no pulses las bombas.', icon: '🐹', color: 'from-lime-200 via-emerald-100 to-amber-100' },
     },
   },
   'nl-BE': {
@@ -35,6 +39,8 @@ const COPY: Record<Language, {
       'magic-world': { title: 'Magische wereld', description: 'Volg het pad, ontwijk hindernissen en verzamel sterren met je vrienden.', icon: '🦄', color: 'from-sky-200 via-cyan-100 to-emerald-100' },
       'magic-memory': { title: 'Magisch geheugen', description: 'Zoek de paren van magische wezens en train je geheugen.', icon: '🪄', color: 'from-violet-200 via-fuchsia-100 to-pink-100' },
       'star-catch': { title: 'Sterren vangen', description: 'Tik zoveel mogelijk vallende sterren aan voor de tijd om is!', icon: '🌟', color: 'from-amber-200 via-yellow-100 to-orange-100' },
+      'color-echo': { title: 'Kleuren-echo', description: 'Onthoud de kleuren en herhaal de reeks. Hoe ver geraak jij?', icon: '🎨', color: 'from-sky-200 via-violet-100 to-fuchsia-100' },
+      'mole-dash': { title: 'Molletje-mep!', description: 'Tik de molletjes voordat ze weg zijn en blijf van de bommen af.', icon: '🐹', color: 'from-lime-200 via-emerald-100 to-amber-100' },
     },
   },
   fr: {
@@ -46,6 +52,8 @@ const COPY: Record<Language, {
       'magic-world': { title: 'Monde magique', description: 'Suis le chemin, évite les obstacles et ramasse des étoiles avec tes amis.', icon: '🦄', color: 'from-sky-200 via-cyan-100 to-emerald-100' },
       'magic-memory': { title: 'Mémoire magique', description: 'Retrouve les paires de créatures magiques et entraîne ta mémoire.', icon: '🪄', color: 'from-violet-200 via-fuchsia-100 to-pink-100' },
       'star-catch': { title: 'Attrape-étoiles', description: 'Touche autant d’étoiles filantes que possible avant la fin du temps !', icon: '🌟', color: 'from-amber-200 via-yellow-100 to-orange-100' },
+      'color-echo': { title: 'Écho des couleurs', description: 'Observe les couleurs et répète la séquence. Jusqu’à quel niveau iras-tu ?', icon: '🎨', color: 'from-sky-200 via-violet-100 to-fuchsia-100' },
+      'mole-dash': { title: 'Tape-taupe !', description: 'Attrape les taupes avant qu’elles se cachent et évite les bombes.', icon: '🐹', color: 'from-lime-200 via-emerald-100 to-amber-100' },
     },
   },
   ar: {
@@ -57,6 +65,8 @@ const COPY: Record<Language, {
       'magic-world': { title: 'العالم السحري', description: 'اتبع الطريق وتجنب العوائق واجمع النجوم مع أصدقائك.', icon: '🦄', color: 'from-sky-200 via-cyan-100 to-emerald-100' },
       'magic-memory': { title: 'الذاكرة السحرية', description: 'اعثر على أزواج المخلوقات السحرية ودرب ذاكرتك.', icon: '🪄', color: 'from-violet-200 via-fuchsia-100 to-pink-100' },
       'star-catch': { title: 'التقط النجوم', description: 'المس أكبر عدد من النجوم قبل انتهاء الوقت!', icon: '🌟', color: 'from-amber-200 via-yellow-100 to-orange-100' },
+      'color-echo': { title: 'صدى الألوان', description: 'شاهد الألوان وكرر التسلسل. إلى أي مستوى ستصل؟', icon: '🎨', color: 'from-sky-200 via-violet-100 to-fuchsia-100' },
+      'mole-dash': { title: 'اضرب الخلد!', description: 'أمسك حيوانات الخلد قبل اختفائها وتجنب القنابل.', icon: '🐹', color: 'from-lime-200 via-emerald-100 to-amber-100' },
     },
   },
 };
@@ -85,6 +95,8 @@ export const OriginalGames: React.FC<OriginalGamesProps> = ({ language }) => {
             {activeGame === 'magic-world' && <MagicWorldGame language={language} />}
             {activeGame === 'magic-memory' && <MagicMemoryGame language={language} />}
             {activeGame === 'star-catch' && <StarCatchGame language={language} />}
+            {activeGame === 'color-echo' && <ColorEchoGame language={language} />}
+            {activeGame === 'mole-dash' && <MoleDashGame language={language} />}
           </Suspense>
         </>
       ) : (
