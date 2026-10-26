@@ -1,26 +1,9 @@
-# FAYMA PLAY — Arcade gameplay update
+# FAYMA PLAY — Actualización de la colección arcade
 
-## Included in this update
-- `src/games/CombatGame.tsx`: real-time arena prototype with movement, attack, dodge, approaching enemies, health, boss spawn, and vocabulary scroll pickups.
-- `src/games/FruitNinjaGame.tsx`: real swipe-to-slice canvas gameplay on touch or mouse, fruit labels, bombs, score, timer, and vocabulary callbacks.
+FAYMA PLAY ofrece ahora un menú de arcade con acceso directo a sus ocho experiencias. Las partidas arrancan sin una ronda de preguntas previa; el vocabulario forma parte de los objetivos y objetos del juego.
 
-## Controls
-### Combat
-- Keyboard: WASD or arrow keys to move; Space/J to attack; Shift to dodge.
-- Mobile: use the on-screen directional, attack, and dodge buttons.
+Las mecánicas actualizadas incluyen carreras de tres carriles, combate en tiempo real, corte de fruta por gestos, tiro con gravedad, conducción callejera lateral y disparos de burbujas por color. Memory Quest incorpora rachas y puntuación; Sentence Builder presenta las frases como mensajes que abren portales.
 
-### Fruit Slice
-- Swipe across fruit with a finger or mouse. Avoid bombs.
-- Five missed fruits or 45 seconds ends the round.
+La interfaz utiliza perspectiva 2.5D y efectos CSS/Canvas. No usa un motor 3D ni modelos 3D. Los controles admiten teclado, ratón, botones táctiles o deslizamientos según el juego.
 
-## Install and verify
-Use the project's package manager. With npm:
-```bash
-npm install --legacy-peer-deps
-npm run build
-```
-
-The ZIP contains the project source at the archive root under `FAYMA-PLAY-main/`. It does not include `node_modules`, `.git`, `dist`, or another copy of the ZIP.
-
-## Scope / transparency
-This update implements playable action mechanics for Combat and Fruit Slice. Other existing games are preserved and have not all been rewritten into full arcade games in this update. Build verification must be run in Codespaces because this packaging environment does not have the project's dependencies installed.
+Consulta [MEJORAS_ARCADE_Y_GUIA.md](./MEJORAS_ARCADE_Y_GUIA.md) para ver los controles, las mecánicas por juego, los pasos de ejecución y los límites actuales.

@@ -17,7 +17,7 @@ export const PWAInstallButton: React.FC = () => {
       <button
         onClick={install}
         className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-3 py-1.5 text-xs font-bold text-white shadow-lg hover:from-cyan-400 hover:to-blue-500 active:scale-95 transition"
-        title="Instalar Juegofy en tu pantalla de inicio"
+        title="Instalar FAYMA PLAY en tu pantalla de inicio"
       >
         <Download className="w-3.5 h-3.5" />
         <span>Instalar PWA</span>
@@ -52,7 +52,7 @@ export const PWAInstallButton: React.FC = () => {
               <div className="mt-3 space-y-2 text-sm text-slate-300">
                 <p>1. Toca el botón <strong>Compartir</strong> <Share className="inline w-4 h-4 text-cyan-400" /> en la barra de Safari.</p>
                 <p>2. Desliza hacia abajo y elige <strong>Añadir a pantalla de inicio</strong>.</p>
-                <p>3. Abre Juegofy sin barras del navegador y juega sin conexión.</p>
+                <p>3. Abre FAYMA PLAY sin barras del navegador y juega sin conexión.</p>
               </div>
               <button
                 onClick={() => setShowIOSGuide(false)}

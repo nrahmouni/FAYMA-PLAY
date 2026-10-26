@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Sparkles, Gamepad2 } from 'lucide-react';
+import { Gamepad2 } from 'lucide-react';
 import { GameProps, DifficultyLevel, PlayerProfile } from '../types';
 
 // Lazy loading minigames
@@ -22,6 +22,16 @@ const CombatGame = React.lazy(() => import('../games/CombatGame').then(m => ({ d
 const DriveGame = React.lazy(() => import('../games/DriveGame').then(m => ({ default: m.DriveGame })));
 const FruitNinjaGame = React.lazy(() => import('../games/FruitNinjaGame').then(m => ({ default: m.FruitNinjaGame })));
 
+const GAME_TITLES: Record<string, string> = {
+  combat: 'FAYMA BATTLE',
+  drive: 'FAYMA RUSH',
+  fruit: 'FAYMA SLICE',
+  drag_match: 'DRIVE CHALLENGE',
+  slingshot: 'SLINGSHOT ADVENTURE',
+  memory: 'MEMORY QUEST',
+  sentence_builder: 'SENTENCE BUILDER',
+  bubble_popper: 'BUBBLE POPPER',
+};
 
 interface InteractiveChallengeModalProps {
   gameId: string;
@@ -60,47 +70,32 @@ export const InteractiveChallengeModal: React.FC<InteractiveChallengeModalProps>
   };
 
   return (
-    <div className="w-full flex flex-col items-center">
-      {/* Top Header Information */}
-      <div className="w-full max-w-xl flex items-center justify-between mb-4 px-3 py-2 rounded-2xl glass-panel border border-white/10">
+    <div className="fayma-game-world relative isolate flex w-full flex-col items-center">
+      <div className="relative z-10 mb-4 flex w-full max-w-2xl items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-950/75 px-4 py-3 shadow-xl backdrop-blur">
         <div className="flex items-center gap-2">
-          <div
-            className="w-3.5 h-3.5 rounded-full"
-            style={{ backgroundColor: player.color }}
-          />
-          <span className="text-xs sm:text-sm font-extrabold text-slate-200">
-            {player.displayName}
-          </span>
+          <span className="h-3 w-3 rounded-full ring-4 ring-white/5" style={{ backgroundColor: player.color }} />
+          <div>
+            <div className="text-[9px] font-black uppercase tracking-[.18em] text-cyan-300">En partida</div>
+            <div className="text-xs font-extrabold text-slate-100 sm:text-sm">{GAME_TITLES[gameId] || 'FAYMA ARCADE'}</div>
+          </div>
         </div>
-
-        {/* Difficulty Stars */}
-        <div className="flex items-center gap-1" title={`Dificultad adaptativa: ${difficulty}/5`}>
-          <span className="text-[10px] text-slate-400 font-bold uppercase mr-1 hidden xs:inline">
-            Nivel
-          </span>
-          {[1, 2, 3, 4, 5].map(lvl => (
-            <span
-              key={lvl}
-              className={`text-xs ${
-                lvl <= difficulty ? 'text-amber-400 font-bold' : 'text-slate-600'
-              }`}
-            >
-              ★
-            </span>
+        <div className="flex items-center gap-1" title={`Dificultad adaptativa: ${difficulty}/5`} aria-label={`Dificultad ${difficulty} de 5`}>
+          <span className="mr-1 text-[9px] font-black uppercase tracking-wider text-slate-400">Reto</span>
+          {[1, 2, 3, 4, 5].map(level => (
+            <span key={level} className={`text-xs ${level <= difficulty ? 'font-bold text-amber-300' : 'text-slate-700'}`}>★</span>
           ))}
         </div>
       </div>
 
-      {/* Game Viewport with Suspense fallback */}
       <Suspense
         fallback={
-          <div className="w-full max-w-xl h-80 rounded-3xl glass-panel flex flex-col items-center justify-center p-8 border border-white/10">
-            <Gamepad2 className="w-12 h-12 text-cyan-400 animate-bounce mb-3" />
-            <p className="text-slate-300 font-bold text-sm">Cargando desafío interactivo...</p>
+          <div className="relative z-10 flex h-80 w-full max-w-2xl flex-col items-center justify-center rounded-3xl border border-white/10 bg-slate-950/85 p-8">
+            <Gamepad2 className="mb-3 h-12 w-12 animate-bounce text-cyan-400" />
+            <p className="text-sm font-bold text-slate-300">Preparando el mundo...</p>
           </div>
         }
       >
-        {renderGame()}
+        <div className="fayma-game-view relative z-10 w-full">{renderGame()}</div>
       </Suspense>
     </div>
   );

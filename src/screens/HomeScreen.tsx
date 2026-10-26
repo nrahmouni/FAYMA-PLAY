@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Play, Users, ShoppingBag, Sparkles, Compass, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Gamepad2, Play, ShieldCheck, ShoppingBag, Sparkles, Users } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
 import { useProfileStore } from '../store/profileStore';
 import { LANGUAGES } from '../data/languages';
@@ -14,126 +14,133 @@ export const HomeScreen: React.FC = () => {
   const activePlayer = profiles[0];
   const langMeta = LANGUAGES[language];
 
-  React.useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter' || e.code === 'Space') {
-        setScreen('WORLD_HUB');
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [setScreen]);
-
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-6 sm:py-12 flex flex-col items-center justify-center text-center">
-      {/* Friendly Children Welcome Lockup */}
-      <div className="relative mb-4 sm:mb-6">
-        <div className="absolute -inset-4 bg-gradient-to-r from-amber-400 via-pink-500 to-cyan-400 rounded-full blur-3xl opacity-35 animate-pulse-glow" />
+    <div className="fayma-home relative mx-auto flex w-full max-w-6xl flex-col gap-8 overflow-hidden px-4 py-8 sm:px-8 sm:py-12">
+      <div className="pointer-events-none absolute -right-28 -top-20 h-80 w-80 rounded-full bg-fuchsia-500/20 blur-[100px]" />
+      <div className="pointer-events-none absolute -bottom-20 -left-24 h-80 w-80 rounded-full bg-cyan-400/15 blur-[110px]" />
 
-        <div className="relative z-10 flex flex-col items-center">
-          {/* Mascot / Gamepad Icon */}
+      <section className="relative grid items-center gap-10 lg:grid-cols-[1.1fr_.9fr]">
+        <div className="z-10">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/[.08] px-3 py-1.5 text-xs font-black uppercase tracking-[.22em] text-cyan-200">
+            <Sparkles className="h-3.5 w-3.5" />
+            El aprendizaje se juega
+          </div>
+          <h1 className="max-w-3xl text-5xl font-black leading-[.95] tracking-[-.06em] text-white sm:text-7xl">
+            FAYMA <span className="fayma-title-gradient">PLAY</span>
+          </h1>
+          <p className="mt-5 max-w-xl text-base leading-7 text-slate-300 sm:text-lg">
+            Ocho mundos. Ocho formas de jugar. Corre, lucha, apunta y explora mientras las palabras se vuelven parte de la aventura.
+          </p>
+
+          <div className="mt-7 flex flex-wrap items-center gap-3">
+            <motion.button
+              type="button"
+              whileHover={{ y: -3, scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setScreen('WORLD_HUB')}
+              className="fayma-primary-button inline-flex items-center gap-3 rounded-2xl px-6 py-4 text-base font-black text-slate-950 sm:text-lg"
+            >
+              <Play className="h-5 w-5 fill-current" />
+              ENTRAR AL ARCADE
+              <ArrowRight className="h-5 w-5" />
+            </motion.button>
+            <div className="rounded-2xl border border-white/10 bg-white/[.04] px-4 py-3 text-left">
+              <div className="text-xs font-bold uppercase tracking-wider text-slate-400">Piloto</div>
+              <div className="font-black text-white">{activePlayer?.displayName || 'Crea tu perfil'}</div>
+            </div>
+          </div>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, rotateY: -18, rotateX: 8, y: 18 }}
+          animate={{ opacity: 1, rotateY: -10, rotateX: 4, y: 0 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="fayma-hero-stage relative mx-auto flex aspect-[1.15] w-full max-w-lg items-center justify-center"
+          aria-label="Escenario arcade futurista"
+        >
+          <div className="fayma-orbit fayma-orbit-back" />
+          <div className="fayma-orbit fayma-orbit-front" />
+          <div className="fayma-stage-platform" />
           <motion.div
-            animate={{ y: [-4, 4, -4], rotate: [-2, 2, -2] }}
-            transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-            className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-tr from-yellow-400 via-pink-500 to-cyan-400 p-1 shadow-2xl mb-3"
+            animate={{ y: [-8, 8, -8], rotateZ: [-3, 3, -3] }}
+            transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
+            className="fayma-hero-arcade"
           >
-            <div className="w-full h-full bg-slate-900 rounded-[22px] flex items-center justify-center text-5xl sm:text-6xl select-none">
-              🦊
+            <div className="fayma-arcade-screen">
+              <span className="text-7xl drop-shadow-[0_12px_24px_rgba(0,0,0,.6)] sm:text-8xl">🦊</span>
+              <span className="mt-1 text-[10px] font-black uppercase tracking-[.28em] text-cyan-100">player one</span>
+            </div>
+            <div className="fayma-arcade-controls">
+              <span className="fayma-arcade-stick" />
+              <span className="fayma-arcade-button fayma-arcade-button-pink" />
+              <span className="fayma-arcade-button fayma-arcade-button-cyan" />
             </div>
           </motion.div>
+          <div className="absolute left-[9%] top-[22%] rounded-2xl border border-cyan-200/20 bg-slate-950/80 px-3 py-2 text-xs font-black text-cyan-200 shadow-xl backdrop-blur">
+            <Gamepad2 className="mr-1 inline h-4 w-4" /> 8 JUEGOS
+          </div>
+          <div className="absolute bottom-[21%] right-[1%] rounded-2xl border border-amber-200/20 bg-slate-950/80 px-3 py-2 text-xs font-black text-amber-200 shadow-xl backdrop-blur">
+            ✦ APRENDE JUGANDO
+          </div>
+        </motion.div>
+      </section>
 
-          <h1 className="text-4xl sm:text-6xl font-black tracking-tight bg-gradient-to-r from-yellow-300 via-pink-400 to-cyan-300 bg-clip-text text-transparent filter drop-shadow">
-            ¡JUEGOFY!
-          </h1>
-          <p className="text-base sm:text-lg text-amber-200 font-extrabold mt-1">
-            ¡Aprende palabras mágicas jugando con amigos!
-          </p>
+      <section className="relative grid gap-4 rounded-[2rem] border border-white/10 bg-slate-950/65 p-4 shadow-2xl backdrop-blur-xl sm:grid-cols-[1fr_auto] sm:items-center sm:p-6">
+        <div>
+          <div className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[.18em] text-slate-400">
+            <span className="text-lg">{langMeta.flag}</span>
+            Elige tu mundo e idioma
+          </div>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {(Object.keys(LANGUAGES) as Language[]).map(langKey => {
+              const meta = LANGUAGES[langKey];
+              const selected = language === langKey;
+              return (
+                <motion.button
+                  key={langKey}
+                  type="button"
+                  whileTap={{ scale: 0.96 }}
+                  onClick={() => setLanguage(langKey)}
+                  aria-pressed={selected}
+                  className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left transition ${
+                    selected
+                      ? 'border-cyan-300/70 bg-cyan-300/10 text-white shadow-[0_0_22px_rgba(34,211,238,.12)]'
+                      : 'border-white/10 bg-white/[.03] text-slate-400 hover:border-white/25 hover:text-white'
+                  }`}
+                >
+                  <span className="text-xl">{meta.flag}</span>
+                  <span className="text-xs font-black">{meta.name}</span>
+                </motion.button>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      {/* Language Selector: Big Friendly Flags for Kids */}
-      <div className="w-full max-w-md my-4">
-        <span className="text-xs uppercase font-black text-cyan-300 tracking-wider block mb-2">
-          🌍 Elige tu idioma para jugar:
-        </span>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {(Object.keys(LANGUAGES) as Language[]).map(langKey => {
-            const meta = LANGUAGES[langKey];
-            const isSelected = language === langKey;
-
-            return (
-              <motion.button
-                key={langKey}
-                type="button"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setLanguage(langKey)}
-                className={`p-3 rounded-2xl flex flex-col items-center justify-center transition cursor-pointer border-3 ${
-                  isSelected
-                    ? 'bg-amber-500/30 border-amber-400 text-white shadow-xl shadow-amber-500/30 scale-105'
-                    : 'glass-card border-white/10 text-slate-300 hover:border-white/30'
-                }`}
-              >
-                <span className="text-3xl mb-1 select-none filter drop-shadow">{meta.flag}</span>
-                <span className="font-black text-xs sm:text-sm tracking-wide">{meta.name}</span>
-              </motion.button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Giant Primary Action Button for Kids */}
-      <div className="w-full max-w-sm space-y-3 mt-4">
-        <motion.button
-          type="button"
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.96 }}
-          onClick={() => setScreen('WORLD_HUB')}
-          className="w-full py-5 px-6 rounded-3xl bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 hover:from-emerald-300 hover:to-cyan-400 text-slate-950 font-black text-xl sm:text-2xl flex items-center justify-center gap-3 shadow-2xl shadow-emerald-500/40 border-2 border-white/40 cursor-pointer"
-        >
-          <Play className="w-7 h-7 fill-current" />
-          <span>¡A JUGAR AHORA!</span>
-        </motion.button>
-
-        {/* Big Colorful Secondary Cards */}
-        <div className="grid grid-cols-2 gap-3 pt-1">
-          <motion.button
+        <div className="grid grid-cols-2 gap-2 sm:min-w-56 sm:grid-cols-1">
+          <button
             type="button"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.96 }}
             onClick={() => setScreen('PLAYER_SETUP')}
-            className="p-3.5 rounded-2xl glass-panel hover:bg-slate-800 border-2 border-cyan-400/40 text-cyan-200 font-extrabold text-xs sm:text-sm flex flex-col items-center justify-center gap-1.5 transition cursor-pointer"
+            className="fayma-secondary-action"
           >
-            <span className="text-2xl">👥</span>
-            <span>Jugadores ({profiles.length})</span>
-          </motion.button>
-
-          <motion.button
+            <Users className="h-4 w-4 text-cyan-300" /> Jugadores
+            <span className="ml-auto text-slate-400">{profiles.length}</span>
+          </button>
+          <button
             type="button"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.96 }}
             onClick={() => setScreen('GARAGE')}
-            className="p-3.5 rounded-2xl glass-panel hover:bg-slate-800 border-2 border-amber-400/40 text-amber-200 font-extrabold text-xs sm:text-sm flex flex-col items-center justify-center gap-1.5 transition cursor-pointer"
+            className="fayma-secondary-action"
           >
-            <span className="text-2xl">🛍️</span>
-            <span>Tienda de Premios</span>
-          </motion.button>
+            <ShoppingBag className="h-4 w-4 text-amber-300" /> Garaje
+          </button>
+          <button
+            type="button"
+            onClick={() => setScreen('AUTH')}
+            className="fayma-secondary-action col-span-2 sm:col-span-1"
+          >
+            <ShieldCheck className="h-4 w-4 text-emerald-300" /> Sincronizar progreso
+          </button>
         </div>
-
-        <button
-          type="button"
-          onClick={() => setScreen('AUTH')}
-          className="w-full py-2.5 px-4 rounded-xl glass-card text-slate-400 hover:text-white text-xs font-bold transition flex items-center justify-center gap-1.5"
-        >
-          <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-          <span>Guardar progreso en la nube (Opcional)</span>
-        </button>
-      </div>
-
-      {/* Control Hint for Kids */}
-      <div className="mt-6 text-xs text-slate-400 font-bold select-none">
-        🎮 ¡Toca la pantalla para jugar! • Funciona en móviles, tablets y computadoras
-      </div>
+      </section>
     </div>
   );
 };

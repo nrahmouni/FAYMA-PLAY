@@ -1,12 +1,23 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Play, Lock, CheckCircle, Sparkles, MapPin, Gamepad2, ArrowRight, Trophy } from 'lucide-react';
-import { useGameStore, WorldNode } from '../store/gameStore';
+import { GameMechanic, useGameStore, WorldNode } from '../store/gameStore';
 import { useProfileStore } from '../store/profileStore';
 import { LANGUAGES } from '../data/languages';
 import { VOCABULARY_BANK } from '../data/vocabulary';
 import { ThemeVocabularyBanner } from '../components/ThemeVocabularyBanner';
 import { Language } from '../types';
+
+const ARCADE_GAMES: { id: GameMechanic; name: string; description: string; icon: string; accent: string }[] = [
+  { id: 'drive', name: 'FAYMA RUSH', description: 'Carrera de carriles, turbo y derrapes', icon: '🏎️', accent: 'from-cyan-400 to-blue-600' },
+  { id: 'combat', name: 'FAYMA BATTLE', description: 'Arena de acción, esquivas y jefes', icon: '⚔️', accent: 'from-fuchsia-400 to-violet-700' },
+  { id: 'fruit', name: 'FAYMA SLICE', description: 'Corta fruta, encadena combos y esquiva bombas', icon: '🍉', accent: 'from-lime-300 to-emerald-600' },
+  { id: 'slingshot', name: 'SLINGSHOT ADVENTURE', description: 'Apunta, calcula y derriba estructuras', icon: '🏹', accent: 'from-amber-300 to-orange-600' },
+  { id: 'memory', name: 'MEMORY QUEST', description: 'Explora, recuerda y descubre parejas', icon: '🧠', accent: 'from-violet-300 to-indigo-700' },
+  { id: 'sentence_builder', name: 'SENTENCE BUILDER', description: 'Construye frases para abrir caminos', icon: '🏗️', accent: 'from-sky-300 to-cyan-700' },
+  { id: 'bubble_popper', name: 'BUBBLE POPPER', description: 'Apunta, combina colores y crea cadenas', icon: '🫧', accent: 'from-pink-300 to-purple-700' },
+  { id: 'drag_match', name: 'DRIVE CHALLENGE', description: 'Conduce por la ciudad: esquiva tráfico y recoge palabras', icon: '🚗', accent: 'from-rose-300 to-red-700' },
+];
 
 export const WorldHub: React.FC = () => {
   const language = useGameStore(s => s.language);
@@ -24,6 +35,10 @@ export const WorldHub: React.FC = () => {
 
   const handleSelectNode = (node: WorldNode) => {
     setActiveWorld(node.theme, node.gameId);
+    startSession(profiles);
+  };
+  const startArcadeGame = (gameId: GameMechanic) => {
+    setActiveWorld('arcade', gameId);
     startSession(profiles);
   };
 
@@ -86,6 +101,48 @@ export const WorldHub: React.FC = () => {
         themeColor={langMeta.themeColor}
       />
 
+      <section className="space-y-4">
+        <div className="flex items-end justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[.2em] text-cyan-300">
+              <Gamepad2 className="h-4 w-4" /> Selección arcade
+            </div>
+            <h2 className="mt-1 text-2xl font-black text-white sm:text-3xl">Elige cómo quieres jugar</h2>
+          </div>
+          <span className="hidden rounded-full border border-white/10 bg-white/[.04] px-3 py-1.5 text-xs font-bold text-slate-400 sm:block">
+            8 juegos · aprendizaje integrado
+          </span>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {ARCADE_GAMES.map((game, index) => (
+            <motion.button
+              key={game.id}
+              type="button"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.035 }}
+              whileHover={{ y: -5, rotateX: 2 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => startArcadeGame(game.id)}
+              className="fayma-game-card group relative overflow-hidden rounded-2xl border border-white/10 p-4 text-left"
+            >
+              <span className={`absolute -right-8 -top-10 h-28 w-28 rounded-full bg-gradient-to-br ${game.accent} opacity-20 blur-2xl transition group-hover:opacity-40`} />
+              <div className="relative flex items-start justify-between">
+                <span className={`fayma-game-icon bg-gradient-to-br ${game.accent}`}>{game.icon}</span>
+                <span className="rounded-full border border-white/10 bg-slate-950/60 px-2 py-1 text-[9px] font-black uppercase tracking-widest text-slate-400">
+                  JUGAR
+                </span>
+              </div>
+              <h3 className="relative mt-4 text-sm font-black tracking-wide text-white">{game.name}</h3>
+              <p className="relative mt-1 min-h-10 text-xs leading-5 text-slate-400">{game.description}</p>
+              <div className="relative mt-3 flex items-center gap-1 text-[10px] font-bold text-cyan-200">
+                <Sparkles className="h-3 w-3" /> Aprende mientras juegas
+              </div>
+            </motion.button>
+          ))}
+        </div>
+      </section>
+
       {/* Nodes Map Grid */}
       <div className="space-y-3">
         <div className="flex items-center justify-between px-1">
@@ -103,10 +160,10 @@ export const WorldHub: React.FC = () => {
           <div className="relative z-10 space-y-8 sm:space-y-10">
             {nodes.map((node, index) => {
               const gameNames: Record<string, string> = {
-                drive: 'Carrera de palabras', fruit: 'Fruta Ninja', combat: 'Combate de vocabulario',
-                slingshot: 'Tirachinas', memory: 'Memoria mágica',
-                drag_match: 'Arrastre rápido', sentence_builder: 'Constructor de frases',
-                bubble_popper: 'Burbujas risueñas'
+                drive: 'FAYMA RUSH', fruit: 'FAYMA SLICE', combat: 'FAYMA BATTLE',
+                slingshot: 'SLINGSHOT ADVENTURE', memory: 'MEMORY QUEST',
+                drag_match: 'DRIVE CHALLENGE', sentence_builder: 'SENTENCE BUILDER',
+                bubble_popper: 'BUBBLE POPPER'
               };
               const locked = !node.unlocked;
               return (

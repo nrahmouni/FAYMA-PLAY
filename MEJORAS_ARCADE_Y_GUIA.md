@@ -1,36 +1,28 @@
-# FAYMA PLAY — paquete de mejora arcade
+# FAYMA PLAY — Arcade y aprendizaje integrado
 
-## Qué se ha cambiado en este paquete
+## Experiencia
 
-### 1. FAYMA SLICE: juego de corte por gestos
-Se ha sustituido la selección de una traducción en botones por una mecánica arcade de cortar objetos en un canvas:
-- Frutas voladoras con palabras del idioma objetivo.
-- Control por deslizamiento táctil o ratón.
-- Bombas que se deben evitar.
-- Puntuación, cuenta atrás de 45 segundos y dificultad que modifica el ritmo.
-- La palabra asociada a cada fruta se registra al cortarla.
-- Resultado enviado al flujo existente de la aplicación.
+- El inicio se ha rediseñado como un hub arcade de FAYMA PLAY, con selección de idioma, perfil, garaje y entrada al catálogo.
+- Los ocho juegos se pueden iniciar desde tarjetas dedicadas en el hub de mundos.
+- Cada turno empieza directamente en el juego. Se eliminó la pantalla de aprendizaje obligatoria previa: el vocabulario se encuentra durante la partida.
+- Se añadieron profundidad, perspectiva 2.5D y una escena arcade en CSS/Canvas, manteniendo el proyecto sin un motor 3D externo.
 
-Es un prototipo jugable de mecánica arcade real; aún se puede ampliar con partículas, combos, sonidos y efectos de fruta partida.
+## Juegos y controles
 
-### 2. DRIVE / FAYMA RUSH
-Se conserva la carrera arcade ya presente en el proyecto: tres carriles, obstáculos, salto, fichas de vocabulario, puntuación y vidas. Los controles son teclado y botones táctiles.
+| Juego | Mecánica principal | Aprendizaje integrado |
+| --- | --- | --- |
+| FAYMA RUSH | Carrera de tres carriles, saltos, choques, turbo y combos en tres tramos. Teclado, botones o deslizamiento. | Recoge palabras durante la carrera. |
+| FAYMA BATTLE | Arena de acción con movimiento libre, ataque, esquiva, enemigos, jefe y arena con perspectiva. WASD/flechas, Espacio/J y Mayús; controles táctiles. | Pergaminos de vocabulario en la arena. |
+| FAYMA SLICE | Cortes por gesto, bombas, frutas perdidas, cinco niveles y multiplicadores de combo. Ratón o pantalla táctil. | Cada fruta muestra una palabra y su traducción aparece al cortarla. |
+| Slingshot Adventure | Tirachinas con velocidad, gravedad, trayectoria visible, obstáculos destructibles y cajas objetivo. Arrastrar y soltar; flechas y Espacio. | Derriba cajas con palabras. |
+| Memory Quest | Memoria de parejas, rachas, puntuación y dificultad adaptativa. Ratón o pantalla táctil. | Asocia escritura, imagen, pronunciación y traducción. |
+| Sentence Builder | Repara mensajes para abrir portales; organiza fragmentos para formar frases. Ratón o pantalla táctil. | Gramática y vocabulario en frases. |
+| Bubble Popper | Dispara, combina tres o más burbujas del mismo color, crea reacciones en cadena y evita que el tablero llegue al fondo. Ratón, pantalla táctil o teclado. | Las burbujas llevan palabras que se aprenden al despejar grupos. |
+| Drive Challenge | Conducción lateral con saltos, tráfico, monedas y curso de longitud fija. Espacio, flecha arriba, W, botón o toque. | Recoge palabras durante el recorrido. |
 
-### 3. Etiquetas de los mundos
-Se han corregido las etiquetas de juegos en `src/store/gameStore.ts` para describir mejor la mecánica real cargada por cada mundo.
+## Ejecutar y validar
 
-### 4. Reglas de Firestore
-Se han endurecido las reglas de `/sessions`: la sesión debe incluir `ownerUid` igual al UID autenticado; las lecturas y modificaciones quedan limitadas a ese propietario y los resultados heredan esa comprobación.
-**Importante:** el código de la aplicación no parece usar actualmente la colección `/sessions`. Si más adelante se añade esa funcionalidad, el código que cree una sesión debe escribir `ownerUid`. Revisa las reglas en Firebase Emulator antes de desplegarlas en producción.
-
-## Archivos principales modificados
-- `src/games/FruitNinjaGame.tsx`
-- `src/store/gameStore.ts`
-- `firestore.rules`
-
-## Cómo probarlo en tu ordenador
-
-Requiere una versión reciente de Node.js compatible con Vite 8.
+Requiere una versión de Node.js compatible con Vite 8.
 
 ```bash
 npm install
@@ -39,13 +31,10 @@ npm run build
 npm run dev
 ```
 
-Abre la URL local que muestre Vite. En el menú de mundos, entra en un nivel que cargue `fruit` para probar FAYMA SLICE. Pulsa y desliza el ratón o el dedo sobre las frutas; evita las bombas.
+La compilación y el chequeo TypeScript se ejecutaron correctamente. Vite puede advertir sobre el uso de `__dirname` en la configuración y sobre el tamaño del bundle principal; no impiden la compilación.
 
-## Validación
-Este entorno no tiene `node_modules` instalado y no se ha ejecutado una compilación con dependencias. Por eso no afirmo que el build esté verificado. Ejecuta los comandos anteriores tras extraer el ZIP y corrige cualquier error que salga antes de subirlo al repositorio.
+## Alcance y límites
 
-## Limitaciones pendientes
-- FAYMA SLICE usa formas y texto dibujados en Canvas, no ilustraciones finales de frutas.
-- No se ha migrado el proyecto entero a un motor como Phaser: se conserva React/Vite y el resto de minijuegos existentes.
-- No se han implementado todavía la campaña de aventura, el combate de acción completo ni la física avanzada del tirachinas.
-- No se ha hecho una prueba de juego automatizada en navegador.
+- Las escenas usan Canvas 2D, perspectiva 2.5D y transformaciones CSS; no incorporan modelos 3D ni un motor WebGL.
+- No se realizó una prueba automatizada de controles en navegador.
+- Las reglas de Firestore para `/sessions` requieren que las sesiones incluyan `ownerUid` igual al UID autenticado. El código actual no parece usar esa colección; antes de adoptarla, verifica las reglas con Firebase Emulator.

@@ -39,7 +39,7 @@ export default function App() {
   useEffect(() => {
     if (currentScreen === 'HOME') {
       setMascotMood('happy');
-      setMascotMessage('¡Bienvenido a Juegofy! Elige tu mundo para empezar.');
+      setMascotMessage('¡Bienvenido a FAYMA PLAY! Elige tu mundo para empezar.');
     } else if (currentScreen === 'WORLD_HUB') {
       setMascotMood('thinking');
       if (language === 'es') {
@@ -52,12 +52,9 @@ export default function App() {
         setMascotMessage('Bonjour! ¡Practica la lengua del arte y la gastronomía!');
       }
     } else if (currentScreen === 'GAME_SESSION') {
-      if (sessionPhase === 'LEARNING_PHASE') {
-        setMascotMood('thinking');
-        setMascotMessage('Escucha la pronunciación con atención antes de empezar.');
-      } else if (sessionPhase === 'CHALLENGE_PHASE') {
+      if (sessionPhase === 'CHALLENGE_PHASE') {
         setMascotMood('idle');
-        setMascotMessage('¡Tú puedes hacerlo! Confía en tu memoria.');
+        setMascotMessage('¡A jugar! Las palabras aparecen dentro de la aventura.');
       } else if (sessionPhase === 'RESULT_PHASE') {
         setMascotMood('happy');
         setMascotMessage('¡Excelente turno! Cada palabra dominada suma experiencia.');
@@ -101,14 +98,14 @@ export default function App() {
               </div>
 
               <h1 className="text-4xl font-black bg-gradient-to-r from-cyan-400 via-pink-400 to-amber-400 bg-clip-text text-transparent">
-                JUEGOFY
+                FAYMA PLAY
               </h1>
               <p className="text-xs uppercase font-extrabold tracking-widest text-cyan-400 mt-1 mb-4">
-                Plataforma PWA Educativa V1
+                ARCADE DE APRENDIZAJE
               </p>
 
               <p className="text-sm text-slate-300 mb-8 leading-relaxed">
-                Minijuegos multijugador adaptativos en <strong>Árabe</strong>, <strong>Flamenco</strong> y <strong>Francés</strong> con repetición espaciada y tienda de cosméticos.
+                Una colección de aventuras arcade donde practicas idiomas mientras corres, luchas y exploras.
               </p>
 
               <div className="space-y-3">
@@ -118,7 +115,7 @@ export default function App() {
                   className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white font-black text-base flex items-center justify-center gap-2 shadow-2xl hover:opacity-95 active:scale-98 transition cursor-pointer shadow-cyan-500/30"
                 >
                   <Play className="w-5 h-5 fill-current" />
-                  <span>Entrar a Juegofy</span>
+                  <span>Entrar a FAYMA PLAY</span>
                 </button>
 
                 <button

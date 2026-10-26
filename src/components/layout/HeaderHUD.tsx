@@ -39,10 +39,10 @@ export const HeaderHUD: React.FC = () => {
             </div>
             <div className="hidden sm:block text-left">
               <span className="font-extrabold text-sm sm:text-base tracking-wider bg-gradient-to-r from-cyan-400 via-pink-400 to-amber-400 bg-clip-text text-transparent">
-                JUEGOFY
+                FAYMA PLAY
               </span>
               <div className="text-[10px] text-slate-400 font-medium -mt-0.5">
-                V1 Multijugador
+                Arcade educativo
               </div>
             </div>
           </button>

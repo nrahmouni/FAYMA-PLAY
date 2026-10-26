@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useProfileStore } from '../store/profileStore';
 import { useAdaptiveRound } from '../hooks/useAdaptiveRound';
-import { SmartLearningModal } from '../modals/SmartLearningModal';
 import { InteractiveChallengeModal } from '../modals/InteractiveChallengeModal';
 import { TurnResultModal } from '../modals/TurnResultModal';
 import { GameProps, GameResult, Word } from '../types';
@@ -14,7 +13,6 @@ export const GameSession: React.FC = () => {
   const totalRounds = useGameStore(s => s.totalRounds);
   const currentPlayerIndex = useGameStore(s => s.currentPlayerIndex);
   const sessionPhase = useGameStore(s => s.sessionPhase);
-  const setSessionPhase = useGameStore(s => s.setSessionPhase);
   const recordTurnResult = useGameStore(s => s.recordTurnResult);
   const advanceTurn = useGameStore(s => s.advanceTurn);
   const currentTurnResult = useGameStore(s => s.currentTurnResult);
@@ -27,6 +25,12 @@ export const GameSession: React.FC = () => {
 
   const activePlayer = profiles[currentPlayerIndex] || profiles[0];
   const difficulty = getPlayerDifficulty(activePlayer?.uid || '');
+  const answerContext = useRef({ uid: activePlayer?.uid || '', streak: 0, handleAnswer });
+  answerContext.current = {
+    uid: activePlayer?.uid || '',
+    streak: streakCount[activePlayer?.uid || ''] || 0,
+    handleAnswer,
+  };
 
   // Select target words for this turn
   const [roundWords, setRoundWords] = useState<Word[]>([]);
@@ -39,14 +43,14 @@ export const GameSession: React.FC = () => {
   }, [activePlayer, currentRound, currentPlayerIndex, selectRoundWords]);
 
   const handleGameCorrect = useCallback((wordId: string) => {
-    const streak = streakCount[activePlayer.uid] || 0;
-    handleAnswer(activePlayer.uid, wordId, true, streak);
-  }, [activePlayer.uid, streakCount, handleAnswer]);
+    const context = answerContext.current;
+    context.handleAnswer(context.uid, wordId, true, context.streak);
+  }, []);
 
   const handleGameWrong = useCallback((wordId: string) => {
-    const streak = streakCount[activePlayer.uid] || 0;
-    handleAnswer(activePlayer.uid, wordId, false, streak);
-  }, [activePlayer.uid, streakCount, handleAnswer]);
+    const context = answerContext.current;
+    context.handleAnswer(context.uid, wordId, false, context.streak);
+  }, []);
 
   const handleGameComplete = useCallback((result: GameResult) => {
     // Inject active player ID
@@ -75,17 +79,6 @@ export const GameSession: React.FC = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-4 sm:py-6 relative min-h-[calc(100vh-80px)] flex flex-col items-center justify-center">
-      {/* Phase A: Smart Learning Modal */}
-      {sessionPhase === 'LEARNING_PHASE' && (
-        <SmartLearningModal
-          words={roundWords}
-          language={language}
-          player={activePlayer}
-          onReady={() => setSessionPhase('CHALLENGE_PHASE')}
-        />
-      )}
-
-      {/* Phase B: Interactive Challenge Active */}
       {sessionPhase === 'CHALLENGE_PHASE' && (
         <InteractiveChallengeModal
           gameId={activeGameId}
@@ -95,7 +88,6 @@ export const GameSession: React.FC = () => {
         />
       )}
 
-      {/* Phase C: Turn Result Feedback Modal */}
       {sessionPhase === 'RESULT_PHASE' && currentTurnResult && (
         <TurnResultModal
           result={currentTurnResult}

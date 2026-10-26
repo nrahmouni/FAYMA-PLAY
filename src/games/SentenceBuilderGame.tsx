@@ -132,27 +132,37 @@ export const SentenceBuilderGame: React.FC<GameProps> = ({
     <div className="w-full max-w-xl mx-auto flex flex-col items-center select-none">
       <JuiceBurst trigger={burst} type="correct" />
 
-      {/* Target prompt & Spanish meaning */}
-      <div className="w-full rounded-2xl glass-panel p-5 mb-5 border border-cyan-400/30 text-center shadow-lg relative">
-        <span className="text-[11px] font-extrabold uppercase tracking-widest text-cyan-400">
-          Ordena la oración correspondiente:
+      <div className="mb-4 flex w-full items-center justify-between rounded-2xl border border-cyan-300/20 bg-slate-950/75 px-4 py-3">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[.2em] text-cyan-300">SENTENCE BUILDER · AVENTURA</p>
+          <h2 className="mt-1 text-base font-black text-white">Reconstruye el mensaje para abrir el portal</h2>
+        </div>
+        <div className="text-right">
+          <div className="text-[9px] font-black uppercase tracking-wider text-slate-400">Puerta</div>
+          <div className="font-black text-cyan-200">{sentenceIndex + 1}/{words.length}</div>
+        </div>
+      </div>
+
+      <div className="relative mb-5 w-full overflow-hidden rounded-2xl border border-cyan-400/30 bg-gradient-to-br from-slate-900 via-slate-950 to-indigo-950 p-5 text-center shadow-2xl">
+        <div className="pointer-events-none absolute inset-0 opacity-25" style={{ backgroundImage: 'linear-gradient(rgba(34,211,238,.2) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,.2) 1px,transparent 1px)', backgroundSize: '24px 24px', transform: 'perspective(450px) rotateX(16deg) scale(1.15)' }} />
+        <span className="relative text-[10px] font-extrabold uppercase tracking-widest text-cyan-300">
+          Pista del explorador
         </span>
-        <h3 className="text-xl sm:text-2xl font-black text-slate-100 mt-1 mb-2">
-          "{currentWord?.exampleTranslation || currentWord?.translation}"
+        <h3 className="relative mt-1 text-xl font-black text-white sm:text-2xl">
+          {currentWord?.exampleTranslation || currentWord?.translation}
         </h3>
-        <div className="flex items-center justify-center gap-2">
-          <span className="text-xs text-slate-400">Palabra clave:</span>
-          <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold text-xs border border-cyan-500/30">
+        <div className="relative mt-3 flex items-center justify-center gap-2">
+          <span className="text-xs text-slate-400">Fragmento brillante:</span>
+          <span className="rounded-full border border-cyan-400/30 bg-cyan-500/15 px-2.5 py-0.5 text-xs font-bold text-cyan-200">
             {currentWord?.text}
           </span>
         </div>
       </div>
 
-      {/* Sentence Drop Slot Line */}
-      <div className="w-full rounded-2xl glass-card p-4 min-h-[90px] border-2 border-dashed border-cyan-500/40 flex flex-wrap items-center justify-center gap-2 relative mb-6">
+      <div className="relative mb-6 flex min-h-[100px] w-full flex-wrap items-center justify-center gap-2 overflow-hidden rounded-2xl border-2 border-dashed border-cyan-500/40 bg-slate-950/60 p-4 shadow-inner">
         {placedTokens.length === 0 && (
-          <span className="text-xs text-slate-500 font-medium italic pointer-events-none">
-            Toca las palabras de abajo para colocarlas aquí en orden
+          <span className="pointer-events-none text-center text-xs font-medium italic text-slate-500">
+            Toca los fragmentos de energía para reparar la señal y abrir el portal
           </span>
         )}
 
@@ -168,7 +178,7 @@ export const SentenceBuilderGame: React.FC<GameProps> = ({
               animate={{ scale: 1, opacity: 1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => handleRemoveToken(token)}
-              className={`px-3.5 py-2 rounded-xl font-bold shadow-md transition border-2 flex items-center gap-1.5 cursor-pointer ${
+              className={`fayma-sentence-tile flex cursor-pointer items-center gap-1.5 rounded-xl border-2 px-3.5 py-2 font-bold shadow-md transition ${
                 isSlotFilledAll
                   ? isSlotCorrect
                     ? 'bg-emerald-500/30 border-emerald-400 text-emerald-200'
@@ -196,8 +206,8 @@ export const SentenceBuilderGame: React.FC<GameProps> = ({
 
       {/* Scrambled Word Bank */}
       <div className="w-full">
-        <span className="text-xs uppercase font-extrabold tracking-wider text-slate-400 block mb-2 px-1">
-          Banco de palabras:
+        <span className="mb-2 block px-1 text-xs font-extrabold uppercase tracking-wider text-slate-400">
+          Fragmentos de energía:
         </span>
         <div className="flex flex-wrap items-center justify-center gap-2.5 min-h-[64px]">
           {bankTokens.map(token => (
@@ -207,7 +217,7 @@ export const SentenceBuilderGame: React.FC<GameProps> = ({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.92 }}
               onClick={() => handlePlaceToken(token)}
-              className={`px-4 py-2.5 rounded-xl glass-card font-black text-slate-100 border-2 border-white/20 hover:border-cyan-400 hover:bg-slate-800 shadow-lg cursor-pointer ${
+              className={`fayma-sentence-tile cursor-pointer rounded-xl border-2 border-white/20 px-4 py-2.5 font-black text-slate-100 shadow-lg ${
                 isArabic ? 'text-2xl font-arabic py-2' : 'text-lg'
               }`}
               dir={isArabic ? 'rtl' : 'ltr'}

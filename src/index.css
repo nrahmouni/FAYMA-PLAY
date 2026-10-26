@@ -11,10 +11,241 @@
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
+    background:
+      radial-gradient(ellipse at 16% -5%, rgba(30, 64, 175, .2), transparent 42rem),
+      radial-gradient(ellipse at 95% 25%, rgba(126, 34, 206, .13), transparent 36rem),
+      #020617;
+    background-attachment: fixed;
   }
 
   [dir="rtl"], .font-arabic {
     font-family: var(--font-arabic);
+  }
+}
+
+@layer components {
+  .fayma-title-gradient {
+    background: linear-gradient(110deg, #67e8f9 0%, #c4b5fd 48%, #f9a8d4 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 12px 36px rgba(34, 211, 238, .2));
+  }
+
+  .fayma-primary-button {
+    background: linear-gradient(115deg, #a5f3fc, #67e8f9 44%, #c4b5fd);
+    box-shadow: 0 12px 34px rgba(34, 211, 238, .2), inset 0 1px rgba(255, 255, 255, .7);
+    transition: filter .2s ease, box-shadow .2s ease;
+  }
+
+  .fayma-primary-button:hover {
+    filter: saturate(1.2) brightness(1.06);
+    box-shadow: 0 16px 42px rgba(34, 211, 238, .32), inset 0 1px rgba(255, 255, 255, .7);
+  }
+
+  .fayma-secondary-action {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    border: 1px solid rgba(255, 255, 255, .09);
+    border-radius: .8rem;
+    background: rgba(255, 255, 255, .035);
+    padding: .7rem .8rem;
+    text-align: left;
+    color: #e2e8f0;
+    font-size: .75rem;
+    font-weight: 800;
+    transition: background .2s ease, border-color .2s ease;
+  }
+
+  .fayma-secondary-action:hover {
+    border-color: rgba(103, 232, 249, .3);
+    background: rgba(255, 255, 255, .08);
+  }
+
+  .fayma-hero-stage {
+    perspective: 900px;
+    transform-style: preserve-3d;
+  }
+
+  .fayma-orbit {
+    position: absolute;
+    width: 72%;
+    height: 36%;
+    border: 1px solid rgba(103, 232, 249, .3);
+    border-radius: 50%;
+    transform: rotateX(68deg) rotateZ(-14deg) translateZ(10px);
+    box-shadow: 0 0 28px rgba(34, 211, 238, .08), inset 0 0 24px rgba(34, 211, 238, .06);
+  }
+
+  .fayma-orbit-back {
+    width: 95%;
+    height: 48%;
+    border-color: rgba(192, 132, 252, .22);
+    transform: rotateX(68deg) rotateZ(14deg) translateZ(-24px);
+  }
+
+  .fayma-orbit-front {
+    transform: rotateX(68deg) rotateZ(-14deg) translateZ(35px);
+  }
+
+  .fayma-stage-platform {
+    position: absolute;
+    bottom: 18%;
+    width: 82%;
+    height: 30%;
+    border: 1px solid rgba(103, 232, 249, .28);
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(8, 47, 73, .52), rgba(15, 23, 42, .9));
+    box-shadow: 0 38px 50px rgba(0, 0, 0, .55), 0 0 48px rgba(34, 211, 238, .15);
+    transform: rotateX(68deg) translateZ(-55px);
+  }
+
+  .fayma-hero-arcade {
+    position: relative;
+    z-index: 1;
+    width: 48%;
+    height: 71%;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 1.8rem;
+    background: linear-gradient(135deg, #475569, #1e293b 30%, #090f1e 75%);
+    box-shadow: 22px 28px 52px rgba(0, 0, 0, .55), inset 3px 3px 3px rgba(255, 255, 255, .35), inset -3px -3px 5px rgba(0, 0, 0, .8);
+    transform: rotateY(-14deg) rotateX(5deg) translateZ(35px);
+  }
+
+  .fayma-arcade-screen {
+    display: flex;
+    height: 72%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 4px solid #080e1b;
+    border-radius: 1.25rem;
+    background:
+      radial-gradient(circle at 50% 32%, rgba(34, 211, 238, .35), transparent 65%),
+      linear-gradient(145deg, #172554, #020617 72%);
+    box-shadow: inset 0 0 26px rgba(34, 211, 238, .22), 0 0 22px rgba(34, 211, 238, .15);
+  }
+
+  .fayma-arcade-controls {
+    display: flex;
+    height: 28%;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .fayma-arcade-stick {
+    position: relative;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #e2e8f0, #64748b 58%, #0f172a);
+    box-shadow: 0 6px 0 #020617, 0 8px 12px rgba(0, 0, 0, .5);
+  }
+
+  .fayma-arcade-stick::after {
+    position: absolute;
+    right: 40%;
+    bottom: 60%;
+    width: .22rem;
+    height: 1.2rem;
+    border-radius: 1rem;
+    background: linear-gradient(90deg, #475569, #cbd5e1, #334155);
+    content: '';
+  }
+
+  .fayma-arcade-button {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(255, 255, 255, .4);
+    border-radius: 50%;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, .6), 0 0 12px currentColor;
+  }
+
+  .fayma-arcade-button-pink { background: #f472b6; color: #f472b6; }
+  .fayma-arcade-button-cyan { background: #22d3ee; color: #22d3ee; }
+
+  .fayma-game-card {
+    background: linear-gradient(145deg, rgba(30, 41, 59, .9), rgba(2, 6, 23, .92));
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .24), inset 0 1px rgba(255, 255, 255, .06);
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+  }
+
+  .fayma-game-card:hover {
+    border-color: rgba(103, 232, 249, .38);
+    box-shadow: 0 18px 38px rgba(0, 0, 0, .34), 0 0 28px rgba(34, 211, 238, .08);
+  }
+
+  .fayma-game-icon {
+    display: grid;
+    width: 2.8rem;
+    height: 2.8rem;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, .25);
+    border-radius: .95rem;
+    box-shadow: 0 7px 16px rgba(0, 0, 0, .26), inset 0 1px rgba(255, 255, 255, .45);
+    font-size: 1.55rem;
+  }
+
+  .fayma-sentence-tile {
+    background: linear-gradient(145deg, rgba(51, 65, 85, .9), rgba(15, 23, 42, .96));
+    box-shadow: 0 5px 0 rgba(2, 6, 23, .8), 0 9px 18px rgba(0, 0, 0, .26), inset 0 1px rgba(255, 255, 255, .12);
+    transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+  }
+
+  .fayma-sentence-tile:hover {
+    border-color: rgba(34, 211, 238, .7);
+    box-shadow: 0 7px 0 rgba(2, 6, 23, .8), 0 12px 24px rgba(34, 211, 238, .1);
+    transform: translateY(-2px);
+  }
+
+  .fayma-game-world {
+    width: 100%;
+    perspective: 1100px;
+  }
+
+  .fayma-game-world::before {
+    position: absolute;
+    z-index: -1;
+    right: -12%;
+    bottom: -12%;
+    left: -12%;
+    height: 50%;
+    background-image:
+      linear-gradient(rgba(103, 232, 249, .09) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(103, 232, 249, .09) 1px, transparent 1px);
+    background-size: 34px 34px;
+    content: '';
+    mask-image: linear-gradient(transparent, #000 38%, transparent);
+    opacity: .45;
+    pointer-events: none;
+    transform: rotateX(65deg) translateZ(-120px) scale(1.3);
+    transform-origin: center bottom;
+  }
+
+  .fayma-game-world::after {
+    position: absolute;
+    z-index: -1;
+    top: 3.5rem;
+    left: 50%;
+    width: min(70vw, 36rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99, 102, 241, .12), transparent 68%);
+    content: '';
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
   }
 }
 

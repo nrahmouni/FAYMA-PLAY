@@ -143,7 +143,7 @@ export const GARAGE_ITEMS: ShopItem[] = [
   {
     id: 'badge_mythic_scholar',
     name: 'Erudito Mítico',
-    description: 'El mayor honor de Juegofy: símbolo de maestría absoluta.',
+    description: 'El mayor honor de FAYMA PLAY: símbolo de maestría absoluta.',
     category: 'badge',
     price: 5,
     currency: 'gems',

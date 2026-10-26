@@ -33,6 +33,8 @@ export const MemoryGame: React.FC<GameProps> = ({
   const [burst, setBurst] = useState(false);
   const [matchesFound, setMatchesFound] = useState(0);
   const [attempts, setAttempts] = useState(0);
+  const [combo, setCombo] = useState(0);
+  const [score, setScore] = useState(0);
 
   const startTimeRef = useRef<number>(Date.now());
   const wordsSeenRef = useRef<string[]>([]);
@@ -46,6 +48,7 @@ export const MemoryGame: React.FC<GameProps> = ({
 
   useEffect(() => {
     const selectedWords = words.slice(0, pairCount);
+    wordsSeenRef.current = [];
     selectedWords.forEach(w => {
       if (!wordsSeenRef.current.includes(w.id)) {
         wordsSeenRef.current.push(w.id);
@@ -84,6 +87,8 @@ export const MemoryGame: React.FC<GameProps> = ({
     setSelectedCards([]);
     setMatchesFound(0);
     setAttempts(0);
+    setCombo(0);
+    setScore(0);
     startTimeRef.current = Date.now();
   }, [words, pairCount]);
 
@@ -120,6 +125,12 @@ export const MemoryGame: React.FC<GameProps> = ({
         playSuccess();
         setBurst(true);
         onCorrect(first.wordId);
+        const nextMatches = matchesFound + 1;
+        const nextCombo = combo + 1;
+        const nextScore = score + 100 * nextCombo;
+        setMatchesFound(nextMatches);
+        setCombo(nextCombo);
+        setScore(nextScore);
 
         setTimeout(() => {
           setCards(prev =>
@@ -128,31 +139,27 @@ export const MemoryGame: React.FC<GameProps> = ({
           setSelectedCards([]);
           setIsEvaluating(false);
           setBurst(false);
-          setMatchesFound(m => {
-            const total = m + 1;
-            if (total >= pairCount) {
-              // Completed all pairs!
-              playFanfare();
-              const totalTime = Date.now() - startTimeRef.current;
-              setTimeout(() => {
-                onComplete({
-                  playerId: '',
-                  gameId: 'memory',
-                  correct: total,
-                  wrong: Math.max(0, attempts + 1 - total),
-                  timeMs: totalTime,
-                  coinsEarned: 12 + total * 5,
-                  wordsSeen: wordsSeenRef.current,
-                });
-              }, 800);
-            }
-            return total;
-          });
+          if (nextMatches >= pairCount) {
+            playFanfare();
+            const totalTime = Date.now() - startTimeRef.current;
+            setTimeout(() => {
+              onComplete({
+                playerId: '',
+                gameId: 'memory',
+                correct: nextMatches,
+                wrong: Math.max(0, attempts + 1 - nextMatches),
+                timeMs: totalTime,
+                coinsEarned: 12 + nextMatches * 5 + nextScore,
+                wordsSeen: wordsSeenRef.current,
+              });
+            }, 800);
+          }
         }, 600);
       } else {
         // NO MATCH!
         playError();
         onWrong(first.wordId);
+        setCombo(0);
 
         setTimeout(() => {
           setCards(prev =>
@@ -173,8 +180,22 @@ export const MemoryGame: React.FC<GameProps> = ({
     <div className="w-full max-w-xl mx-auto flex flex-col items-center select-none">
       <JuiceBurst trigger={burst} type="correct" />
 
-      {/* Header Info */}
-      <div className="w-full flex items-center justify-between mb-4 px-2">
+      <div className="w-full mb-4 rounded-2xl border border-white/10 bg-slate-950/60 p-4">
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[.2em] text-violet-300">MEMORY QUEST · EXPLORACIÓN</p>
+            <p className="mt-1 text-xs text-slate-400">Descubre los artefactos y reúne sus parejas.</p>
+          </div>
+          <div className="text-right">
+            <div className="text-sm font-black text-amber-300">⭐ {score}</div>
+            {combo > 1 && <div className="text-[10px] font-bold text-fuchsia-300">RACHA ×{combo}</div>}
+          </div>
+        </div>
+        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-800">
+          <div className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-violet-400 transition-all" style={{ width: `${(matchesFound / pairCount) * 100}%` }} />
+        </div>
+      </div>
+      <div className="w-full flex items-center justify-between mb-3 px-2">
         <div className="flex items-center gap-1.5 text-xs text-slate-400 font-bold uppercase tracking-wider">
           <Eye className="w-4 h-4 text-cyan-400" />
           <span>Parejas: {matchesFound} de {pairCount}</span>
@@ -198,6 +219,8 @@ export const MemoryGame: React.FC<GameProps> = ({
               key={card.cardId}
               type="button"
               whileTap={{ scale: 0.95 }}
+              animate={{ rotateY: isRevealed ? [85, 0] : 0 }}
+              transition={{ duration: 0.28, ease: 'easeOut' }}
               onClick={() => handleCardClick(card)}
               className={`h-24 sm:h-28 rounded-2xl p-2 flex flex-col items-center justify-center relative cursor-pointer transition-all border-2 ${
                 card.isMatched
@@ -237,7 +260,7 @@ export const MemoryGame: React.FC<GameProps> = ({
                 <div className="flex flex-col items-center justify-center text-slate-500 group-hover:text-cyan-400">
                   <span className="text-2xl sm:text-3xl opacity-60">🎴</span>
                   <span className="text-[10px] uppercase font-extrabold tracking-widest mt-1 text-slate-500">
-                    Juegofy
+                    FAYMA PLAY
                   </span>
                 </div>
               )}

@@ -1,369 +1,392 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Volume2, Sparkles, Target, RotateCcw } from 'lucide-react';
-import { GameProps, Word } from '../types';
-import { useSpeech } from '../hooks/useSpeech';
-import { useSound } from '../hooks/useSound';
-import { JuiceBurst } from '../components/JuiceBurst';
-import { shuffleArray } from '../lib/utils';
-import { VOCABULARY_BANK } from '../data/vocabulary';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { GameProps, GameResult, Word } from '../types';
 
-interface FloatingTarget {
-  word: Word;
-  x: number; // percentage 10-90
-  y: number; // percentage 15-50
-  vx: number;
-  vy: number;
-  radius: number;
-  hit: boolean;
-}
+type Target = { word: Word; x: number; y: number; hit: boolean; sway: number };
+type WoodBlock = { x: number; y: number; width: number; height: number; broken: boolean };
+type Shot = { x: number; y: number; vx: number; vy: number; trail: { x: number; y: number }[] };
 
-export const SlingshotGame: React.FC<GameProps> = ({
-  words,
-  difficulty,
-  onCorrect,
-  onWrong,
-  onComplete,
-  language,
-}) => {
-  const [targetIndex, setTargetIndex] = useState(0);
-  const [targets, setTargets] = useState<FloatingTarget[]>([]);
-  const [burst, setBurst] = useState(false);
-  const [burstPos, setBurstPos] = useState({ x: 0.5, y: 0.5 });
-  const [correctCount, setCorrectCount] = useState(0);
-  const [wrongCount, setWrongCount] = useState(0);
+/** Slingshot physics adventure: drag, aim, calculate the arc, and smash word crates. */
+export const SlingshotGame: React.FC<GameProps> = ({ words, difficulty, onCorrect, onComplete }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const raf = useRef(0);
+  const callbacks = useRef({ onCorrect, onComplete });
+  callbacks.current = { onCorrect, onComplete };
+  const game = useRef({
+    targets: [] as Target[],
+    blocks: [] as WoodBlock[],
+    shot: null as Shot | null,
+    pull: null as { x: number; y: number } | null,
+    score: 0,
+    correct: 0,
+    misses: 0,
+    wordIndex: 0,
+    level: 1,
+    last: 0,
+    started: 0,
+    done: false,
+    wordsSeen: [] as string[],
+    aim: -0.65,
+  });
+  const [hud, setHud] = useState({
+    score: 0,
+    level: 1,
+    message: 'Tira de la goma hacia atrás y suelta para lanzar.',
+  });
+  const deck = useMemo(() => words.slice(0, 12), [words]);
 
-  // Slingshot drag state
-  const [isAiming, setIsAiming] = useState(false);
-  const [dragOrigin, setDragOrigin] = useState({ x: 0, y: 0 });
-  const [dragCurrent, setDragCurrent] = useState({ x: 0, y: 0 });
-  const [projectile, setProjectile] = useState<{
-    x: number;
-    y: number;
-    vx: number;
-    vy: number;
-    active: boolean;
-  } | null>(null);
+  const finish = useCallback(() => {
+    const g = game.current;
+    if (g.done) return;
+    g.done = true;
+    const result: GameResult = {
+      playerId: '',
+      gameId: 'slingshot',
+      correct: g.correct,
+      wrong: g.misses,
+      timeMs: Date.now() - g.started,
+      coinsEarned: g.score + g.correct * 5,
+      wordsSeen: g.wordsSeen,
+    };
+    callbacks.current.onComplete(result);
+  }, []);
 
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const animFrameRef = useRef<number | null>(null);
-  const startTimeRef = useRef<number>(Date.now());
-  const wordsSeenRef = useRef<string[]>([]);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (!canvas || !ctx) return;
+    const g = game.current;
+    g.targets = [];
+    g.blocks = [];
+    g.shot = null;
+    g.pull = null;
+    g.score = 0;
+    g.correct = 0;
+    g.misses = 0;
+    g.wordIndex = 0;
+    g.level = 1;
+    g.last = performance.now();
+    g.started = Date.now();
+    g.done = false;
+    g.wordsSeen = [];
+    g.aim = -0.65;
+    setHud({ score: 0, level: 1, message: 'Tira de la goma hacia atrás y suelta para lanzar.' });
 
-  const { speak } = useSpeech();
-  const { playSlingshot, playSuccess, playError, playPop } = useSound();
-
-  const currentWord = words[targetIndex] || words[0];
-  const isArabic = language === 'ar';
-
-  // Spawn floating targets
-  const spawnTargets = useCallback(() => {
-    if (!currentWord) return;
-
-    if (!wordsSeenRef.current.includes(currentWord.id)) {
-      wordsSeenRef.current.push(currentWord.id);
-    }
-
-    const distractorPool = VOCABULARY_BANK.filter(
-      w => w.language === language && w.id !== currentWord.id
-    );
-    const count = difficulty >= 3 ? 4 : 3;
-    const pickedDistractors = shuffleArray(distractorPool).slice(0, count - 1);
-    const all = shuffleArray([currentWord, ...pickedDistractors]);
-
-    const newTargets: FloatingTarget[] = all.map((word, idx) => {
-      const step = 80 / all.length;
-      return {
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.max(1, Math.round(rect.width * ratio));
+      canvas.height = Math.max(1, Math.round(rect.height * ratio));
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    };
+    const launchPoint = (width: number, height: number) => ({ x: width * 0.16, y: height * 0.76 });
+    const loadLevel = () => {
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      const remaining = deck.slice(g.wordIndex);
+      if (remaining.length === 0) {
+        finish();
+        return;
+      }
+      const targetCount = Math.min(3, remaining.length);
+      g.targets = remaining.slice(0, targetCount).map((word, index) => ({
         word,
-        x: 15 + idx * step + (Math.random() * 8 - 4),
-        y: 18 + (idx % 2) * 16 + (Math.random() * 6 - 3),
-        vx: (Math.random() - 0.5) * 0.12,
-        vy: (Math.random() - 0.5) * 0.08,
-        radius: 38,
+        x: width * (0.62 + index * 0.105),
+        y: height * (0.42 + (index % 2) * 0.11),
         hit: false,
-      };
-    });
+        sway: Math.random() * Math.PI * 2,
+      }));
+      g.blocks = [
+        { x: width * 0.48, y: height * 0.68, width: 42, height: 20, broken: false },
+        { x: width * 0.55, y: height * 0.61, width: 54, height: 18, broken: false },
+        { x: width * 0.57, y: height * 0.75, width: 48, height: 20, broken: false },
+        { x: width * 0.76, y: height * 0.72, width: 68, height: 20, broken: false },
+      ];
+    };
+    loadLevel();
 
-    setTargets(newTargets);
-    setProjectile(null);
-    speak(currentWord.audioText || currentWord.text, language);
-  }, [currentWord, difficulty, language, speak]);
+    const releaseShot = (pullX?: number, pullY?: number) => {
+      if (g.done || g.shot) return;
+      const { x, y } = launchPoint(canvas.clientWidth, canvas.clientHeight);
+      if (pullX !== undefined && pullY !== undefined) {
+        const dx = x - pullX;
+        const dy = y - pullY;
+        const power = Math.min(1, Math.hypot(dx, dy) / 145);
+        if (power < 0.08) return;
+        g.aim = Math.atan2(dy, dx);
+        const velocity = 560 * power * (1 + difficulty * 0.045);
+        g.shot = { x, y, vx: Math.cos(g.aim) * velocity, vy: Math.sin(g.aim) * velocity, trail: [] };
+      } else {
+        const velocity = 470 * (1 + difficulty * 0.045);
+        g.shot = { x, y, vx: Math.cos(g.aim) * velocity, vy: Math.sin(g.aim) * velocity, trail: [] };
+      }
+      setHud(value => ({ ...value, message: `¡Vuelo! Ajusta el ángulo para el próximo disparo.` }));
+    };
+    const pointerDown = (event: PointerEvent) => {
+      if (g.shot || g.done) return;
+      const rect = canvas.getBoundingClientRect();
+      const point = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+      g.pull = point;
+      canvas.setPointerCapture(event.pointerId);
+    };
+    const pointerMove = (event: PointerEvent) => {
+      if (!g.pull) return;
+      const rect = canvas.getBoundingClientRect();
+      g.pull = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    };
+    const pointerUp = () => {
+      if (!g.pull) return;
+      const point = g.pull;
+      g.pull = null;
+      releaseShot(point.x, point.y);
+    };
+    const keyDown = (event: KeyboardEvent) => {
+      if (event.target instanceof HTMLElement && event.target.matches('input, textarea, select, [contenteditable="true"]')) return;
+      if (event.code === 'Space' || event.key === 'ArrowUp' || event.key === 'ArrowDown') event.preventDefault();
+      if (event.key === 'ArrowUp') g.aim = Math.max(-1.35, g.aim - 0.06);
+      if (event.key === 'ArrowDown') g.aim = Math.min(-0.15, g.aim + 0.06);
+      if (event.code === 'Space' && !event.repeat) releaseShot();
+    };
+    const hitTarget = (shot: Shot) => g.targets.find(target =>
+      !target.hit && Math.abs(shot.x - target.x) < 46 && Math.abs(shot.y - target.y) < 32
+    );
 
-  useEffect(() => {
-    spawnTargets();
-  }, [targetIndex, spawnTargets]);
+    const draw = (now: number) => {
+      const dt = Math.min(0.034, (now - g.last) / 1000);
+      g.last = now;
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      const { x: slingX, y: slingY } = launchPoint(width, height);
+      const gravity = 600;
 
-  // Animation loop for floating targets & projectile
-  useEffect(() => {
-    let lastTime = performance.now();
-
-    const loop = (time: number) => {
-      const dt = Math.min((time - lastTime) / 1000, 0.05);
-      lastTime = time;
-
-      // Update targets floating
-      setTargets(prev =>
-        prev.map(t => {
-          let nx = t.x + t.vx * dt * 60;
-          let ny = t.y + t.vy * dt * 60;
-          let nvx = t.vx;
-          let nvy = t.vy;
-
-          if (nx < 8 || nx > 88) nvx = -nvx;
-          if (ny < 12 || ny > 52) nvy = -nvy;
-
-          return { ...t, x: nx, y: ny, vx: nvx, vy: nvy };
-        })
-      );
-
-      // Update projectile flight
-      setProjectile(p => {
-        if (!p || !p.active) return null;
-        const nx = p.x + p.vx * dt * 60;
-        const ny = p.y + p.vy * dt * 60 + 0.3 * dt * 60; // faux gravity
-
-        // Check if out of bounds
-        if (nx < 0 || nx > 100 || ny < 0 || ny > 100) {
-          return null;
-        }
-
-        // Check collision with targets
-        targets.forEach(target => {
-          if (target.hit) return;
-          const dx = (nx - target.x);
-          const dy = (ny - target.y);
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 10) {
-            handleHitTarget(target);
+      if (!g.done && g.shot) {
+        const shot = g.shot;
+        shot.trail.push({ x: shot.x, y: shot.y });
+        if (shot.trail.length > 14) shot.trail.shift();
+        shot.x += shot.vx * dt;
+        shot.y += shot.vy * dt;
+        shot.vy += gravity * dt;
+        const target = hitTarget(shot);
+        if (target) {
+          target.hit = true;
+          g.wordIndex += 1;
+          g.correct += 1;
+          g.score += 25;
+          g.wordsSeen.push(target.word.id);
+          callbacks.current.onCorrect(target.word.id);
+          setHud(value => ({ ...value, score: g.score, message: `${target.word.text} = ${target.word.translation} · ¡Diana!` }));
+          g.shot = null;
+          if (g.targets.every(item => item.hit)) {
+            g.level += 1;
+            if (g.wordIndex >= deck.length) finish();
+            else {
+              loadLevel();
+              setHud(value => ({ ...value, level: g.level, message: `¡Nivel ${g.level - 1} superado! Derriba las cajas de palabras.` }));
+            }
           }
-        });
-
-        return { ...p, x: nx, y: ny };
-      });
-
-      animFrameRef.current = requestAnimationFrame(loop);
-    };
-
-    animFrameRef.current = requestAnimationFrame(loop);
-    return () => {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    };
-  }, [targets]);
-
-  const handleHitTarget = (target: FloatingTarget) => {
-    setProjectile(null);
-
-    if (target.word.id === currentWord.id) {
-      // Hit correct target!
-      playSuccess();
-      playPop();
-      setBurstPos({ x: target.x / 100, y: target.y / 100 });
-      setBurst(true);
-      setCorrectCount(c => c + 1);
-      onCorrect(currentWord.id);
-
-      setTargets(prev => prev.map(t => (t.word.id === target.word.id ? { ...t, hit: true } : t)));
-
-      setTimeout(() => {
-        setBurst(false);
-        if (targetIndex + 1 < words.length) {
-          setTargetIndex(i => i + 1);
         } else {
-          // Finished!
-          const totalTime = Date.now() - startTimeRef.current;
-          onComplete({
-            playerId: '',
-            gameId: 'slingshot',
-            correct: correctCount + 1,
-            wrong: wrongCount,
-            timeMs: totalTime,
-            coinsEarned: 10 + (correctCount + 1) * 5,
-            wordsSeen: wordsSeenRef.current,
-          });
+          const block = g.blocks.find(item =>
+            !item.broken && Math.abs(shot.x - item.x) < item.width / 2 + 9 && Math.abs(shot.y - item.y) < item.height / 2 + 9
+          );
+          if (block) {
+            block.broken = true;
+            g.score += 3;
+            shot.vx *= -0.38;
+            shot.vy *= -0.38;
+            setHud(value => ({ ...value, score: g.score, message: '¡Madera rota! Ahora apunta a una caja con palabra.' }));
+          }
+          if (shot.x > width + 15 || shot.x < -15 || shot.y > height + 15 || shot.y < -height) {
+            g.shot = null;
+            g.misses += 1;
+            setHud(value => ({ ...value, message: 'El disparo ha pasado de largo. Prueba otro ángulo.' }));
+            if (g.misses >= 8) finish();
+          }
         }
-      }, 1000);
-    } else {
-      // Hit wrong target!
-      playError();
-      setWrongCount(w => w + 1);
-      onWrong(currentWord.id);
-    }
-  };
+      }
 
-  // Touch / Mouse controls for Slingshot
-  const handlePointerDown = (e: React.PointerEvent) => {
-    if (!containerRef.current || projectile?.active) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
+      const sky = ctx.createLinearGradient(0, 0, 0, height);
+      sky.addColorStop(0, '#60a5fa');
+      sky.addColorStop(0.6, '#c4b5fd');
+      sky.addColorStop(1, '#fde68a');
+      ctx.fillStyle = sky;
+      ctx.fillRect(0, 0, width, height);
+      ctx.fillStyle = 'rgba(255,255,255,.42)';
+      for (let i = 0; i < 4; i += 1) {
+        ctx.beginPath();
+        ctx.ellipse(width * (0.14 + i * 0.24), height * (0.2 + (i % 2) * 0.1), 44, 12, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = '#365d51';
+      ctx.beginPath();
+      ctx.moveTo(0, height * 0.66);
+      ctx.quadraticCurveTo(width * 0.3, height * 0.5, width * 0.56, height * 0.67);
+      ctx.quadraticCurveTo(width * 0.8, height * 0.76, width, height * 0.59);
+      ctx.lineTo(width, height);
+      ctx.lineTo(0, height);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#36533e';
+      ctx.fillRect(0, height * 0.82, width, height * 0.18);
+      ctx.fillStyle = 'rgba(255,255,255,.12)';
+      ctx.beginPath();
+      ctx.moveTo(width * 0.35, height);
+      ctx.lineTo(width * 0.51, height * 0.77);
+      ctx.lineTo(width * 0.84, height * 0.77);
+      ctx.lineTo(width, height);
+      ctx.fill();
 
-    // Only allow starting drag in the lower slingshot area (y > 60)
-    if (y > 60) {
-      setIsAiming(true);
-      setDragOrigin({ x: 50, y: 82 }); // Center of slingshot base
-      setDragCurrent({ x, y });
-    }
-  };
+      for (const block of g.blocks) {
+        if (block.broken) continue;
+        ctx.fillStyle = '#92400e';
+        ctx.fillRect(block.x - block.width / 2, block.y - block.height / 2, block.width, block.height);
+        ctx.fillStyle = '#fbbf24';
+        ctx.fillRect(block.x - block.width / 2, block.y - block.height / 2, block.width, 4);
+        ctx.strokeStyle = 'rgba(69,26,3,.7)';
+        ctx.strokeRect(block.x - block.width / 2, block.y - block.height / 2, block.width, block.height);
+      }
+      for (const target of g.targets) {
+        if (target.hit) continue;
+        const bob = Math.sin(now / 450 + target.sway) * 3;
+        const x = target.x;
+        const y = target.y + bob;
+        const boxWidth = 84;
+        const boxHeight = 54;
+        ctx.fillStyle = '#78350f';
+        ctx.beginPath();
+        ctx.moveTo(x - boxWidth / 2, y - boxHeight / 2);
+        ctx.lineTo(x + boxWidth / 2, y - boxHeight / 2);
+        ctx.lineTo(x + boxWidth / 2 + 10, y - boxHeight / 2 - 8);
+        ctx.lineTo(x + 10, y - boxHeight / 2 - 8);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#f59e0b';
+        ctx.fillRect(x - boxWidth / 2, y - boxHeight / 2, boxWidth, boxHeight);
+        ctx.fillStyle = '#fef3c7';
+        ctx.fillRect(x - boxWidth / 2 + 5, y - boxHeight / 2 + 5, boxWidth - 10, boxHeight - 10);
+        ctx.fillStyle = '#451a03';
+        ctx.font = 'bold 12px system-ui';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(target.word.text.slice(0, 13), x, y + 1);
+      }
 
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isAiming || !containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setDragCurrent({ x, y });
-  };
+      ctx.fillStyle = '#854d0e';
+      ctx.beginPath();
+      ctx.moveTo(slingX - 21, slingY + 22);
+      ctx.lineTo(slingX - 11, slingY - 31);
+      ctx.lineTo(slingX - 2, slingY - 27);
+      ctx.lineTo(slingX - 10, slingY + 22);
+      ctx.closePath();
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(slingX + 21, slingY + 22);
+      ctx.lineTo(slingX + 11, slingY - 31);
+      ctx.lineTo(slingX + 2, slingY - 27);
+      ctx.lineTo(slingX + 10, slingY + 22);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#fbbf24';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(slingX - 10, slingY - 28);
+      ctx.lineTo(g.pull?.x ?? slingX, g.pull?.y ?? slingY);
+      ctx.lineTo(slingX + 10, slingY - 28);
+      ctx.stroke();
 
-  const handlePointerUp = () => {
-    if (!isAiming) return;
-    setIsAiming(false);
+      if (g.pull) {
+        const dx = slingX - g.pull.x;
+        const dy = slingY - g.pull.y;
+        const magnitude = Math.min(1, Math.hypot(dx, dy) / 145);
+        const vx = Math.cos(Math.atan2(dy, dx)) * 560 * magnitude;
+        const vy = Math.sin(Math.atan2(dy, dx)) * 560 * magnitude;
+        ctx.fillStyle = 'rgba(255,255,255,.65)';
+        for (let t = 0.08; t < 0.64; t += 0.09) {
+          const px = slingX + vx * t;
+          const py = slingY + vy * t + 0.5 * gravity * t * t;
+          if (py > height) break;
+          ctx.beginPath();
+          ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      if (g.shot) {
+        g.shot.trail.forEach((point, index) => {
+          ctx.globalAlpha = index / g.shot!.trail.length * 0.45;
+          ctx.fillStyle = '#fef3c7';
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, 5, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = '#fef3c7';
+        ctx.shadowColor = '#fb923c';
+        ctx.shadowBlur = 16;
+        ctx.beginPath();
+        ctx.arc(g.shot.x, g.shot.y, 9, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+      ctx.fillStyle = 'rgba(2,6,23,.73)';
+      ctx.beginPath();
+      ctx.roundRect(12, 12, width - 24, 42, 12);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.font = '900 13px system-ui';
+      ctx.textAlign = 'left';
+      ctx.fillText(`🏹 NIVEL ${g.level}/3 · 🎯 ${g.correct}/${deck.length}`, 24, 38);
+      ctx.textAlign = 'right';
+      ctx.fillText(`⭐ ${g.score} · DISPAROS ${g.misses}`, width - 24, 38);
 
-    // Calculate velocity vector (drag direction opposite to shoot direction)
-    const dx = dragOrigin.x - dragCurrent.x;
-    const dy = dragOrigin.y - dragCurrent.y;
-    const power = Math.min(Math.sqrt(dx * dx + dy * dy), 24);
+      if (!g.done) raf.current = requestAnimationFrame(draw);
+      else {
+        ctx.fillStyle = 'rgba(2,6,23,.7)';
+        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = '#fff';
+        ctx.font = '900 25px system-ui';
+        ctx.textAlign = 'center';
+        ctx.fillText(g.correct === deck.length ? '¡AVENTURA COMPLETADA!' : '¡FIN DE LA AVENTURA!', width / 2, height / 2);
+      }
+    };
 
-    if (power > 3) {
-      playSlingshot();
-      setProjectile({
-        x: dragOrigin.x,
-        y: dragOrigin.y,
-        vx: dx * 0.18,
-        vy: dy * 0.18,
-        active: true,
-      });
-    }
-  };
+    resize();
+    window.addEventListener('resize', resize);
+    window.addEventListener('keydown', keyDown);
+    canvas.addEventListener('pointerdown', pointerDown);
+    canvas.addEventListener('pointermove', pointerMove);
+    canvas.addEventListener('pointerup', pointerUp);
+    canvas.addEventListener('pointercancel', pointerUp);
+    raf.current = requestAnimationFrame(draw);
+    return () => {
+      cancelAnimationFrame(raf.current);
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('keydown', keyDown);
+      canvas.removeEventListener('pointerdown', pointerDown);
+      canvas.removeEventListener('pointermove', pointerMove);
+      canvas.removeEventListener('pointerup', pointerUp);
+      canvas.removeEventListener('pointercancel', pointerUp);
+    };
+  }, [deck, difficulty, finish]);
 
   return (
-    <div className="w-full max-w-xl mx-auto flex flex-col items-center select-none">
-      <JuiceBurst trigger={burst} type="correct" x={burstPos.x} y={burstPos.y} />
-
-      {/* Target Prompt Box */}
-      <div className="w-full rounded-2xl glass-panel p-4 mb-3 flex items-center justify-between border border-cyan-500/40 shadow-lg">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-cyan-500/20 text-cyan-400">
-            <Target className="w-6 h-6 animate-spin-slow" />
-          </div>
-          <div>
-            <span className="text-[11px] uppercase font-bold tracking-wider text-cyan-400">
-              Dispara a la traducción de:
-            </span>
-            <div className={`font-black text-slate-100 ${isArabic ? 'text-2xl font-arabic' : 'text-xl'}`} dir={isArabic ? 'rtl' : 'ltr'}>
-              {currentWord.text} {currentWord.phonetic ? `(${currentWord.phonetic})` : ''}
-            </div>
-          </div>
+    <div className="mx-auto w-full max-w-2xl p-3 text-white">
+      <div className="mb-3 flex items-center justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[.2em] text-amber-300">SLINGSHOT ADVENTURE · FÍSICA</p>
+          <h2 className="text-xl font-black">Calcula el arco y derriba las cajas</h2>
         </div>
-
-        <button
-          type="button"
-          onClick={() => speak(currentWord.audioText || currentWord.text, language)}
-          className="p-3 rounded-xl bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30 transition"
-          title="Escuchar audio"
-        >
-          <Volume2 className="w-5 h-5" />
-        </button>
-      </div>
-
-      {/* Interactive Arena / Canvas */}
-      <div
-        ref={containerRef}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        className="w-full h-[380px] sm:h-[420px] rounded-3xl glass-panel relative overflow-hidden border-2 border-white/10 shadow-2xl cursor-crosshair touch-none"
-      >
-        {/* Sky / Grid background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-950 to-slate-900/80 pointer-events-none" />
-        <div className="absolute top-2 left-3 text-[10px] text-slate-500 font-mono pointer-events-none">
-          OBJETIVO {targetIndex + 1}/{words.length} • ARRASTRA EL PROYECTIL HACIA ATRÁS
-        </div>
-
-        {/* Floating Targets */}
-        {targets.map(target => {
-          if (target.hit) return null;
-          return (
-            <button
-              key={target.word.id}
-              type="button"
-              onClick={() => handleHitTarget(target)} // Direct tap fallback
-              style={{
-                left: `${target.x}%`,
-                top: `${target.y}%`,
-                transform: 'translate(-50%, -50%)',
-              }}
-              className="absolute z-20 px-3 py-2 rounded-2xl glass-card border border-cyan-400/50 flex items-center gap-1.5 shadow-xl hover:scale-110 active:scale-95 transition-transform cursor-pointer"
-            >
-              <span className="text-xl">{target.word.imageUrl || '🎯'}</span>
-              <span className="text-xs sm:text-sm font-bold text-slate-100 whitespace-nowrap">
-                {target.word.translation}
-              </span>
-            </button>
-          );
-        })}
-
-        {/* Flying Projectile */}
-        {projectile && projectile.active && (
-          <div
-            style={{
-              left: `${projectile.x}%`,
-              top: `${projectile.y}%`,
-              transform: 'translate(-50%, -50%)',
-            }}
-            className="absolute z-30 w-6 h-6 rounded-full bg-gradient-to-r from-amber-400 to-pink-500 shadow-lg shadow-pink-500/50 pointer-events-none animate-pulse"
-          />
-        )}
-
-        {/* Slingshot Base & Rubber Bands */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center pointer-events-none">
-          {/* Elastic line if aiming */}
-          {isAiming && (
-            <svg className="absolute -top-16 w-32 h-24 overflow-visible pointer-events-none">
-              <line
-                x1="24"
-                y1="30"
-                x2={64 + (dragCurrent.x - dragOrigin.x) * 2}
-                y2={30 + (dragCurrent.y - dragOrigin.y) * 2}
-                stroke="#38bdf8"
-                strokeWidth="4"
-                strokeLinecap="round"
-              />
-              <line
-                x1="104"
-                y1="30"
-                x2={64 + (dragCurrent.x - dragOrigin.x) * 2}
-                y2={30 + (dragCurrent.y - dragOrigin.y) * 2}
-                stroke="#38bdf8"
-                strokeWidth="4"
-                strokeLinecap="round"
-              />
-            </svg>
-          )}
-
-          {/* Slingshot Ball / Grip */}
-          <div
-            style={
-              isAiming
-                ? {
-                    transform: `translate(${Math.min(
-                      Math.max((dragCurrent.x - dragOrigin.x) * 1.5, -40),
-                      40
-                    )}px, ${Math.min(
-                      Math.max((dragCurrent.y - dragOrigin.y) * 1.5, -20),
-                      35
-                    )}px)`,
-                  }
-                : {}
-            }
-            className="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-500 to-pink-500 flex items-center justify-center text-white font-black shadow-xl shadow-cyan-500/40 cursor-grab active:cursor-grabbing border-2 border-white pointer-events-auto"
-          >
-            🚀
-          </div>
-
-          <div className="mt-1 text-[11px] font-extrabold text-cyan-300 uppercase tracking-widest">
-            {isAiming ? '¡Suelta para disparar!' : 'Tensa la honda'}
-          </div>
+        <div className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-right text-sm font-black">
+          Nivel {hud.level}/3 <span className="text-amber-300">· ⭐ {hud.score}</span>
         </div>
       </div>
+      <canvas
+        ref={canvasRef}
+        className="h-[min(58vh,450px)] min-h-[330px] w-full touch-none rounded-3xl border border-amber-200/30 shadow-2xl shadow-orange-950/30"
+        aria-label="Apunta con el tirachinas arrastrando hacia atrás y lanza para derribar cajas de vocabulario"
+      />
+      <p className="mt-3 text-center text-xs text-slate-300">
+        Ratón o pantalla: tira de la goma hacia atrás y suelta · Teclado: ↑/↓ ajusta el ángulo y ESPACIO lanza.
+        La trayectoria punteada muestra el efecto de la gravedad.
+      </p>
+      <p className="mt-2 min-h-5 text-center text-sm font-bold text-amber-200">{hud.message}</p>
     </div>
   );
 };
