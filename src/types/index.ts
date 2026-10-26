@@ -1,0 +1,106 @@
+export type Language = 'ar' | 'nl-BE' | 'fr';
+
+export type DifficultyLevel = 1 | 2 | 3 | 4 | 5;
+
+export type MasteryLevel = 'new' | 'learning' | 'review' | 'mastered';
+
+export interface Word {
+  id: string;
+  text: string;            // Palabra o frase en idioma objetivo
+  translation: string;     // Significado en español
+  phonetic?: string;       // Transcripción fonética de apoyo
+  language: Language;
+  theme: string;           // 'saludos', 'comida', 'colores', 'animales', 'viajes'
+  imageUrl?: string;       // Emoji o URL representativa
+  audioText?: string;      // Texto alternativo si el TTS requiere diacríticos
+  exampleSentence?: string;
+  exampleTranslation?: string;
+}
+
+export interface WordMastery {
+  correct: number;
+  wrong: number;
+  lastSeen: number;
+  level: MasteryLevel;
+}
+
+export interface PlayerProfile {
+  uid: string;
+  displayName: string;
+  avatarUrl?: string;      // Base64 de cámara o identificador de preset emoji
+  color: string;
+  createdAt: number;
+  mastery: Record<string, WordMastery>;
+  coins: number;
+  gems: number;
+  inventory: string[];     // IDs de ítems adquiridos
+  equippedSkin?: string;
+  equippedBadge?: string;
+}
+
+export interface GameSession {
+  id: string;
+  players: PlayerProfile[];
+  rounds: number;
+  currentRound: number;
+  currentPlayerIndex: number;
+  language: Language;
+  worldId: string;
+  scores: Record<string, number>;
+  status: 'setup' | 'playing' | 'finished';
+}
+
+export interface GameResult {
+  playerId: string;
+  gameId: string;
+  correct: number;
+  wrong: number;
+  timeMs: number;
+  coinsEarned: number;
+  wordsSeen: string[];
+}
+
+export interface GameProps {
+  words: Word[];
+  difficulty: DifficultyLevel;
+  onCorrect: (wordId: string) => void;
+  onWrong: (wordId: string) => void;
+  onComplete: (result: GameResult) => void;
+  language: Language;
+}
+
+export type Screen = 
+  | 'BOOT' 
+  | 'AUTH' 
+  | 'PLAYER_SETUP' 
+  | 'HOME' 
+  | 'WORLD_HUB' 
+  | 'GAME_SESSION' 
+  | 'PODIUM' 
+  | 'GARAGE';
+
+export interface ShopItem {
+  id: string;
+  name: string;
+  description: string;
+  category: 'avatar_frame' | 'mascot_skin' | 'theme_color' | 'badge';
+  price: number;
+  currency: 'coins' | 'gems';
+  previewEmoji: string;
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  glowColor?: string;
+}
+
+export interface LanguageMeta {
+  code: Language;
+  name: string;
+  nativeName: string;
+  flag: string;
+  themeColor: string;
+  accentColor: string;
+  bgGradient: string;
+  voiceLang: string;
+  voiceFallbacks: string[];
+  dir: 'ltr' | 'rtl';
+  description: string;
+}

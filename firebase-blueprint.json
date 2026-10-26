@@ -1,0 +1,66 @@
+{
+  "entities": {
+    "PlayerProfile": {
+      "title": "PlayerProfile",
+      "description": "User profile with SRS mastery, progression, and cosmetics",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "displayName": { "type": "string", "maxLength": 50, "minLength": 1 },
+        "avatarUrl": { "type": "string", "maxLength": 50000 },
+        "color": { "type": "string", "maxLength": 30 },
+        "createdAt": { "type": "number" },
+        "coins": { "type": "number" },
+        "gems": { "type": "number" },
+        "inventory": { "type": "array" },
+        "equippedSkin": { "type": "string", "maxLength": 50 },
+        "equippedBadge": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["uid", "displayName", "color", "coins", "gems"]
+    },
+    "GameSession": {
+      "title": "GameSession",
+      "description": "Active or completed multiplayer game session",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "language": { "type": "string", "enum": ["ar", "nl-BE", "fr"] },
+        "worldId": { "type": "string", "maxLength": 64 },
+        "rounds": { "type": "number" },
+        "currentRound": { "type": "number" },
+        "currentPlayerIndex": { "type": "number" },
+        "status": { "type": "string", "enum": ["setup", "playing", "finished"] }
+      },
+      "required": ["id", "language", "worldId", "rounds", "status"]
+    },
+    "GameResult": {
+      "title": "GameResult",
+      "description": "Result of an individual turn or round",
+      "type": "object",
+      "properties": {
+        "playerId": { "type": "string", "maxLength": 128 },
+        "gameId": { "type": "string", "maxLength": 64 },
+        "correct": { "type": "number" },
+        "wrong": { "type": "number" },
+        "timeMs": { "type": "number" },
+        "coinsEarned": { "type": "number" },
+        "wordsSeen": { "type": "array" }
+      },
+      "required": ["playerId", "gameId", "correct", "wrong"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "PlayerProfile",
+      "description": "User profile documents"
+    },
+    "/sessions/{sessionId}": {
+      "schema": "GameSession",
+      "description": "Active or archived game sessions"
+    },
+    "/sessions/{sessionId}/results/{resultId}": {
+      "schema": "GameResult",
+      "description": "Turn results recorded under a session"
+    }
+  }
+}
