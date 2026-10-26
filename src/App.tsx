@@ -5,6 +5,7 @@ import { HeaderHUD } from './components/layout/HeaderHUD';
 import { OfflineIndicator } from './components/layout/OfflineIndicator';
 import { AudioUnlocker } from './components/AudioUnlocker';
 import { testConnection } from './lib/firebase';
+import { useSound } from './hooks/useSound';
 
 // Screens
 import { HomeScreen } from './screens/HomeScreen';
@@ -12,6 +13,7 @@ import { AuthScreen } from './screens/AuthScreen';
 import { PlayerSetup } from './screens/PlayerSetup';
 import { WorldHub } from './screens/WorldHub';
 import { FlemishLearningScreen } from './screens/FlemishLearningScreen';
+import { RewardsMenu } from './screens/RewardsMenu';
 import { PassportScreen } from './screens/PassportScreen';
 import { GameSession } from './screens/GameSession';
 import { PodiumScreen } from './screens/PodiumScreen';
@@ -19,6 +21,7 @@ import { GarageShop } from './screens/GarageShop';
 
 export default function App() {
   const currentScreen = useGameStore(s => s.currentScreen);
+  const { playClick } = useSound();
   // Boot initialization
   useEffect(() => {
     testConnection();
@@ -40,6 +43,8 @@ export default function App() {
         return <WorldHub />;
       case 'LEARN_FLEMISH':
         return <FlemishLearningScreen />;
+      case 'REWARDS':
+        return <RewardsMenu />;
       case 'PASSPORT':
         return <PassportScreen />;
       case 'GAME_SESSION':
@@ -54,7 +59,15 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen text-slate-900 flex flex-col relative overflow-x-hidden selection:bg-pink-300 selection:text-slate-900 bg-gradient-to-br from-sky-100 via-pink-50 to-yellow-100 transition-colors duration-700">
+    <div
+      onClickCapture={event => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        const button = target.closest('button');
+        if (button && !button.disabled && !button.hasAttribute('data-silent-click')) playClick();
+      }}
+      className="min-h-screen text-slate-900 flex flex-col relative overflow-x-hidden selection:bg-pink-300 selection:text-slate-900 bg-gradient-to-br from-sky-100 via-pink-50 to-yellow-100 transition-colors duration-700"
+    >
       {/* Audio Unlocker & Offline Indicator */}
       <AudioUnlocker />
       <OfflineIndicator />

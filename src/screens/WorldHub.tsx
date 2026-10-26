@@ -4,6 +4,7 @@ import { ArrowLeft, BookOpen, Play, Sparkles } from 'lucide-react';
 import { GameMechanic, useGameStore } from '../store/gameStore';
 import { useProfileStore } from '../store/profileStore';
 import { LANGUAGES } from '../data/languages';
+import { useSound } from '../hooks/useSound';
 
 const GAMES: Array<{ id: GameMechanic; name: string; description: string; emoji: string; art: string; color: string }> = [
   { id: 'safari', name: 'Safari de palabras', description: 'Encuentra el dibujo que corresponde a la palabra.', emoji: '🦒', art: '/games/safari.svg', color: 'from-lime-100 to-emerald-100' },
@@ -17,9 +18,11 @@ export const WorldHub: React.FC = () => {
   const setActiveWorld = useGameStore(state => state.setActiveWorld);
   const startSession = useGameStore(state => state.startSession);
   const profiles = useProfileStore(state => state.profiles);
+  const { unlockAudio } = useSound();
   const meta = LANGUAGES[language];
 
   const playGame = (gameId: GameMechanic) => {
+    unlockAudio();
     setActiveWorld('arcade', gameId);
     startSession(profiles);
   };
@@ -59,17 +62,19 @@ export const WorldHub: React.FC = () => {
             whileHover={{ y: -4 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => playGame(game.id)}
-            className="group overflow-hidden rounded-[2rem] border-4 border-white bg-white p-3 text-left shadow-[0_7px_0_rgba(71,85,105,.1),0_14px_28px_rgba(71,85,105,.08)] transition sm:p-4"
+            className="group flex items-center gap-3 overflow-hidden rounded-[1.5rem] border-4 border-white bg-white p-2.5 text-left shadow-[0_5px_0_rgba(71,85,105,.1),0_12px_24px_rgba(71,85,105,.08)] transition sm:block sm:rounded-[2rem] sm:p-4"
           >
             <div className={`relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br ${game.color}`}>
-              <img src={game.art} alt="" className="h-36 w-full object-contain transition-transform duration-300 group-hover:scale-105 sm:h-44" />
-              <span className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl shadow-sm" aria-hidden="true">{game.emoji}</span>
+              <img src={game.art} alt="" className="h-24 w-24 object-contain transition-transform duration-300 group-hover:scale-105 sm:h-36 sm:w-full lg:h-44" />
+              <span className="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full bg-white text-sm shadow-sm sm:right-3 sm:top-3 sm:h-11 sm:w-11 sm:text-xl" aria-hidden="true">{game.emoji}</span>
             </div>
-            <h2 className="mt-4 text-xl font-black text-slate-900">{game.name}</h2>
-            <p className="mt-1 min-h-12 text-sm leading-6 text-slate-600">{game.description}</p>
-            <span className="mt-3 flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-emerald-500 text-base font-black text-white shadow-[0_4px_0_#328248] transition group-hover:bg-emerald-600 group-active:translate-y-1 group-active:shadow-none">
+            <div className="min-w-0 flex-1 sm:block">
+              <h2 className="text-base font-black leading-tight text-slate-900 sm:mt-4 sm:text-xl">{game.name}</h2>
+              <p className="mt-1 hidden min-h-12 text-sm leading-6 text-slate-600 sm:block">{game.description}</p>
+            <span className="mt-2 flex min-h-10 items-center justify-center gap-2 rounded-xl bg-emerald-500 text-sm font-black text-white shadow-[0_3px_0_#328248] transition group-hover:bg-emerald-600 group-active:translate-y-1 group-active:shadow-none sm:mt-3 sm:min-h-12 sm:rounded-2xl sm:text-base">
               <Play className="h-5 w-5 fill-current" /> ¡Jugar!
             </span>
+            </div>
           </motion.button>
         ))}
       </section>

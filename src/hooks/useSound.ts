@@ -47,6 +47,47 @@ class SoundSynthesizer {
     });
   }
 
+  public playClick() {
+    if (this.isMuted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const now = this.ctx.currentTime;
+    const oscillator = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(620, now);
+    oscillator.frequency.exponentialRampToValueAtTime(880, now + 0.06);
+    gain.gain.setValueAtTime(0.07, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+    oscillator.connect(gain);
+    gain.connect(this.ctx.destination);
+    oscillator.start(now);
+    oscillator.stop(now + 0.1);
+  }
+
+  public playTurnStart() {
+    if (this.isMuted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const now = this.ctx.currentTime;
+    [659.25, 783.99].forEach((frequency, index) => {
+      const oscillator = this.ctx!.createOscillator();
+      const gain = this.ctx!.createGain();
+      const startAt = now + index * 0.12;
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(frequency, startAt);
+      gain.gain.setValueAtTime(0, startAt);
+      gain.gain.linearRampToValueAtTime(0.12, startAt + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, startAt + 0.22);
+      oscillator.connect(gain);
+      gain.connect(this.ctx!.destination);
+      oscillator.start(startAt);
+      oscillator.stop(startAt + 0.24);
+    });
+  }
+
   public playError() {
     if (this.isMuted) return;
     this.init();
@@ -56,18 +97,18 @@ class SoundSynthesizer {
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
 
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(140, now);
-    osc.frequency.linearRampToValueAtTime(80, now + 0.25);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(330, now);
+    osc.frequency.linearRampToValueAtTime(260, now + 0.15);
 
-    gain.gain.setValueAtTime(0.2, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+    gain.gain.setValueAtTime(0.08, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start(now);
-    osc.stop(now + 0.32);
+    osc.stop(now + 0.2);
   }
 
   public playPop() {
@@ -191,28 +232,46 @@ class SoundSynthesizer {
 
 const synthInstance = new SoundSynthesizer();
 
+export function isAudioMuted() {
+  return synthInstance.isMuted;
+}
+
 export function useSound() {
   const [muted, setMuted] = useState(synthInstance.isMuted);
 
   const toggleMute = useCallback(() => {
     synthInstance.isMuted = !synthInstance.isMuted;
+    if (synthInstance.isMuted && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
     setMuted(synthInstance.isMuted);
   }, []);
 
   const unlockAudio = useCallback(() => {
     synthInstance.init();
   }, []);
+  const playSuccess = useCallback(() => synthInstance.playSuccess(), []);
+  const playError = useCallback(() => synthInstance.playError(), []);
+  const playPop = useCallback(() => synthInstance.playPop(), []);
+  const playCoin = useCallback(() => synthInstance.playCoin(), []);
+  const playCardFlip = useCallback(() => synthInstance.playCardFlip(), []);
+  const playSlingshot = useCallback(() => synthInstance.playSlingshot(), []);
+  const playFanfare = useCallback(() => synthInstance.playFanfare(), []);
+  const playClick = useCallback(() => synthInstance.playClick(), []);
+  const playTurnStart = useCallback(() => synthInstance.playTurnStart(), []);
 
   return {
     isMuted: muted,
     toggleMute,
     unlockAudio,
-    playSuccess: () => synthInstance.playSuccess(),
-    playError: () => synthInstance.playError(),
-    playPop: () => synthInstance.playPop(),
-    playCoin: () => synthInstance.playCoin(),
-    playCardFlip: () => synthInstance.playCardFlip(),
-    playSlingshot: () => synthInstance.playSlingshot(),
-    playFanfare: () => synthInstance.playFanfare(),
+    playSuccess,
+    playError,
+    playPop,
+    playCoin,
+    playCardFlip,
+    playSlingshot,
+    playFanfare,
+    playClick,
+    playTurnStart,
   };
 }

@@ -13,6 +13,7 @@ interface TurnResultModalProps {
   language: Language;
   missionCompleted?: boolean;
   isFinalTurn?: boolean;
+  nextPlayerName?: string;
   onContinue: () => void;
 }
 
@@ -22,11 +23,13 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
   language,
   missionCompleted = false,
   isFinalTurn = false,
+  nextPlayerName,
   onContinue,
 }) => {
   const { speak } = useSpeech();
-  const { playCardFlip, playFanfare } = useSound();
+  const { playCardFlip, playFanfare, playSuccess } = useSound();
   const celebrationPlayed = useRef(false);
+  const turnAnnounced = useRef(false);
 
   const total = result.correct + result.wrong;
   const accuracy = total > 0 ? Math.round((result.correct / total) * 100) : 100;
@@ -39,11 +42,20 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
   };
 
   useEffect(() => {
+    if (turnAnnounced.current) return;
+    turnAnnounced.current = true;
+    playSuccess();
+    const message = isFinalTurn
+      ? `¡Muy bien, ${player.displayName}! Terminaste todas las rondas. ¡Lo habéis hecho genial!`
+      : `¡Muy bien, ${player.displayName}! Ahora le toca a ${nextPlayerName}. ¿Estás preparado, ${nextPlayerName}?`;
+    speak(message, 'es');
+  }, [isFinalTurn, nextPlayerName, playSuccess, player.displayName, speak]);
+
+  useEffect(() => {
     if (!missionCompleted || celebrationPlayed.current) return;
     celebrationPlayed.current = true;
     playFanfare();
-    speak(celebrationCopy[language], language);
-  }, [missionCompleted, language, playFanfare, speak]);
+  }, [missionCompleted, playFanfare]);
 
   // Words seen during the turn
   const wordsSeenList: Word[] = result.wordsSeen
@@ -105,7 +117,7 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
           <div className="flex flex-col items-center rounded-2xl border border-amber-100 bg-amber-50 p-3">
             <Coins className="mb-1 h-5 w-5 text-amber-600" />
             <span className="text-lg font-black text-amber-800">+{result.coinsEarned}</span>
-            <span className="text-[10px] font-bold uppercase text-slate-600">Estrellas</span>
+            <span className="text-[10px] font-bold uppercase text-slate-600">Monedas</span>
           </div>
         </div>
 

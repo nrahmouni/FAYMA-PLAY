@@ -1,7 +1,9 @@
-import React, { useMemo, useCallback, useRef, useState } from 'react';
+import React, { useMemo, useCallback, useRef, useState, useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useProfileStore } from '../store/profileStore';
 import { useAdaptiveRound } from '../hooks/useAdaptiveRound';
+import { useSpeech } from '../hooks/useSpeech';
+import { useSound } from '../hooks/useSound';
 import { InteractiveChallengeModal } from '../modals/InteractiveChallengeModal';
 import { TurnResultModal } from '../modals/TurnResultModal';
 import { GameProps, GameResult } from '../types';
@@ -21,12 +23,23 @@ export const GameSession: React.FC = () => {
   const [missionCompleted, setMissionCompleted] = useState(false);
 
   const profiles = useProfileStore(s => s.profiles);
+  const { speak } = useSpeech();
+  const { playTurnStart } = useSound();
   const addRewards = useProfileStore(s => s.addRewards);
   const { selectRoundWords, getPlayerDifficulty, handleAnswer, adaptDifficultyAfterTurn } = useAdaptiveRound();
 
   const activePlayer = profiles[currentPlayerIndex] || profiles[0];
   const difficulty = getPlayerDifficulty(activePlayer?.uid || '');
   const turnKey = `${activeGameId}:${currentPlayerIndex}:${currentRound}:${activePlayer?.uid || ''}:${language}`;
+  const announcedTurn = useRef('');
+
+  useEffect(() => {
+    if (sessionPhase !== 'CHALLENGE_PHASE' || !activePlayer || announcedTurn.current === turnKey) return;
+    announcedTurn.current = turnKey;
+    playTurnStart();
+    speak(`¿Estás preparado, ${activePlayer.displayName}? ¡Empieza tu turno!`, 'es');
+  }, [activePlayer?.displayName, playTurnStart, sessionPhase, speak, turnKey]);
+
   const roundWords = useMemo(
     () => activePlayer ? selectRoundWords(activePlayer) : [],
     [activePlayer?.uid, currentPlayerIndex, currentRound, activeGameId, language, selectRoundWords],
@@ -83,7 +96,7 @@ export const GameSession: React.FC = () => {
   }), [roundWords, difficulty, handleGameCorrect, handleGameWrong, handleGameComplete, language]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-4 sm:py-6 relative min-h-[calc(100vh-80px)] flex flex-col items-center justify-center">
+    <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center px-2 py-2 sm:px-4 sm:py-3">
       {sessionPhase === 'CHALLENGE_PHASE' && activePlayer && (
         <InteractiveChallengeModal
           key={turnKey}
@@ -101,6 +114,11 @@ export const GameSession: React.FC = () => {
           language={language}
           missionCompleted={missionCompleted}
           isFinalTurn={currentRound >= totalRounds && currentPlayerIndex >= profiles.length - 1}
+          nextPlayerName={
+            currentRound >= totalRounds && currentPlayerIndex >= profiles.length - 1
+              ? undefined
+              : profiles[(currentPlayerIndex + 1) % profiles.length]?.displayName
+          }
           onContinue={handleContinueNextTurn}
         />
       )}

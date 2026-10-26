@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Users } from 'lucide-react';
+import { Gift, Users } from 'lucide-react';
 import { LANGUAGES } from '../data/languages';
 import { Language } from '../types';
 import { useGameStore } from '../store/gameStore';
@@ -78,6 +78,13 @@ export const HomeScreen: React.FC = () => {
       <footer className="mt-7 text-center text-xs font-semibold text-slate-500">
         {profiles.length > 1 ? `${profiles.length} jugadores · ${totalRounds} rondas` : `${totalRounds} rondas · ¡Juega a tu ritmo!`}
       </footer>
+      <button
+        type="button"
+        onClick={() => setScreen('REWARDS')}
+        className="mx-auto mt-3 inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-xs font-bold text-slate-500 transition hover:bg-white/70 hover:text-amber-800"
+      >
+        <Gift className="h-4 w-4" /> Premios y rangos
+      </button>
     </main>
   );
 };

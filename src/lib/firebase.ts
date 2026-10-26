@@ -84,8 +84,10 @@ export async function syncUserProfile(profile: PlayerProfile): Promise<void> {
   const userPath = `users/${profile.uid}`;
   try {
     const userDocRef = doc(db, 'users', profile.uid);
+    const cloudProfile = { ...profile };
+    if (cloudProfile.avatarUrl?.startsWith('data:')) delete cloudProfile.avatarUrl;
     await setDoc(userDocRef, {
-      ...profile,
+      ...cloudProfile,
       updatedAt: Date.now(),
     }, { merge: true });
     localStorage.setItem(`juegofy_profile_${profile.uid}`, JSON.stringify(profile));
@@ -118,6 +120,9 @@ export async function fetchUserProfile(uid: string): Promise<PlayerProfile | nul
     const snap = await getDoc(userDocRef);
     if (snap.exists()) {
       const data = snap.data() as PlayerProfile;
+      if (localData?.avatarUrl?.startsWith('data:')) {
+        data.avatarUrl = localData.avatarUrl;
+      }
       localStorage.setItem(`juegofy_profile_${uid}`, JSON.stringify(data));
       return data;
     }

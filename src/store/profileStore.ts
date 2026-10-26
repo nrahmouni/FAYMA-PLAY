@@ -16,6 +16,7 @@ interface ProfileState {
   addRewards: (playerUid: string, coins: number, gems: number) => void;
   equipItem: (playerUid: string, category: 'avatar_frame' | 'mascot_skin' | 'badge', itemId: string) => void;
   updateProfile: (updated: PlayerProfile) => void;
+  updateLocalAvatar: (playerUid: string, avatarUrl: string) => void;
 }
 
 const DEFAULT_PROFILES: PlayerProfile[] = [
@@ -212,6 +213,19 @@ export const useProfileStore = create<ProfileState>((set, get) => {
       persistProfiles(newProfiles);
       set({ profiles: newProfiles });
       syncUserProfile(updated);
+    },
+
+    updateLocalAvatar: (playerUid, avatarUrl) => {
+      const { profiles } = get();
+      const idx = profiles.findIndex(profile => profile.uid === playerUid);
+      if (idx === -1) return;
+
+      const updated = { ...profiles[idx], avatarUrl };
+      const newProfiles = [...profiles];
+      newProfiles[idx] = updated;
+      persistProfiles(newProfiles);
+      localStorage.setItem(`juegofy_profile_${playerUid}`, JSON.stringify(updated));
+      set({ profiles: newProfiles });
     },
   };
 });

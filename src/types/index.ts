@@ -76,6 +76,7 @@ export type Screen =
   | 'HOME' 
   | 'WORLD_HUB' 
   | 'LEARN_FLEMISH'
+  | 'REWARDS'
   | 'PASSPORT'
   | 'GAME_SESSION' 
   | 'PODIUM' 

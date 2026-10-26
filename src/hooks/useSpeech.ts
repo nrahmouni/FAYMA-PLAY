@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Language } from '../types';
 import { LANGUAGES } from '../data/languages';
+import { isAudioMuted } from './useSound';
 
 export function useSpeech() {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
@@ -57,6 +58,10 @@ export function useSpeech() {
   }, [voices]);
 
   const speak = useCallback((text: string, lang: Language, onEnd?: () => void) => {
+    if (isAudioMuted()) {
+      if (onEnd) onEnd();
+      return;
+    }
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
       if (onEnd) onEnd();
       return;
