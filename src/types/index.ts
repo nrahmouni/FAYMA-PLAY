@@ -71,6 +71,7 @@ export interface GameProps {
   onWrong: (wordId: string) => void;
   onComplete: (result: GameResult) => void;
   language: Language;
+  introSpoken?: boolean;
 }
 
 export type Screen = 

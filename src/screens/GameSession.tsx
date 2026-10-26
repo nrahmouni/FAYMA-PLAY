@@ -23,6 +23,7 @@ export const GameSession: React.FC = () => {
   const worldNodes = useGameStore(s => s.worldNodes);
   const [missionCompleted, setMissionCompleted] = useState(false);
   const [levelAdvanced, setLevelAdvanced] = useState(false);
+  const [introSpokenForTurn, setIntroSpokenForTurn] = useState<string | null>(null);
 
   const profiles = useProfileStore(s => s.profiles);
   const { speak } = useSpeech();
@@ -44,8 +45,12 @@ export const GameSession: React.FC = () => {
       ? copy.safariVoiceGuide
       : activeGameId === 'garden_match'
         ? copy.gardenVoiceGuide
-        : difficulty >= 13 ? copy.orderSentence : copy.trainVoiceGuide;
-    speak(`${copy.ready.replace('{name}', activePlayer.displayName)} ${copy.startTurn} ${guide}`, language);
+        : copy.trainVoiceGuide;
+    speak(
+      `${copy.ready.replace('{name}', activePlayer.displayName)} ${copy.startTurn} ${guide}`,
+      language,
+      () => setIntroSpokenForTurn(turnKey),
+    );
   }, [activeGameId, activePlayer?.displayName, copy, difficulty, language, playTurnStart, sessionPhase, speak, turnKey]);
 
   const roundWords = useMemo(
@@ -103,7 +108,8 @@ export const GameSession: React.FC = () => {
     onWrong: handleGameWrong,
     onComplete: handleGameComplete,
     language,
-  }), [roundWords, difficulty, handleGameCorrect, handleGameWrong, handleGameComplete, language]);
+    introSpoken: introSpokenForTurn === turnKey,
+  }), [roundWords, difficulty, handleGameCorrect, handleGameWrong, handleGameComplete, language, introSpokenForTurn, turnKey]);
 
   return (
     <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center px-2 py-2 sm:px-4 sm:py-3">

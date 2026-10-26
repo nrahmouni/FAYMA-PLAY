@@ -1,269 +1,343 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { Volume2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, Volume2 } from 'lucide-react';
 import { GameProps, Language, Word } from '../types';
 import { shuffleArray } from '../lib/utils';
 import { GAME_COPY } from '../data/gameCopy';
-import { useSpeech } from '../hooks/useSpeech';
-import { useSound } from '../hooks/useSound';
 import { GameProgress, EmptyGame } from './GameProgress';
 import { useGameProgress } from './useGameProgress';
+import { useSpeech } from '../hooks/useSpeech';
 
-interface PhrasePuzzle {
+interface TrainChallenge {
+  id: string;
   clue: string;
-  phrase: string;
   words: string[];
 }
 
-const PHRASES: Record<Language, PhrasePuzzle[]> = {
-  es: [
-    { clue: 'el sol amarillo', phrase: 'el sol amarillo', words: ['el', 'sol', 'amarillo'] },
-    { clue: 'la casa grande', phrase: 'la casa grande', words: ['la', 'casa', 'grande'] },
-    { clue: 'el gato pequeño', phrase: 'el gato pequeño', words: ['el', 'gato', 'pequeño'] },
-  ],
-  fr: [
-    { clue: 'el sol amarillo', phrase: 'le soleil jaune', words: ['le', 'soleil', 'jaune'] },
-    { clue: 'la casa grande', phrase: 'la grande maison', words: ['la', 'grande', 'maison'] },
-    { clue: 'el gato pequeño', phrase: 'le petit chat', words: ['le', 'petit', 'chat'] },
-  ],
-  'nl-BE': [
-    { clue: 'el sol amarillo', phrase: 'de gele zon', words: ['de', 'gele', 'zon'] },
-    { clue: 'la casa grande', phrase: 'het grote huis', words: ['het', 'grote', 'huis'] },
-    { clue: 'el gato pequeño', phrase: 'de kleine kat', words: ['de', 'kleine', 'kat'] },
-  ],
-  ar: [
-    { clue: 'el sol amarillo', phrase: 'الشمس صفراء', words: ['الشمس', 'صفراء'] },
-    { clue: 'la casa grande', phrase: 'البيت كبير', words: ['البيت', 'كبير'] },
-    { clue: 'el gato pequeño', phrase: 'القط صغير', words: ['القط', 'صغير'] },
-  ],
-};
-
-interface PhraseToken {
+interface TrainToken {
   id: string;
   text: string;
 }
 
-export const WordTrainGame: React.FC<GameProps> = ({ words, difficulty, language, onCorrect, onWrong, onComplete }) => {
-  const isPhraseLevel = difficulty >= 13;
-  const roundWords = useMemo(
-    () => words.slice(0, isPhraseLevel ? PHRASES[language].length : Math.min(6, 2 + Math.floor((difficulty - 1) / 3))),
-    [difficulty, isPhraseLevel, language, words],
+const CHALLENGES: Record<Language, [TrainChallenge[], TrainChallenge[], TrainChallenge[]]> = {
+  es: [
+    [
+      { id: 'sun', clue: 'El sol amarillo', words: ['el', 'sol', 'amarillo'] },
+      { id: 'house', clue: 'La casa grande', words: ['la', 'casa', 'grande'] },
+      { id: 'cat', clue: 'El gato duerme', words: ['el', 'gato', 'duerme'] },
+    ],
+    [
+      { id: 'dog', clue: 'Mi perro bebe agua', words: ['mi', 'perro', 'bebe', 'agua'] },
+      { id: 'girl', clue: 'La niña come pan', words: ['la', 'niña', 'come', 'pan'] },
+      { id: 'ball', clue: 'El niño tiene pelota', words: ['el', 'niño', 'tiene', 'pelota'] },
+    ],
+    [
+      { id: 'brother', clue: 'Mi hermano juega al fútbol', words: ['mi', 'hermano', 'juega', 'al', 'fútbol'] },
+      { id: 'book', clue: 'La niña lee un libro', words: ['la', 'niña', 'lee', 'un', 'libro'] },
+      { id: 'outside', clue: 'El perro corre muy rápido', words: ['el', 'perro', 'corre', 'muy', 'rápido'] },
+    ],
+  ],
+  fr: [
+    [
+      { id: 'sun', clue: 'El sol amarillo', words: ['le', 'soleil', 'jaune'] },
+      { id: 'house', clue: 'La casa grande', words: ['la', 'grande', 'maison'] },
+      { id: 'cat', clue: 'El gato duerme', words: ['le', 'chat', 'dort'] },
+    ],
+    [
+      { id: 'dog', clue: 'Mi perro duerme mucho', words: ['mon', 'chien', 'dort', 'beaucoup'] },
+      { id: 'girl', clue: 'La niña lee bien', words: ['la', 'fille', 'lit', 'bien'] },
+      { id: 'ball', clue: 'Mi hermano juega fuera', words: ['mon', 'frère', 'joue', 'dehors'] },
+    ],
+    [
+      { id: 'brother', clue: 'Mi hermano juega al balón', words: ['mon', 'frère', 'joue', 'au', 'ballon'] },
+      { id: 'book', clue: 'La niña lee un libro', words: ['la', 'fille', 'lit', 'un', 'livre'] },
+      { id: 'outside', clue: 'El perro corre muy rápido', words: ['le', 'chien', 'court', 'très', 'vite'] },
+    ],
+  ],
+  'nl-BE': [
+    [
+      { id: 'sun', clue: 'El sol amarillo', words: ['de', 'gele', 'zon'] },
+      { id: 'house', clue: 'La casa grande', words: ['het', 'grote', 'huis'] },
+      { id: 'cat', clue: 'El gato duerme', words: ['de', 'kat', 'slaapt'] },
+    ],
+    [
+      { id: 'dog', clue: 'Mi perro bebe agua', words: ['mijn', 'hond', 'drinkt', 'water'] },
+      { id: 'girl', clue: 'La niña come pan', words: ['het', 'meisje', 'eet', 'brood'] },
+      { id: 'ball', clue: 'Mi hermano juega hoy', words: ['mijn', 'broer', 'speelt', 'vandaag'] },
+    ],
+    [
+      { id: 'brother', clue: 'Mi hermano tiene una pelota', words: ['mijn', 'broer', 'heeft', 'een', 'bal'] },
+      { id: 'book', clue: 'La niña lee un libro', words: ['het', 'meisje', 'leest', 'een', 'boek'] },
+      { id: 'outside', clue: 'El perro corre muy rápido', words: ['de', 'hond', 'loopt', 'heel', 'snel'] },
+    ],
+  ],
+  ar: [
+    [
+      { id: 'sun', clue: 'El sol amarillo', words: ['شمس', 'صفراء', 'جميلة'] },
+      { id: 'house', clue: 'La casa grande', words: ['بيت', 'كبير', 'جميل'] },
+      { id: 'cat', clue: 'El gato duerme', words: ['قط', 'صغير', 'نائم'] },
+    ],
+    [
+      { id: 'dog', clue: 'Mi perro bebe agua', words: ['كلبي', 'يشرب', 'ماءً', 'بارداً'] },
+      { id: 'girl', clue: 'La niña come pan', words: ['الطفلة', 'تأكل', 'خبزاً', 'لذيذاً'] },
+      { id: 'ball', clue: 'Mi hermano tiene una pelota', words: ['أخي', 'يملك', 'كرة', 'جديدة'] },
+    ],
+    [
+      { id: 'brother', clue: 'Mi hermano juega con la pelota', words: ['أخي', 'يلعب', 'بالكرة', 'في', 'الحديقة'] },
+      { id: 'book', clue: 'La niña pequeña lee un libro', words: ['الطفلة', 'الصغيرة', 'تقرأ', 'كتاباً', 'جميلاً'] },
+      { id: 'outside', clue: 'El perro corre muy rápido', words: ['الكلب', 'يجري', 'بسرعة', 'كبيرة', 'جداً'] },
+    ],
+  ],
+};
+
+function getDifficultyGroup(difficulty: number): number {
+  if (difficulty <= 5) return 0;
+  if (difficulty <= 10) return 1;
+  return 2;
+}
+
+function createSentence(challenge: TrainChallenge): string {
+  return challenge.words.join(' ');
+}
+
+export const WordTrainGame: React.FC<GameProps> = ({
+  words,
+  difficulty,
+  language,
+  onCorrect,
+  onWrong,
+  onComplete,
+  introSpoken = false,
+}) => {
+  const challenges = useMemo(
+    () => CHALLENGES[language][getDifficultyGroup(difficulty)].slice(0, Math.min(3, Math.max(2, words.length))),
+    [difficulty, language, words.length],
   );
   const [questionIndex, setQuestionIndex] = useState(0);
-  const [answerId, setAnswerId] = useState<string | null>(null);
-  const [placedTokens, setPlacedTokens] = useState<PhraseToken[]>([]);
-  const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
+  const [placedState, setPlacedState] = useState<{ questionIndex: number; slots: Array<string | null> }>({
+    questionIndex: 0,
+    slots: [],
+  });
+  const [solved, setSolved] = useState(false);
   const [draggedTokenId, setDraggedTokenId] = useState<string | null>(null);
+  const errorReported = useRef(-1);
   const { recordAnswer, finish } = useGameProgress('word_train', { onCorrect, onWrong, onComplete });
   const { speak } = useSpeech();
-  const { playError } = useSound();
   const copy = GAME_COPY[language];
-  const question = roundWords[questionIndex];
-  const phrase = isPhraseLevel ? PHRASES[language][questionIndex] : undefined;
-  const phraseTokens = useMemo<PhraseToken[]>(
-    () => phrase ? shuffleArray(phrase.words.map((text, index) => ({ id: `${questionIndex}-${index}`, text }))) : [],
-    [phrase, questionIndex],
+  const challenge = challenges[questionIndex];
+  const question = words[questionIndex % Math.max(1, words.length)];
+  const slots = placedState.questionIndex === questionIndex && placedState.slots.length === (challenge?.words.length || 0)
+    ? placedState.slots
+    : Array<string | null>(challenge?.words.length || 0).fill(null);
+  const tokens = useMemo<TrainToken[]>(
+    () => challenge
+      ? shuffleArray(challenge.words.map((text, index) => ({ id: `${questionIndex}-${index}`, text })))
+      : [],
+    [challenge, questionIndex],
   );
-  const options = useMemo(() => {
-    if (!question || isPhraseLevel) return [];
-    const distractors = shuffleArray(words.filter(word => word.id !== question.id)).slice(0, Math.min(5, Math.ceil(difficulty / 3)));
-    return shuffleArray([question, ...distractors]);
-  }, [difficulty, isPhraseLevel, question, words]);
+  const sentence = challenge ? createSentence(challenge) : '';
+  const isCorrectOrder = Boolean(challenge) && slots.every((tokenId, index) => (
+    tokens.find(token => token.id === tokenId)?.text === challenge.words[index]
+  ));
 
   useEffect(() => {
-    if (!answerId || !question) return;
-    const timeout = window.setTimeout(() => {
-      if (questionIndex + 1 === roundWords.length) {
-        finish(roundWords.map(word => word.id));
-        return;
-      }
-      setAnswerId(null);
-      setQuestionIndex(index => index + 1);
-    }, 900);
+    if (!challenge || !introSpoken) return;
+    const timeout = window.setTimeout(() => speak(sentence, language), 350);
     return () => window.clearTimeout(timeout);
-  }, [answerId, finish, question, questionIndex, roundWords]);
+  }, [challenge, introSpoken, language, sentence, speak]);
 
-  useEffect(() => {
-    if (feedback !== 'correct' || !question) return;
-    const timeout = window.setTimeout(() => {
-      if (questionIndex + 1 === roundWords.length) {
-        finish(roundWords.map(word => word.id));
-        return;
-      }
-      setPlacedTokens([]);
-      setFeedback(null);
-      setQuestionIndex(index => index + 1);
-    }, 1100);
-    return () => window.clearTimeout(timeout);
-  }, [feedback, finish, question, questionIndex, roundWords]);
-
-  if (!question) return <EmptyGame language={language} />;
-
-  const moveTokenToSentence = (token: PhraseToken, targetIndex = placedTokens.length) => {
-    setPlacedTokens(current => {
-      const withoutToken = current.filter(item => item.id !== token.id);
-      withoutToken.splice(Math.min(targetIndex, withoutToken.length), 0, token);
-      return withoutToken;
-    });
-    setFeedback(null);
-    speak(token.text, language);
+  const updateSlots = (nextSlots: Array<string | null>) => {
+    setPlacedState({ questionIndex, slots: nextSlots });
   };
 
-  const removeTokenFromSentence = (tokenId: string) => {
-    const token = placedTokens.find(item => item.id === tokenId);
-    setPlacedTokens(current => current.filter(token => token.id !== tokenId));
-    setFeedback(null);
+  const placeToken = (tokenId: string, targetIndex: number) => {
+    if (solved) return;
+    const nextSlots = [...slots];
+    const previousIndex = nextSlots.indexOf(tokenId);
+    if (previousIndex === targetIndex) return;
+    const displacedToken = nextSlots[targetIndex];
+
+    if (previousIndex >= 0) {
+      nextSlots[previousIndex] = displacedToken;
+    }
+    nextSlots[targetIndex] = tokenId;
+    updateSlots(nextSlots);
+    const token = tokens.find(item => item.id === tokenId);
     if (token) speak(token.text, language);
   };
 
-  const checkSentence = () => {
-    if (!phrase || placedTokens.length !== phrase.words.length) return;
-    const correct = placedTokens.map(token => token.text).join(' ') === phrase.phrase;
-    if (!correct) {
-      setFeedback('wrong');
-      playError();
+  const placeNextToken = (tokenId: string) => {
+    const emptyIndex = slots.findIndex(tokenIdInSlot => tokenIdInSlot === null);
+    if (emptyIndex >= 0) placeToken(tokenId, emptyIndex);
+  };
+
+  const moveToken = (slotIndex: number, direction: -1 | 1) => {
+    if (solved) return;
+    const targetIndex = slotIndex + direction;
+    if (targetIndex < 0 || targetIndex >= slots.length) return;
+    const nextSlots = [...slots];
+    [nextSlots[slotIndex], nextSlots[targetIndex]] = [nextSlots[targetIndex], nextSlots[slotIndex]];
+    updateSlots(nextSlots);
+  };
+
+  const checkOrder = () => {
+    if (!challenge || !question || solved || slots.some(tokenId => tokenId === null)) return;
+    if (!isCorrectOrder) {
+      if (errorReported.current !== questionIndex) {
+        errorReported.current = questionIndex;
+        recordAnswer(question, false, question, false);
+      }
       speak(copy.tryAgain, language);
       return;
     }
-    setFeedback('correct');
-    recordAnswer(question, true);
-    speak(copy.correct, language);
+
+    setSolved(true);
+    recordAnswer(question, true, question, false);
+    speak(`${copy.correct} ${sentence}`, language);
+    window.setTimeout(() => {
+      if (questionIndex + 1 >= challenges.length) {
+        finish(words.slice(0, challenges.length).map(word => word.id));
+        return;
+      }
+      errorReported.current = -1;
+      setPlacedState({ questionIndex: questionIndex + 1, slots: [] });
+      setQuestionIndex(index => index + 1);
+      setSolved(false);
+    }, 1300);
   };
 
+  if (!challenge || !question) return <EmptyGame language={language} />;
+
   return (
-    <section lang={language} dir={language === 'ar' ? 'rtl' : 'ltr'} className="mx-auto w-full max-w-3xl rounded-[2rem] bg-[#f6fbff] p-4 shadow-[0_18px_45px_rgba(51,113,166,.14)] ring-1 ring-sky-100 sm:p-6">
-      <GameProgress current={questionIndex + 1} total={roundWords.length} label={isPhraseLevel ? copy.sentenceLevel : copy.wordLevel} icon="🚉" language={language} />
-      <div className="mb-5 flex items-center gap-2 overflow-hidden rounded-3xl bg-gradient-to-br from-sky-100 via-blue-50 to-yellow-100 p-4 sm:gap-5 sm:p-6">
-        <div className="min-w-0 flex-1">
-          <h2 className="text-xl font-black leading-relaxed text-slate-900 sm:text-3xl">
-            {isPhraseLevel ? copy.sentencePrompt : copy.trainTitle}
-          </h2>
-          {!isPhraseLevel && <p className="mt-2 text-sm font-semibold text-slate-600">{copy.trainHint}</p>}
-          {isPhraseLevel ? (
-            <p className="mt-3 text-2xl font-black text-blue-800 sm:text-3xl">{phrase?.clue}</p>
-          ) : (
-            <>
-              <p className="mt-3 text-3xl" aria-hidden="true">{question.imageUrl || '✨'}</p>
-              <p className="mt-1 text-xl font-black text-blue-800 sm:text-2xl">{question.translation}</p>
-            </>
-          )}
+    <section
+      lang={language}
+      dir={language === 'ar' ? 'rtl' : 'ltr'}
+      className="mx-auto w-full max-w-3xl rounded-[2rem] bg-[#fffdf4] p-4 shadow-[0_18px_45px_rgba(63,115,64,.14)] ring-1 ring-lime-100 sm:p-6"
+    >
+      <GameProgress current={questionIndex + 1} total={challenges.length} label={copy.trainProgress} icon="🚂" language={language} />
+
+      <div className="mb-5 rounded-3xl bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 p-4 sm:p-6">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-xs font-black uppercase tracking-wider text-amber-800">{copy.trainTitle}</p>
+            <h2 className="mt-1 text-xl font-black leading-tight text-slate-900 sm:text-3xl">{copy.sentencePrompt}</h2>
+            <p className="mt-2 text-lg font-extrabold text-orange-800 sm:text-2xl">{challenge.clue} 💡</p>
+          </div>
           <button
             type="button"
-            onClick={() => speak(isPhraseLevel ? phrase?.phrase || '' : question.audioText || question.text, language)}
-            className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-extrabold text-blue-800 shadow-sm ring-1 ring-blue-100 hover:bg-blue-50"
-            aria-label={copy.listen}
+            onClick={() => speak(sentence, language)}
+            aria-label={copy.listenPhrase}
+            className="inline-flex min-h-12 shrink-0 items-center gap-2 rounded-full bg-white px-4 font-extrabold text-amber-900 shadow-sm hover:bg-amber-50"
           >
-            <Volume2 className="h-4 w-4" /> {copy.listen}
+            <Volume2 size={20} aria-hidden="true" />
+            <span className="hidden sm:inline">{copy.listenPhrase}</span>
           </button>
         </div>
-        <img src="/games/train.svg" alt="" className="h-16 w-24 shrink-0 object-contain sm:h-28 sm:w-48" />
+        <p className="mt-3 text-sm font-semibold text-slate-700">{copy.orderSentence}</p>
       </div>
 
-      {isPhraseLevel && phrase ? (
-        <>
-          <div
-            onDragOver={event => event.preventDefault()}
-            onDrop={event => {
-              event.preventDefault();
-              const token = phraseTokens.find(item => item.id === draggedTokenId);
-              if (token) moveTokenToSentence(token);
-              setDraggedTokenId(null);
-            }}
-            className="mb-4 flex min-h-20 flex-wrap items-center justify-center gap-2 rounded-3xl border-2 border-dashed border-sky-300 bg-white/80 p-3"
-            aria-label={copy.sentencePrompt}
-          >
-            {placedTokens.map((token, index) => (
+      <div className="mb-5 grid gap-2" aria-label={copy.orderSentence}>
+        {slots.map((tokenId, slotIndex) => {
+          const token = tokens.find(item => item.id === tokenId);
+          return (
+            <div key={`${questionIndex}-slot-${slotIndex}`} className="flex min-w-0 items-center gap-2">
               <button
-                key={token.id}
                 type="button"
-                draggable
-                onDragStart={() => setDraggedTokenId(token.id)}
+                disabled={!token || solved}
+                onClick={() => {
+                  if (!token) return;
+                  const nextSlots = [...slots];
+                  nextSlots[slotIndex] = null;
+                  updateSlots(nextSlots);
+                  speak(token.text, language);
+                }}
                 onDragOver={event => event.preventDefault()}
                 onDrop={event => {
                   event.preventDefault();
-                  event.stopPropagation();
-                  const moved = phraseTokens.find(item => item.id === draggedTokenId)
-                    || placedTokens.find(item => item.id === draggedTokenId);
-                  if (moved) moveTokenToSentence(moved, index);
+                  if (draggedTokenId) placeToken(draggedTokenId, slotIndex);
                   setDraggedTokenId(null);
                 }}
-                onClick={() => removeTokenFromSentence(token.id)}
-                disabled={feedback === 'correct'}
-                className="min-h-12 rounded-2xl bg-sky-100 px-4 text-lg font-black text-sky-900 shadow-sm"
-                aria-label={`${copy.removeWord}: ${token.text}`}
-              >
-                {token.text}
-              </button>
-            ))}
-            {placedTokens.length === 0 && <span className="text-sm font-bold text-slate-400">{copy.orderSentence}</span>}
-          </div>
-          <div className="mb-4 flex flex-wrap justify-center gap-2">
-            {phraseTokens.filter(token => !placedTokens.some(placed => placed.id === token.id)).map(token => (
-              <button
-                key={token.id}
-                type="button"
-                draggable
-                onDragStart={() => setDraggedTokenId(token.id)}
-                onClick={() => moveTokenToSentence(token)}
-                disabled={feedback === 'correct'}
-                className="min-h-12 rounded-2xl border-2 border-white bg-amber-100 px-4 text-lg font-black text-amber-900 shadow-[0_4px_0_#e6c579]"
-              >
-                {token.text}
-              </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            disabled={placedTokens.length !== phrase.words.length || feedback === 'correct'}
-            onClick={checkSentence}
-            className="min-h-12 w-full rounded-2xl bg-emerald-500 px-5 text-base font-black text-white shadow-[0_4px_0_#328248] disabled:opacity-50"
-          >
-            {copy.checkOrder}
-          </button>
-          {feedback && (
-            <p aria-live="polite" className="mt-3 text-center text-lg font-black text-emerald-800">
-              {feedback === 'correct' ? copy.correct : copy.tryAgain}
-            </p>
-          )}
-        </>
-      ) : (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {options.map(option => {
-            const selected = answerId === option.id;
-            const correct = option.id === question.id;
-            return (
-              <motion.button
-                key={option.id}
-                type="button"
-                disabled={answerId !== null}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => {
-                  setAnswerId(option.id);
-                  recordAnswer(question, correct, option);
-                  speak(`${copy.sayWord} ${option.text}`, language);
-                }}
-                aria-label={option.translation}
-                lang={option.language}
-                dir={option.language === 'ar' ? 'rtl' : 'auto'}
-                className={`flex min-h-28 flex-col items-center justify-center rounded-3xl border-2 p-3 text-center transition sm:min-h-36 ${
-                  selected && correct
-                    ? 'border-emerald-400 bg-emerald-100 text-emerald-900'
-                    : selected ? 'border-rose-300 bg-rose-50 text-rose-800'
-                      : 'border-white bg-white text-slate-800 shadow-[0_5px_0_#d5e7f4] hover:-translate-y-1 hover:bg-sky-50'
+                aria-label={token ? `${copy.removeWord}: ${token.text}` : `${copy.emptySlot} ${slotIndex + 1}`}
+                className={`flex min-h-14 min-w-0 flex-1 items-center justify-center rounded-2xl border-2 border-dashed px-3 text-lg font-black transition sm:min-h-16 sm:text-xl ${
+                  token
+                    ? solved ? 'border-emerald-400 bg-emerald-100 text-emerald-900' : 'border-orange-300 bg-white text-slate-900'
+                    : 'border-amber-300 bg-amber-50 text-amber-700'
                 }`}
               >
-                <span className="text-4xl sm:text-5xl" aria-hidden="true">{option.imageUrl || '✨'}</span>
-                <span className="mt-2 text-base font-black sm:text-lg">{option.text}</span>
+                {token ? token.text : `${copy.emptySlot} ${slotIndex + 1} ⬇️`}
+              </button>
+              {token && !solved && (
+                <div className="flex shrink-0 flex-col gap-1">
+                  <button
+                    type="button"
+                    onClick={() => moveToken(slotIndex, -1)}
+                    disabled={slotIndex === 0}
+                    aria-label={copy.moveEarlier}
+                    className="flex h-7 w-8 items-center justify-center rounded-lg bg-amber-100 text-amber-900 disabled:opacity-30"
+                  >
+                    <ArrowUp size={16} aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveToken(slotIndex, 1)}
+                    disabled={slotIndex === slots.length - 1}
+                    aria-label={copy.moveLater}
+                    className="flex h-7 w-8 items-center justify-center rounded-lg bg-amber-100 text-amber-900 disabled:opacity-30"
+                  >
+                    <ArrowDown size={16} aria-hidden="true" />
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="rounded-3xl bg-sky-50 p-3 sm:p-4">
+        <p className="mb-3 text-center text-sm font-black text-sky-900">{copy.orderSentence}</p>
+        <div className="flex flex-wrap justify-center gap-2">
+          {tokens.map(token => {
+            const isPlaced = slots.includes(token.id);
+            return (
+              <motion.button
+                key={token.id}
+                type="button"
+                draggable={!solved}
+                disabled={solved || isPlaced}
+                whileTap={{ scale: 0.94 }}
+                onClick={() => {
+                  if (isPlaced) return;
+                  placeNextToken(token.id);
+                }}
+                onDragStart={() => setDraggedTokenId(token.id)}
+                onDragEnd={() => setDraggedTokenId(null)}
+                className={`min-h-12 rounded-2xl border-2 px-5 text-lg font-black shadow-[0_4px_0_#c7dfeb] transition sm:text-xl ${
+                  isPlaced ? 'border-transparent bg-transparent text-transparent shadow-none' : 'border-white bg-white text-sky-900 hover:-translate-y-0.5 hover:bg-sky-100'
+                }`}
+                aria-label={token.text}
+                aria-hidden={isPlaced}
+              >
+                {isPlaced ? '\u00a0' : token.text}
               </motion.button>
             );
           })}
         </div>
-      )}
-      {answerId && (
-        <p aria-live="polite" className="mt-4 text-center text-lg font-black text-blue-800">
-          {answerId === question.id ? copy.correct : copy.tryAgain}
+      </div>
+
+      {solved && (
+        <p aria-live="polite" className="mt-4 text-center text-xl font-black text-emerald-800">
+          {copy.correct} {challenge.clue} 🎉
         </p>
       )}
+
+      <button
+        type="button"
+        onClick={checkOrder}
+        disabled={solved || slots.some(tokenId => tokenId === null)}
+        className="mt-5 min-h-14 w-full rounded-2xl bg-emerald-500 px-5 text-lg font-black text-white shadow-[0_5px_0_#16834f] transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none sm:text-xl"
+      >
+        {copy.checkOrder} ✅
+      </button>
     </section>
   );
 };
