@@ -3,6 +3,8 @@ import { Screen, Language, DifficultyLevel, GameResult, PlayerProfile } from '..
 
 export type GameSessionPhase = 'LEARNING_PHASE' | 'CHALLENGE_PHASE' | 'RESULT_PHASE';
 
+export type GameMechanic = 'combat' | 'drive' | 'fruit' | 'slingshot' | 'memory' | 'drag_match' | 'sentence_builder' | 'bubble_popper';
+
 export interface WorldNode {
   id: string;
   theme: string;
@@ -49,8 +51,8 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'saludos',
       name: 'Isla de la Bienvenida',
       icon: '🏝️',
-      gameId: 'drag_match',
-      gameName: 'Arrastre Rápido',
+      gameId: 'drive',
+      gameName: 'Carrera de palabras',
       minDifficulty: 1,
       unlocked: true,
       completed: false,
@@ -60,10 +62,10 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'animales',
       name: 'Safari de Mascotas',
       icon: '🐾',
-      gameId: 'memory',
-      gameName: 'Memoria Mágica',
+      gameId: 'fruit',
+      gameName: 'Fruta Ninja',
       minDifficulty: 1,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
     {
@@ -71,10 +73,10 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'comida',
       name: 'Feria de Sabores',
       icon: '🍎',
-      gameId: 'bubble_popper',
-      gameName: 'Burbujas Risueñas',
+      gameId: 'combat',
+      gameName: 'Combate de vocabulario',
       minDifficulty: 2,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
     {
@@ -85,7 +87,7 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       gameId: 'slingshot',
       gameName: 'Tirachinas de Colores',
       minDifficulty: 2,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
     {
@@ -93,10 +95,10 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'viajes',
       name: 'Castillo del Espacio',
       icon: '🚀',
-      gameId: 'sentence_builder',
+      gameId: 'memory',
       gameName: 'Constructor de Frases',
       minDifficulty: 3,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
   ],
@@ -106,8 +108,8 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'saludos',
       name: 'Oasis de Saludos',
       icon: '🌴',
-      gameId: 'drag_match',
-      gameName: 'Arrastre Rápido',
+      gameId: 'drive',
+      gameName: 'Carrera de palabras',
       minDifficulty: 1,
       unlocked: true,
       completed: false,
@@ -117,10 +119,10 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'comida',
       name: 'Zoco de Sabores',
       icon: '☕',
-      gameId: 'memory',
-      gameName: 'Memoria Mágica',
+      gameId: 'fruit',
+      gameName: 'Fruta Ninja',
       minDifficulty: 1,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
     {
@@ -128,10 +130,10 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'colores',
       name: 'Palacio de Colores',
       icon: '🎨',
-      gameId: 'bubble_popper',
+      gameId: 'combat',
       gameName: 'Burbujas Árabes',
       minDifficulty: 2,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
     {
@@ -142,7 +144,7 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       gameId: 'slingshot',
       gameName: 'Tirachinas Cósmico',
       minDifficulty: 2,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
     {
@@ -150,10 +152,10 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'viajes',
       name: 'Constelación del Desierto',
       icon: '🌌',
-      gameId: 'sentence_builder',
+      gameId: 'memory',
       gameName: 'Constructor de Frases',
       minDifficulty: 3,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
   ],
@@ -163,8 +165,8 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'saludos',
       name: 'Plaza Mayor de Brujas',
       icon: '🏰',
-      gameId: 'drag_match',
-      gameName: 'Arrastre Rápido',
+      gameId: 'drive',
+      gameName: 'Carrera de palabras',
       minDifficulty: 1,
       unlocked: true,
       completed: false,
@@ -174,10 +176,10 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'comida',
       name: 'Chocolatería de Gante',
       icon: '🍫',
-      gameId: 'memory',
-      gameName: 'Memoria Mágica',
+      gameId: 'fruit',
+      gameName: 'Fruta Ninja',
       minDifficulty: 1,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
     {
@@ -185,10 +187,10 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'viajes',
       name: 'Canales de Flandes',
       icon: '🚲',
-      gameId: 'slingshot',
+      gameId: 'combat',
       gameName: 'Tirachinas Flamenco',
       minDifficulty: 2,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
     {
@@ -196,10 +198,10 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'animales',
       name: 'Bosque del León Flamenco',
       icon: '🦁',
-      gameId: 'bubble_popper',
+      gameId: 'slingshot',
       gameName: 'Burbujas del Norte',
       minDifficulty: 2,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
     {
@@ -207,10 +209,10 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'colores',
       name: 'Taller de los Maestros',
       icon: '🎭',
-      gameId: 'sentence_builder',
+      gameId: 'memory',
       gameName: 'Constructor de Frases',
       minDifficulty: 3,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
   ],
@@ -220,8 +222,8 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'saludos',
       name: 'Boulevard de París',
       icon: '🥐',
-      gameId: 'drag_match',
-      gameName: 'Arrastre Rápido',
+      gameId: 'drive',
+      gameName: 'Carrera de palabras',
       minDifficulty: 1,
       unlocked: true,
       completed: false,
@@ -231,10 +233,10 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'comida',
       name: 'Bistro Gourmet',
       icon: '🧀',
-      gameId: 'memory',
-      gameName: 'Memoria Mágica',
+      gameId: 'fruit',
+      gameName: 'Fruta Ninja',
       minDifficulty: 1,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
     {
@@ -242,10 +244,10 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'animales',
       name: 'Jardín de Versalles',
       icon: '🦋',
-      gameId: 'slingshot',
+      gameId: 'combat',
       gameName: 'Tirachinas Francés',
       minDifficulty: 2,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
     {
@@ -253,10 +255,10 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'colores',
       name: 'Montmartre de Artistas',
       icon: '🎨',
-      gameId: 'bubble_popper',
+      gameId: 'slingshot',
       gameName: 'Burbujas de Neón',
       minDifficulty: 2,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
     {
@@ -264,14 +266,37 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       theme: 'viajes',
       name: 'Torre Luminosa',
       icon: '🗼',
-      gameId: 'sentence_builder',
+      gameId: 'memory',
       gameName: 'Constructor de Frases',
       minDifficulty: 3,
-      unlocked: true,
+      unlocked: false,
       completed: false,
     },
   ],
 };
+
+function loadSavedWorlds(): Record<Language, WorldNode[]> {
+  try {
+    if (typeof localStorage === 'undefined') return DEFAULT_WORLDS;
+    const saved = localStorage.getItem('fayma-play-world-progress');
+    if (!saved) return DEFAULT_WORLDS;
+    const parsed = JSON.parse(saved) as Partial<Record<Language, WorldNode[]>>;
+    const merged = { ...DEFAULT_WORLDS };
+    (Object.keys(DEFAULT_WORLDS) as Language[]).forEach(lang => {
+      const savedNodes = parsed[lang];
+      if (savedNodes?.length) {
+        merged[lang] = DEFAULT_WORLDS[lang].map(node => {
+          const savedNode = savedNodes.find(item => item.id === node.id);
+          return savedNode ? { ...node, unlocked: savedNode.unlocked, completed: savedNode.completed } : node;
+        });
+      }
+    });
+    return merged;
+  } catch {
+    return DEFAULT_WORLDS;
+  }
+}
+
 
 export const useGameStore = create<GameState>((set, get) => ({
   currentScreen: 'BOOT',
@@ -286,7 +311,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   results: [],
   difficulties: {},
   currentTurnResult: null,
-  worldNodes: DEFAULT_WORLDS,
+  worldNodes: loadSavedWorlds(),
 
   setScreen: (screen) => set({ currentScreen: screen }),
   setLanguage: (lang) => set({ language: lang }),
@@ -320,18 +345,32 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   recordTurnResult: (result) => {
-    const { scores, results } = get();
+    const { scores, results, worldNodes, language, activeWorldId } = get();
     const prevScore = scores[result.playerId] || 0;
     const gained = (result.correct * 10) + Math.max(0, result.coinsEarned);
+    const nodes = [...(worldNodes[language] || [])];
+    const activeIndex = nodes.findIndex(node => node.theme === activeWorldId);
+    const total = result.correct + result.wrong;
+    const passed = total > 0 && result.correct / total >= 0.6;
+
+    if (activeIndex >= 0 && passed) {
+      nodes[activeIndex] = { ...nodes[activeIndex], completed: true };
+      if (activeIndex + 1 < nodes.length) {
+        nodes[activeIndex + 1] = { ...nodes[activeIndex + 1], unlocked: true };
+      }
+    }
+
+    const nextWorldNodes = { ...worldNodes, [language]: nodes };
+    try {
+      if (typeof localStorage !== 'undefined') localStorage.setItem('fayma-play-world-progress', JSON.stringify(nextWorldNodes));
+    } catch { /* Progress remains available in memory if storage is unavailable. */ }
 
     set({
-      scores: {
-        ...scores,
-        [result.playerId]: prevScore + gained,
-      },
+      scores: { ...scores, [result.playerId]: prevScore + gained },
       results: [...results, result],
       currentTurnResult: result,
       sessionPhase: 'RESULT_PHASE',
+      worldNodes: nextWorldNodes,
     });
   },
 

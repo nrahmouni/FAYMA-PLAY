@@ -18,6 +18,10 @@ const SentenceBuilderGame = React.lazy(() =>
 const BubblePopperGame = React.lazy(() =>
   import('../games/BubblePopperGame').then(m => ({ default: m.BubblePopperGame }))
 );
+const CombatGame = React.lazy(() => import('../games/CombatGame').then(m => ({ default: m.CombatGame })));
+const DriveGame = React.lazy(() => import('../games/DriveGame').then(m => ({ default: m.DriveGame })));
+const FruitNinjaGame = React.lazy(() => import('../games/FruitNinjaGame').then(m => ({ default: m.FruitNinjaGame })));
+
 
 interface InteractiveChallengeModalProps {
   gameId: string;
@@ -34,6 +38,12 @@ export const InteractiveChallengeModal: React.FC<InteractiveChallengeModalProps>
 }) => {
   const renderGame = () => {
     switch (gameId) {
+      case 'combat':
+        return <CombatGame {...gameProps} />;
+      case 'drive':
+        return <DriveGame {...gameProps} />;
+      case 'fruit':
+        return <FruitNinjaGame {...gameProps} />;
       case 'drag_match':
         return <DragMatchGame {...gameProps} />;
       case 'slingshot':

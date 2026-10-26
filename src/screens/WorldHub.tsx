@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Play, Lock, CheckCircle, Sparkles, MapPin, Gamepad2, ArrowRight } from 'lucide-react';
+import { Play, Lock, CheckCircle, Sparkles, MapPin, Gamepad2, ArrowRight, Trophy } from 'lucide-react';
 import { useGameStore, WorldNode } from '../store/gameStore';
 import { useProfileStore } from '../store/profileStore';
 import { LANGUAGES } from '../data/languages';
@@ -44,7 +44,7 @@ export const WorldHub: React.FC = () => {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl sm:text-3xl font-black text-slate-100">
-                Mundo de {langMeta.name}
+                {language === 'es' ? 'España' : language === 'fr' ? 'Francia' : language === 'ar' ? 'Marruecos' : 'Bélgica'}
               </h1>
               <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-cyan-300 font-mono border border-cyan-500/20">
                 {langMeta.nativeName}
@@ -91,66 +91,59 @@ export const WorldHub: React.FC = () => {
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2 text-slate-200 font-extrabold text-base">
             <MapPin className="w-4 h-4 text-cyan-400" />
-            <span>Niveles y Minijuegos Disponibles</span>
+            <span>Mapa de aventuras</span>
           </div>
           <span className="text-xs text-slate-400">
-            {nodes.length} aventuras disponibles
+            {nodes.filter(n => n.unlocked).length}/{nodes.length} niveles desbloqueados
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {nodes.map((node, index) => {
-            return (
-              <motion.div
-                key={node.id}
-                whileHover={{ y: -4 }}
-                className="rounded-3xl glass-card p-5 border-2 border-white/10 hover:border-cyan-400/50 transition-all flex flex-col justify-between shadow-xl relative overflow-hidden group"
-              >
-                {/* Node Top */}
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-3xl select-none p-2 rounded-2xl bg-slate-800/80 border border-white/10">
-                      {node.icon}
-                    </span>
-                    <div className="flex items-center gap-1">
-                      {[1, 2, 3, 4, 5].map(s => (
-                        <span
-                          key={s}
-                          className={`text-xs ${
-                            s <= node.minDifficulty ? 'text-amber-400' : 'text-slate-700'
-                          }`}
-                        >
-                          ★
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <h3 className="text-lg font-black text-slate-100 group-hover:text-cyan-300 transition">
-                    {node.name}
-                  </h3>
-                  <div className="flex items-center gap-1.5 text-xs text-cyan-400/90 font-bold mt-1">
-                    <Gamepad2 className="w-3.5 h-3.5" />
-                    <span>Minijuego: {node.gameName}</span>
-                  </div>
-
-                  <span className="inline-block mt-2 text-[10px] uppercase font-extrabold text-slate-400 bg-slate-900/80 px-2 py-0.5 rounded border border-white/5">
-                    Tema: {node.theme}
-                  </span>
-                </div>
-
-                {/* Node Action CTA */}
-                <button
-                  type="button"
-                  onClick={() => handleSelectNode(node)}
-                  className="mt-5 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 active:scale-95 transition cursor-pointer"
+        <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/50 px-4 sm:px-8 py-8">
+          <div className="absolute inset-y-8 left-1/2 -translate-x-1/2 w-1 rounded-full bg-gradient-to-b from-cyan-400 via-fuchsia-500 to-amber-400 opacity-40" />
+          <div className="relative z-10 space-y-8 sm:space-y-10">
+            {nodes.map((node, index) => {
+              const gameNames: Record<string, string> = {
+                drive: 'Carrera de palabras', fruit: 'Fruta Ninja', combat: 'Combate de vocabulario',
+                slingshot: 'Tirachinas', memory: 'Memoria mágica',
+                drag_match: 'Arrastre rápido', sentence_builder: 'Constructor de frases',
+                bubble_popper: 'Burbujas risueñas'
+              };
+              const locked = !node.unlocked;
+              return (
+                <motion.div
+                  key={node.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.07 }}
+                  className={`flex items-center gap-3 sm:gap-5 ${index % 2 ? 'sm:flex-row-reverse' : ''}`}
                 >
-                  <Play className="w-3.5 h-3.5 fill-current" />
-                  <span>Jugar Este Nivel</span>
-                </button>
-              </motion.div>
-            );
-          })}
+                  <button
+                    type="button"
+                    disabled={locked}
+                    onClick={() => handleSelectNode(node)}
+                    aria-label={`${node.name}${locked ? ', bloqueado' : ', jugar'}`}
+                    className={`relative shrink-0 w-[76px] h-[76px] sm:w-24 sm:h-24 rounded-full border-4 flex flex-col items-center justify-center shadow-xl transition-transform ${locked ? 'bg-slate-800 border-slate-700 text-slate-500 cursor-not-allowed' : node.completed ? 'bg-emerald-500 border-emerald-200 text-white hover:scale-105' : 'bg-gradient-to-br from-cyan-400 to-indigo-600 border-cyan-200 text-white hover:scale-105 active:scale-95'}`}
+                  >
+                    <span className="text-3xl sm:text-4xl">{node.completed ? '🏆' : locked ? <Lock className="w-6 h-6" /> : node.icon}</span>
+                    <span className="text-[9px] font-black uppercase mt-0.5">{node.completed ? 'Completado' : `Nivel ${index + 1}`}</span>
+                  </button>
+                  <div className={`min-w-0 flex-1 max-w-sm rounded-2xl border p-3 sm:p-4 backdrop-blur ${locked ? 'border-white/5 bg-slate-900/70 opacity-70' : 'border-white/10 bg-slate-900/90 shadow-lg'} ${index % 2 ? 'sm:text-right' : ''}`}>
+                    <div className={`flex items-center gap-2 ${index % 2 ? 'sm:flex-row-reverse' : ''}`}>
+                      <span className="text-xl">{node.icon}</span>
+                      <h3 className="font-black text-sm sm:text-base text-white">{node.name}</h3>
+                    </div>
+                    <p className="text-xs text-cyan-300 font-bold mt-1">{gameNames[node.gameId] ?? node.gameName}</p>
+                    <div className={`flex items-center gap-1.5 mt-2 ${index % 2 ? 'sm:justify-end' : ''}`}>
+                      {[1,2,3,4,5].map(star => <span key={star} className={`text-xs ${star <= node.minDifficulty ? 'text-amber-400' : 'text-slate-700'}`}>★</span>)}
+                      <span className="text-[10px] text-slate-400 ml-1 uppercase tracking-wide">{node.theme}</span>
+                    </div>
+                    {!locked && <button type="button" onClick={() => handleSelectNode(node)} className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 px-3 py-2 text-xs font-black text-slate-950 transition active:scale-95"><Play className="w-3 h-3 fill-current"/> Jugar nivel <ArrowRight className="w-3 h-3"/></button>}
+                    {locked && <p className="mt-2 text-[10px] text-slate-500 font-bold">🔒 Supera el nivel anterior para desbloquearlo</p>}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
