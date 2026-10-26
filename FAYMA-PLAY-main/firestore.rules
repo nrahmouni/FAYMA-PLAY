@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default-deny: every collection must opt into explicit ownership rules.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128
+        && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    match /users/{userId} {
+      allow read: if isValidId(userId) && isOwner(userId);
+      // Keep the document ID tied to the authenticated user's UID.
+      allow create, update: if isValidId(userId) && isOwner(userId);
+      allow delete: if false;
+    }
+
+    match /sessions/{sessionId} {
+      // Session documents must carry ownerUid. Existing session-writing code
+      // must set ownerUid to the authenticated user's UID.
+      allow create: if isSignedIn()
+        && isValidId(sessionId)
+        && request.resource.data.ownerUid == request.auth.uid;
+      allow read: if isSignedIn()
+        && resource.data.ownerUid == request.auth.uid;
+      allow update: if isSignedIn()
+        && resource.data.ownerUid == request.auth.uid
+        && request.resource.data.ownerUid == resource.data.ownerUid;
+      allow delete: if false;
+
+      match /results/{resultId} {
+        allow read, create: if isSignedIn()
+          && isValidId(resultId)
+          && get(/databases/$(database)/documents/sessions/$(sessionId)).data.ownerUid == request.auth.uid;
+        allow update, delete: if false;
+      }
+    }
+  }
+}
