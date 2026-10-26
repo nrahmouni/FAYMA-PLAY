@@ -1,9 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'motion/react';
+import { Volume2 } from 'lucide-react';
 import { GameProps, Word } from '../types';
 import { MathGameId, MATH_GAME_COPY } from '../data/mathGameCopy';
 import { GameProgress } from './GameProgress';
 import { useGameProgress } from './useGameProgress';
+import { useSpeech } from '../hooks/useSpeech';
 
 interface MathQuestion {
   id: string;
@@ -16,6 +18,7 @@ interface MathQuestion {
 }
 
 const ROUND_LENGTH = 6;
+const QUESTION_MAX_NUMBERS = [5, 5, 7, 8, 10, 12];
 
 function randomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -78,23 +81,43 @@ interface MathArcadeGameProps extends GameProps {
 
 const MathArcadeGame: React.FC<MathArcadeGameProps> = ({
   gameId,
-  difficulty,
   language,
   onCorrect,
   onWrong,
   onComplete,
+  introSpoken = false,
 }) => {
-  const maxNumber = difficulty < 6 ? 10 : 20;
   const questions = useMemo(
-    () => Array.from({ length: ROUND_LENGTH }, (_, index) => createQuestion(gameId, index, maxNumber)),
-    [gameId, maxNumber],
+    () => Array.from({ length: ROUND_LENGTH }, (_, index) => createQuestion(gameId, index, QUESTION_MAX_NUMBERS[index])),
+    [gameId],
   );
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [eliminatedAnswers, setEliminatedAnswers] = useState<number[]>([]);
   const { recordAnswer, finish } = useGameProgress(gameId, { onCorrect, onWrong, onComplete });
+  const { speak } = useSpeech();
   const copy = MATH_GAME_COPY[language][gameId];
   const question = questions[questionIndex];
+  const spokenQuestionId = useRef('');
+
+  const speakQuestion = useCallback(() => {
+    if (!question) return;
+    const { left, right, missing } = question;
+    const speech = language === 'es'
+      ? missing === 'answer' ? `¿Cuánto es ${left} ${question.operation === '+' ? 'más' : 'menos'} ${right}?` : `Completa el número que falta: ${expressionFor(question)}`
+      : language === 'fr'
+        ? missing === 'answer' ? `Combien font ${left} ${question.operation === '+' ? 'plus' : 'moins'} ${right} ?` : `Complète le nombre manquant : ${expressionFor(question)}`
+        : language === 'nl-BE'
+          ? missing === 'answer' ? `Hoeveel is ${left} ${question.operation === '+' ? 'plus' : 'min'} ${right}?` : `Vul het ontbrekende getal in: ${expressionFor(question)}`
+          : missing === 'answer' ? `كم يساوي ${left} ${question.operation === '+' ? 'زائد' : 'ناقص'} ${right}؟` : `أكمل العدد الناقص: ${expressionFor(question)}`;
+    speak(speech, language);
+  }, [language, question, speak]);
+
+  useEffect(() => {
+    if (!introSpoken || !question || spokenQuestionId.current === question.id) return;
+    spokenQuestionId.current = question.id;
+    speakQuestion();
+  }, [introSpoken, question, speakQuestion]);
 
   useEffect(() => {
     if (selectedAnswer === null || !question) return;
@@ -141,6 +164,16 @@ const MathArcadeGame: React.FC<MathArcadeGameProps> = ({
       className="mx-auto w-full max-w-3xl overflow-hidden rounded-[2rem] bg-[#fffdf4] p-4 shadow-[0_18px_45px_rgba(63,115,64,.14)] ring-1 ring-amber-100 sm:p-6"
     >
       <GameProgress current={questionIndex + 1} total={questions.length} label={copy.progress} icon={gameId === 'comet_dash' ? '🚀' : gameId === 'cookie_count' ? '🍪' : gameId === 'number_bridge' ? '🌉' : '🗺️'} language={language} />
+
+      <button
+        type="button"
+        onClick={speakQuestion}
+        aria-label={language === 'es' ? 'Escuchar la pregunta' : language === 'fr' ? 'Écouter la question' : language === 'ar' ? 'استمع إلى السؤال' : 'Luister naar de vraag'}
+        className="mb-4 inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-amber-100 bg-white px-4 text-sm font-black text-amber-900 shadow-sm transition hover:bg-amber-50"
+      >
+        <Volume2 size={19} aria-hidden="true" />
+        {language === 'es' ? 'Escuchar pregunta' : language === 'fr' ? 'Écouter la question' : language === 'ar' ? 'استمع إلى السؤال' : 'Luister naar de vraag'}
+      </button>
 
       {gameId === 'comet_dash' && (
         <div className="mb-5 rounded-3xl bg-gradient-to-br from-indigo-950 via-violet-900 to-sky-700 p-5 text-white sm:p-7">

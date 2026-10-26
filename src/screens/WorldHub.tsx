@@ -21,14 +21,14 @@ const GAMES: Array<{ id: GameMechanic; art: string; color: string; icon?: string
   { id: 'draw_word', art: '/games/draw.svg', color: 'from-teal-100 to-cyan-100' },
   { id: 'letter_puzzle', art: '/games/letters.svg', color: 'from-orange-100 to-rose-100' },
   { id: 'word_sort', art: '/games/sort.svg', color: 'from-lime-100 to-emerald-100' },
-  { id: 'comet_dash', art: '', icon: '🚀', color: 'from-indigo-200 to-sky-200' },
-  { id: 'cookie_count', art: '', icon: '🍪', color: 'from-amber-200 to-rose-200' },
-  { id: 'number_bridge', art: '', icon: '🌉', color: 'from-cyan-200 to-blue-200' },
-  { id: 'treasure_trail', art: '', icon: '🗺️', color: 'from-lime-200 to-yellow-200' },
-  { id: 'body_detective', art: '', icon: '🩺', color: 'from-rose-200 to-pink-200' },
-  { id: 'habitat_rescue', art: '', icon: '🐾', color: 'from-lime-200 to-emerald-200' },
-  { id: 'space_explorer', art: '', icon: '🪐', color: 'from-indigo-200 to-violet-200' },
-  { id: 'eco_mission', art: '', icon: '🌱', color: 'from-emerald-200 to-cyan-200' },
+  { id: 'comet_dash', art: '/games/comet.svg', color: 'from-indigo-200 to-sky-200' },
+  { id: 'cookie_count', art: '/games/cookies.svg', color: 'from-amber-200 to-rose-200' },
+  { id: 'number_bridge', art: '/games/number-bridge.svg', color: 'from-cyan-200 to-blue-200' },
+  { id: 'treasure_trail', art: '/games/treasure.svg', color: 'from-lime-200 to-yellow-200' },
+  { id: 'body_detective', art: '/games/body.svg', color: 'from-rose-200 to-pink-200' },
+  { id: 'habitat_rescue', art: '/games/habitat.svg', color: 'from-lime-200 to-emerald-200' },
+  { id: 'space_explorer', art: '/games/space.svg', color: 'from-indigo-200 to-violet-200' },
+  { id: 'eco_mission', art: '/games/eco.svg', color: 'from-emerald-200 to-cyan-200' },
 ];
 
 const isMathGame = (id: GameMechanic): id is MathGameId =>

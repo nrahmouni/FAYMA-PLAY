@@ -10,6 +10,7 @@ import { GameProps, GameResult } from '../types';
 import { GAME_COPY } from '../data/gameCopy';
 import { MathGameId, MATH_GAME_COPY } from '../data/mathGameCopy';
 import { LearningGameId, LEARNING_GAME_COPY } from '../data/learningGameCopy';
+import { TurnReadyOverlay } from '../components/TurnReadyOverlay';
 
 function isMathGameId(value: string): value is MathGameId {
   return value === 'comet_dash' || value === 'cookie_count' || value === 'number_bridge' || value === 'treasure_trail';
@@ -38,6 +39,7 @@ export const GameSession: React.FC = () => {
   const [missionCompleted, setMissionCompleted] = useState(false);
   const [levelAdvanced, setLevelAdvanced] = useState(false);
   const [introSpokenForTurn, setIntroSpokenForTurn] = useState<string | null>(null);
+  const [readyConfirmedForTurn, setReadyConfirmedForTurn] = useState<string | null>(null);
 
   const profiles = useProfileStore(s => s.profiles);
   const { speak } = useSpeech();
@@ -54,7 +56,11 @@ export const GameSession: React.FC = () => {
   useEffect(() => {
     if (sessionPhase !== 'CHALLENGE_PHASE' || !activePlayer || announcedTurn.current === turnKey) return;
     announcedTurn.current = turnKey;
-    playTurnStart();
+    speak(copy.ready.replace('{name}', activePlayer.displayName), language);
+  }, [activePlayer?.displayName, copy.ready, language, sessionPhase, speak, turnKey]);
+
+  const handleReady = useCallback(() => {
+    if (!activePlayer) return;
     const guide = isMathGameId(activeGameId)
       ? MATH_GAME_COPY[language][activeGameId].voiceGuide
       : isLearningGameId(activeGameId)
@@ -78,12 +84,14 @@ export const GameSession: React.FC = () => {
                     : activeGameId === 'word_sort'
                       ? copy.wordSortVoiceGuide
                       : copy.trainVoiceGuide;
+    setReadyConfirmedForTurn(turnKey);
+    playTurnStart();
     speak(
-      `${copy.ready.replace('{name}', activePlayer.displayName)} ${copy.startTurn} ${guide}`,
+      `${copy.startTurn} ${guide}`,
       language,
       () => setIntroSpokenForTurn(turnKey),
     );
-  }, [activeGameId, activePlayer?.displayName, copy, difficulty, language, playTurnStart, sessionPhase, speak, turnKey]);
+  }, [activeGameId, activePlayer, copy, language, playTurnStart, speak, turnKey]);
 
   const roundWords = useMemo(
     () => activePlayer ? selectRoundWords(activePlayer) : [],
@@ -157,13 +165,25 @@ export const GameSession: React.FC = () => {
   return (
     <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center px-2 py-2 sm:px-4 sm:py-3">
       {sessionPhase === 'CHALLENGE_PHASE' && activePlayer && (
-        <InteractiveChallengeModal
-          key={turnKey}
-          gameId={activeGameId}
-          gameProps={gameProps}
-          player={activePlayer}
-          difficulty={difficulty}
-        />
+        <>
+          {readyConfirmedForTurn !== turnKey && (
+            <TurnReadyOverlay
+              player={activePlayer}
+              gameId={activeGameId}
+              language={language}
+              onReady={handleReady}
+            />
+          )}
+          {readyConfirmedForTurn === turnKey && (
+            <InteractiveChallengeModal
+              key={turnKey}
+              gameId={activeGameId}
+              gameProps={gameProps}
+              player={activePlayer}
+              difficulty={difficulty}
+            />
+          )}
+        </>
       )}
 
       {sessionPhase === 'RESULT_PHASE' && activePlayer && currentTurnResult && (

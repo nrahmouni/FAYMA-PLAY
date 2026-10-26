@@ -1,9 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'motion/react';
+import { Volume2 } from 'lucide-react';
 import { GameProps, Word } from '../types';
 import { LearningGameId, LearningQuestion, LEARNING_GAME_COPY } from '../data/learningGameCopy';
 import { GameProgress } from './GameProgress';
 import { useGameProgress } from './useGameProgress';
+import { useSpeech } from '../hooks/useSpeech';
 
 interface PreparedQuestion extends LearningQuestion {
   id: string;
@@ -62,6 +64,7 @@ const SubjectArcadeGame: React.FC<SubjectArcadeGameProps> = ({
   onCorrect,
   onWrong,
   onComplete,
+  introSpoken = false,
 }) => {
   const copy = LEARNING_GAME_COPY[language][gameId];
   const questions = useMemo(() => prepareQuestions(gameId, copy.questions), [copy.questions, gameId]);
@@ -69,8 +72,21 @@ const SubjectArcadeGame: React.FC<SubjectArcadeGameProps> = ({
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [eliminatedAnswers, setEliminatedAnswers] = useState<number[]>([]);
   const { recordAnswer, finish } = useGameProgress(gameId, { onCorrect, onWrong, onComplete });
+  const { speak } = useSpeech();
   const question = questions[questionIndex];
   const style = GAME_STYLE[gameId];
+  const spokenQuestionId = useRef('');
+
+  const speakQuestion = useCallback(() => {
+    if (!question) return;
+    speak(question.prompt.replace(/^[^\p{L}\p{N}¿¡]+/u, ''), language);
+  }, [language, question, speak]);
+
+  useEffect(() => {
+    if (!introSpoken || !question || spokenQuestionId.current === question.id) return;
+    spokenQuestionId.current = question.id;
+    speakQuestion();
+  }, [introSpoken, question, speakQuestion]);
 
   useEffect(() => {
     if (selectedAnswer === null || !question) return;
@@ -106,6 +122,15 @@ const SubjectArcadeGame: React.FC<SubjectArcadeGameProps> = ({
   return (
     <section lang={language} dir={language === 'ar' ? 'rtl' : 'ltr'} className="mx-auto w-full max-w-3xl rounded-[2rem] bg-[#fffdf4] p-4 shadow-[0_18px_45px_rgba(63,115,64,.14)] ring-1 ring-emerald-100 sm:p-6">
       <GameProgress current={questionIndex + 1} total={questions.length} label={copy.progress} icon={style.icon} language={language} />
+      <button
+        type="button"
+        onClick={speakQuestion}
+        aria-label={language === 'es' ? 'Escuchar la pregunta' : language === 'fr' ? 'Écouter la question' : language === 'ar' ? 'استمع إلى السؤال' : 'Luister naar de vraag'}
+        className="mb-4 inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-emerald-100 bg-white px-4 text-sm font-black text-emerald-900 shadow-sm transition hover:bg-emerald-50"
+      >
+        <Volume2 size={19} aria-hidden="true" />
+        {language === 'es' ? 'Escuchar pregunta' : language === 'fr' ? 'Écouter la question' : language === 'ar' ? 'استمع إلى السؤال' : 'Luister naar de vraag'}
+      </button>
 
       {gameId === 'body_detective' && (
         <div className={`mb-5 rounded-3xl bg-gradient-to-br ${style.colors} p-5 sm:p-7`}>
