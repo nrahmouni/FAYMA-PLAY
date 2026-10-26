@@ -1,8 +1,8 @@
 import { Language } from '../types';
 
 export const GAME_COPY: Record<Language, {
-  gameNames: { safari: string; train: string; garden: string; wordPicker: string; soundEcho: string; dinoPicnic: string };
-  gameDescriptions: { safari: string; train: string; garden: string; wordPicker: string; soundEcho: string; dinoPicnic: string };
+  gameNames: { safari: string; train: string; garden: string; wordPicker: string; soundEcho: string; dinoPicnic: string; lineMatch: string; drawWord: string; letterPuzzle: string; wordSort: string };
+  gameDescriptions: { safari: string; train: string; garden: string; wordPicker: string; soundEcho: string; dinoPicnic: string; lineMatch: string; drawWord: string; letterPuzzle: string; wordSort: string };
   welcome: string;
   chooseGame: string;
   changeFlag: string;
@@ -24,6 +24,27 @@ export const GAME_COPY: Record<Language, {
   dinoPlate: string;
   dinoCheer: string;
   dinoYum: string;
+  lineMatchProgress: string;
+  lineMatchTitle: string;
+  lineMatchHint: string;
+  lineMatchLeft: string;
+  lineMatchRight: string;
+  lineMatchDone: string;
+  drawWordProgress: string;
+  drawWordTitle: string;
+  drawWordHint: string;
+  drawCanvasLabel: string;
+  drawClear: string;
+  drawDone: string;
+  drawFinished: string;
+  letterPuzzleProgress: string;
+  letterPuzzleTitle: string;
+  letterPuzzleHint: string;
+  letterPuzzleSlot: string;
+  letterPuzzleReset: string;
+  wordSortProgress: string;
+  wordSortTitle: string;
+  wordSortHint: string;
   trainProgress: string;
   trainTitle: string;
   trainHint: string;
@@ -67,6 +88,10 @@ export const GAME_COPY: Record<Language, {
   wordPickerVoiceGuide: string;
   soundEchoVoiceGuide: string;
   dinoPicnicVoiceGuide: string;
+  lineMatchVoiceGuide: string;
+  drawWordVoiceGuide: string;
+  letterPuzzleVoiceGuide: string;
+  wordSortVoiceGuide: string;
   sayWord: string;
   orderSentence: string;
   sentencePrompt: string;
@@ -87,8 +112,8 @@ export const GAME_COPY: Record<Language, {
   moveLater: string;
 }> = {
   es: {
-    gameNames: { safari: 'Safari de palabras', train: 'Tren de palabras', garden: 'Jardín de parejas', wordPicker: 'Globos de palabras', soundEcho: 'Eco de sonidos', dinoPicnic: 'La merienda del dinosaurio' },
-    gameDescriptions: { safari: 'Escucha una palabra y elige el dibujo.', train: 'Escucha la frase y ordena sus palabras.', garden: 'Une cada dibujo con su palabra.', wordPicker: 'Escucha la palabra y elige su significado.', soundEcho: 'Escucha una secuencia y repítela con los dibujos.', dinoPicnic: 'Ayuda al dinosaurio a encontrar comida entre los dibujos.' },
+    gameNames: { safari: 'Safari de palabras', train: 'Tren de palabras', garden: 'Jardín de parejas', wordPicker: 'Globos de palabras', soundEcho: 'Eco de sonidos', dinoPicnic: 'La merienda del dinosaurio', lineMatch: 'Une con una línea', drawWord: 'Pizarra de palabras', letterPuzzle: 'Letras revueltas', wordSort: 'Clasifica palabras' },
+    gameDescriptions: { safari: 'Escucha una palabra y elige el dibujo.', train: 'Escucha la frase y ordena sus palabras.', garden: 'Une cada dibujo con su palabra.', wordPicker: 'Escucha la palabra y elige su significado.', soundEcho: 'Escucha una secuencia y repítela con los dibujos.', dinoPicnic: 'Ayuda al dinosaurio a encontrar comida entre los dibujos.', lineMatch: 'Une cada significado con su palabra.', drawWord: 'Escucha y escribe la palabra en la pizarra.', letterPuzzle: 'Ordena las letras para formar la palabra.', wordSort: 'Separa las palabras de comida y animales.' },
     welcome: '¡Bienvenidos!',
     chooseGame: '¿Qué juego elegimos?',
     changeFlag: 'Cambiar idioma',
@@ -110,6 +135,27 @@ export const GAME_COPY: Record<Language, {
     dinoPlate: '¡A la cesta!',
     dinoCheer: '¡Sigue buscando la comida!',
     dinoYum: '¡Qué merienda tan rica!',
+    lineMatchProgress: 'Parejas unidas',
+    lineMatchTitle: '¡Conecta las parejas!',
+    lineMatchHint: 'Toca un significado y después su palabra para unirlos.',
+    lineMatchLeft: 'Significado',
+    lineMatchRight: 'Palabra',
+    lineMatchDone: '¡Todas las parejas conectadas!',
+    drawWordProgress: 'Palabras escritas',
+    drawWordTitle: 'Pizarra mágica',
+    drawWordHint: 'Escucha y escribe la palabra en flamenco. Puedes borrar y volver a intentarlo.',
+    drawCanvasLabel: 'Pizarra para escribir la palabra',
+    drawClear: 'Borrar',
+    drawDone: 'Terminé',
+    drawFinished: '¡Muy bien! La palabra era',
+    letterPuzzleProgress: 'Palabras formadas',
+    letterPuzzleTitle: '¡Letras revueltas!',
+    letterPuzzleHint: 'Toca las letras para formar la palabra que escuchas.',
+    letterPuzzleSlot: 'Hueco {number}',
+    letterPuzzleReset: 'Empezar de nuevo',
+    wordSortProgress: 'Palabras clasificadas',
+    wordSortTitle: '¡Ordena las palabras!',
+    wordSortHint: 'Escucha la palabra y elige si pertenece a comida o animales.',
     trainProgress: 'Viaje en tren',
     trainTitle: '¡El tren de palabras!',
     trainHint: 'Escucha la frase y coloca sus palabras en orden.',
@@ -153,6 +199,10 @@ export const GAME_COPY: Record<Language, {
     wordPickerVoiceGuide: 'Escucha la palabra flamenca y toca su significado en español.',
     soundEchoVoiceGuide: 'Escucha la secuencia de palabras. Después toca los dibujos en el mismo orden. Puedes volver a escucharla.',
     dinoPicnicVoiceGuide: 'El dinosaurio tiene hambre. Toca los dibujos de comida para llenar su plato. Si te equivocas, prueba con otro.',
+    lineMatchVoiceGuide: 'Une cada palabra con su significado: toca una opción de la izquierda y después su pareja de la derecha.',
+    drawWordVoiceGuide: 'Escucha la palabra y escríbela en la pizarra. Puedes borrar y probar otra vez.',
+    letterPuzzleVoiceGuide: 'Escucha la palabra y toca sus letras en el orden correcto. Si te equivocas, puedes quitar letras.',
+    wordSortVoiceGuide: 'Escucha cada palabra y clasifícala como comida o animal.',
     sayWord: 'La palabra es',
     orderSentence: 'Arrastra las palabras para ordenar la frase.',
     sentencePrompt: 'Forma esta frase:',
@@ -173,8 +223,8 @@ export const GAME_COPY: Record<Language, {
     moveLater: 'Mover después',
   },
   fr: {
-    gameNames: { safari: 'Safari des mots', train: 'Train des mots', garden: 'Jardin des paires', wordPicker: 'Ballons de mots', soundEcho: 'Écho des sons', dinoPicnic: 'Le goûter du dinosaure' },
-    gameDescriptions: { safari: 'Écoute un mot et choisis le dessin.', train: 'Écoute la phrase et remets les mots en ordre.', garden: 'Relie chaque dessin à son mot.', wordPicker: 'Écoute le mot et choisis sa signification.', soundEcho: 'Écoute une suite de mots et répète-la avec les dessins.', dinoPicnic: 'Aide le dinosaure à trouver à manger parmi les dessins.' },
+    gameNames: { safari: 'Safari des mots', train: 'Train des mots', garden: 'Jardin des paires', wordPicker: 'Ballons de mots', soundEcho: 'Écho des sons', dinoPicnic: 'Le goûter du dinosaure', lineMatch: 'Relie les mots', drawWord: 'Ardoise à mots', letterPuzzle: 'Lettres mélangées', wordSort: 'Trie les mots' },
+    gameDescriptions: { safari: 'Écoute un mot et choisis le dessin.', train: 'Écoute la phrase et remets les mots en ordre.', garden: 'Relie chaque dessin à son mot.', wordPicker: 'Écoute le mot et choisis sa signification.', soundEcho: 'Écoute une suite de mots et répète-la avec les dessins.', dinoPicnic: 'Aide le dinosaure à trouver à manger parmi les dessins.', lineMatch: 'Relie chaque sens au bon mot.', drawWord: 'Écoute et écris le mot sur l’ardoise.', letterPuzzle: 'Remets les lettres dans le bon ordre.', wordSort: 'Trie les mots : nourriture ou animaux.' },
     welcome: 'Bienvenue !',
     chooseGame: 'À quel jeu joue-t-on ?',
     changeFlag: 'Changer de langue',
@@ -196,6 +246,27 @@ export const GAME_COPY: Record<Language, {
     dinoPlate: 'Dans le panier !',
     dinoCheer: 'Continue à chercher la nourriture !',
     dinoYum: 'Quel délicieux goûter !',
+    lineMatchProgress: 'Paires reliées',
+    lineMatchTitle: 'Relie les paires !',
+    lineMatchHint: 'Touche un sens, puis le mot qui correspond pour les relier.',
+    lineMatchLeft: 'Signification',
+    lineMatchRight: 'Mot',
+    lineMatchDone: 'Toutes les paires sont reliées !',
+    drawWordProgress: 'Mots écrits',
+    drawWordTitle: 'Ardoise magique',
+    drawWordHint: 'Écoute et écris le mot en flamand. Tu peux effacer et recommencer.',
+    drawCanvasLabel: 'Ardoise pour écrire le mot',
+    drawClear: 'Effacer',
+    drawDone: 'Terminé',
+    drawFinished: 'Bravo ! Le mot était',
+    letterPuzzleProgress: 'Mots formés',
+    letterPuzzleTitle: 'Lettres mélangées !',
+    letterPuzzleHint: 'Touche les lettres pour former le mot que tu entends.',
+    letterPuzzleSlot: 'Case {number}',
+    letterPuzzleReset: 'Recommencer',
+    wordSortProgress: 'Mots triés',
+    wordSortTitle: 'Range les mots !',
+    wordSortHint: 'Écoute le mot et choisis nourriture ou animaux.',
     trainProgress: 'Voyage en train',
     trainTitle: 'Le train des mots !',
     trainHint: 'Écoute la phrase et place les mots dans l’ordre.',
@@ -239,6 +310,10 @@ export const GAME_COPY: Record<Language, {
     wordPickerVoiceGuide: 'Écoute le mot flamand et touche sa signification en espagnol.',
     soundEchoVoiceGuide: 'Écoute la suite de mots, puis touche les dessins dans le même ordre. Tu peux la réécouter.',
     dinoPicnicVoiceGuide: 'Le dinosaure a faim. Touche les dessins de nourriture pour remplir son assiette. Si tu te trompes, essaie un autre dessin.',
+    lineMatchVoiceGuide: 'Relie chaque mot à sa signification : touche une option à gauche, puis sa paire à droite.',
+    drawWordVoiceGuide: 'Écoute le mot et écris-le sur l’ardoise. Tu peux effacer et essayer à nouveau.',
+    letterPuzzleVoiceGuide: 'Écoute le mot et touche ses lettres dans le bon ordre. Tu peux retirer des lettres.',
+    wordSortVoiceGuide: 'Écoute chaque mot et classe-le parmi la nourriture ou les animaux.',
     sayWord: 'Le mot est',
     orderSentence: 'Fais glisser les mots pour former la phrase.',
     sentencePrompt: 'Forme cette phrase :',
@@ -259,8 +334,8 @@ export const GAME_COPY: Record<Language, {
     moveLater: 'Déplacer après',
   },
   'nl-BE': {
-    gameNames: { safari: 'Woordensafari', train: 'Woordentrein', garden: 'Paren in de tuin', wordPicker: 'Woordballonnen', soundEcho: 'Geluidsecho', dinoPicnic: 'Dino’s picknick' },
-    gameDescriptions: { safari: 'Luister naar een woord en kies het plaatje.', train: 'Luister naar de zin en zet de woorden in de juiste volgorde.', garden: 'Koppel elk plaatje aan het juiste woord.', wordPicker: 'Luister naar het woord en kies de betekenis.', soundEcho: 'Luister naar een rij woorden en herhaal die met de plaatjes.', dinoPicnic: 'Help de dino eten te zoeken tussen de plaatjes.' },
+    gameNames: { safari: 'Woordensafari', train: 'Woordentrein', garden: 'Paren in de tuin', wordPicker: 'Woordballonnen', soundEcho: 'Geluidsecho', dinoPicnic: 'Dino’s picknick', lineMatch: 'Verbind de woorden', drawWord: 'Woordenbord', letterPuzzle: 'Gehusselde letters', wordSort: 'Sorteer de woorden' },
+    gameDescriptions: { safari: 'Luister naar een woord en kies het plaatje.', train: 'Luister naar de zin en zet de woorden in de juiste volgorde.', garden: 'Koppel elk plaatje aan het juiste woord.', wordPicker: 'Luister naar het woord en kies de betekenis.', soundEcho: 'Luister naar een rij woorden en herhaal die met de plaatjes.', dinoPicnic: 'Help de dino eten te zoeken tussen de plaatjes.', lineMatch: 'Verbind elke betekenis met het juiste woord.', drawWord: 'Luister en schrijf het woord op het bord.', letterPuzzle: 'Zet de letters in de goede volgorde.', wordSort: 'Sorteer de woorden: eten of dieren.' },
     welcome: 'Welkom!',
     chooseGame: 'Welk spel kiezen we?',
     changeFlag: 'Taal veranderen',
@@ -282,6 +357,27 @@ export const GAME_COPY: Record<Language, {
     dinoPlate: 'In de mand!',
     dinoCheer: 'Zoek verder naar eten!',
     dinoYum: 'Wat een lekkere picknick!',
+    lineMatchProgress: 'Paren verbonden',
+    lineMatchTitle: 'Verbind de paren!',
+    lineMatchHint: 'Tik op een betekenis en daarna op het woord dat erbij hoort.',
+    lineMatchLeft: 'Betekenis',
+    lineMatchRight: 'Woord',
+    lineMatchDone: 'Alle paren zijn verbonden!',
+    drawWordProgress: 'Woorden geschreven',
+    drawWordTitle: 'Magisch schrijfbord',
+    drawWordHint: 'Luister en schrijf het Vlaamse woord. Je kunt wissen en opnieuw beginnen.',
+    drawCanvasLabel: 'Schrijfbord om het woord te schrijven',
+    drawClear: 'Wissen',
+    drawDone: 'Klaar',
+    drawFinished: 'Goed gedaan! Het woord was',
+    letterPuzzleProgress: 'Woorden gemaakt',
+    letterPuzzleTitle: 'Gehusselde letters!',
+    letterPuzzleHint: 'Tik op de letters en maak het woord dat je hoort.',
+    letterPuzzleSlot: 'Vakje {number}',
+    letterPuzzleReset: 'Opnieuw beginnen',
+    wordSortProgress: 'Woorden gesorteerd',
+    wordSortTitle: 'Sorteer de woorden!',
+    wordSortHint: 'Luister naar het woord en kies eten of dieren.',
     trainProgress: 'Treinreis',
     trainTitle: 'De woordentrein!',
     trainHint: 'Luister naar de zin en zet de woorden op de juiste plek.',
@@ -325,6 +421,10 @@ export const GAME_COPY: Record<Language, {
     wordPickerVoiceGuide: 'Luister naar het Vlaamse woord en tik op de Spaanse betekenis.',
     soundEchoVoiceGuide: 'Luister naar de woordenreeks. Tik daarna de plaatjes in dezelfde volgorde aan. Je kunt opnieuw luisteren.',
     dinoPicnicVoiceGuide: 'De dino heeft honger. Tik op de plaatjes met eten om zijn bord te vullen. Kies een ander plaatje als je je vergist.',
+    lineMatchVoiceGuide: 'Verbind elk woord met de betekenis: tik links en daarna op het passende woord rechts.',
+    drawWordVoiceGuide: 'Luister naar het woord en schrijf het op het bord. Je kunt wissen en opnieuw proberen.',
+    letterPuzzleVoiceGuide: 'Luister naar het woord en tik de letters in de juiste volgorde aan. Je kunt letters verwijderen.',
+    wordSortVoiceGuide: 'Luister naar elk woord en sorteer het bij eten of dieren.',
     sayWord: 'Het woord is',
     orderSentence: 'Sleep de woorden naar de juiste plek.',
     sentencePrompt: 'Maak deze zin:',
@@ -345,8 +445,8 @@ export const GAME_COPY: Record<Language, {
     moveLater: 'Later zetten',
   },
   ar: {
-    gameNames: { safari: 'سفاري الكلمات', train: 'قطار الكلمات', garden: 'حديقة الأزواج', wordPicker: 'بالونات الكلمات', soundEcho: 'صدى الأصوات', dinoPicnic: 'نزهة الديناصور' },
-    gameDescriptions: { safari: 'استمع إلى كلمة واختر الصورة.', train: 'استمع إلى الجملة ورتّب كلماتها.', garden: 'اربط كل صورة بكلمتها.', wordPicker: 'استمع إلى الكلمة واختر معناها.', soundEcho: 'استمع إلى سلسلة كلمات وكررها بالصور.', dinoPicnic: 'ساعد الديناصور في العثور على الطعام بين الصور.' },
+    gameNames: { safari: 'سفاري الكلمات', train: 'قطار الكلمات', garden: 'حديقة الأزواج', wordPicker: 'بالونات الكلمات', soundEcho: 'صدى الأصوات', dinoPicnic: 'نزهة الديناصور', lineMatch: 'صِل الكلمات', drawWord: 'لوحة الكلمات', letterPuzzle: 'رتّب الحروف', wordSort: 'صنّف الكلمات' },
+    gameDescriptions: { safari: 'استمع إلى كلمة واختر الصورة.', train: 'استمع إلى الجملة ورتّب كلماتها.', garden: 'اربط كل صورة بكلمتها.', wordPicker: 'استمع إلى الكلمة واختر معناها.', soundEcho: 'استمع إلى سلسلة كلمات وكررها بالصور.', dinoPicnic: 'ساعد الديناصور في العثور على الطعام بين الصور.', lineMatch: 'صِل كل معنى بالكلمة المناسبة.', drawWord: 'استمع واكتب الكلمة على اللوحة.', letterPuzzle: 'رتّب الحروف لتكوين الكلمة.', wordSort: 'صنّف الكلمات: طعام أم حيوانات؟' },
     welcome: 'أهلاً وسهلاً!',
     chooseGame: 'أي لعبة نختار؟',
     changeFlag: 'تغيير اللغة',
@@ -368,6 +468,27 @@ export const GAME_COPY: Record<Language, {
     dinoPlate: 'إلى السلة!',
     dinoCheer: 'واصل البحث عن الطعام!',
     dinoYum: 'يا لها من وجبة لذيذة!',
+    lineMatchProgress: 'أزواج متصلة',
+    lineMatchTitle: 'صِل الأزواج!',
+    lineMatchHint: 'المس المعنى ثم المس الكلمة المناسبة لتوصيلهما.',
+    lineMatchLeft: 'المعنى',
+    lineMatchRight: 'الكلمة',
+    lineMatchDone: 'تم توصيل كل الأزواج!',
+    drawWordProgress: 'كلمات كتبتها',
+    drawWordTitle: 'لوحة سحرية',
+    drawWordHint: 'استمع واكتب الكلمة الفلمنكية. يمكنك المسح والمحاولة مجدداً.',
+    drawCanvasLabel: 'لوحة لكتابة الكلمة',
+    drawClear: 'امسح',
+    drawDone: 'انتهيت',
+    drawFinished: 'أحسنت! كانت الكلمة',
+    letterPuzzleProgress: 'كلمات كوّنتها',
+    letterPuzzleTitle: 'حروف مبعثرة!',
+    letterPuzzleHint: 'المس الحروف لتكوين الكلمة التي تسمعها.',
+    letterPuzzleSlot: 'مكان {number}',
+    letterPuzzleReset: 'ابدأ من جديد',
+    wordSortProgress: 'كلمات صنّفتها',
+    wordSortTitle: 'رتّب الكلمات!',
+    wordSortHint: 'استمع إلى الكلمة واختر الطعام أو الحيوانات.',
     trainProgress: 'رحلة القطار',
     trainTitle: 'قطار الكلمات!',
     trainHint: 'استمع إلى الجملة وضع الكلمات في ترتيبها.',
@@ -411,6 +532,10 @@ export const GAME_COPY: Record<Language, {
     wordPickerVoiceGuide: 'استمع إلى الكلمة الفلمنكية والمس معناها بالإسبانية.',
     soundEchoVoiceGuide: 'استمع إلى سلسلة الكلمات ثم المس الصور بالترتيب نفسه. يمكنك الاستماع مرة أخرى.',
     dinoPicnicVoiceGuide: 'الديناصور جائع. المس صور الطعام لملء طبقه. إذا أخطأت، جرّب صورة أخرى.',
+    lineMatchVoiceGuide: 'صِل كل كلمة بمعناها: المس خياراً على اليسار ثم الكلمة المناسبة على اليمين.',
+    drawWordVoiceGuide: 'استمع إلى الكلمة واكتبها على اللوحة. يمكنك المسح والمحاولة مرة أخرى.',
+    letterPuzzleVoiceGuide: 'استمع إلى الكلمة والمس حروفها بالترتيب الصحيح. يمكنك إزالة الحروف.',
+    wordSortVoiceGuide: 'استمع إلى كل كلمة وصنّفها طعاماً أو حيواناً.',
     sayWord: 'الكلمة هي',
     orderSentence: 'اسحب الكلمات إلى ترتيبها الصحيح.',
     sentencePrompt: 'رتّب هذه الجملة:',

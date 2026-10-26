@@ -7,13 +7,17 @@ import { LANGUAGES } from '../data/languages';
 import { GAME_COPY } from '../data/gameCopy';
 import { useSound } from '../hooks/useSound';
 
-const GAMES: Array<{ id: GameMechanic; emoji: string; art: string; color: string }> = [
-  { id: 'safari', emoji: '🦒', art: '/games/safari.svg', color: 'from-lime-100 to-emerald-100' },
-  { id: 'word_train', emoji: '🚂', art: '/games/train.svg', color: 'from-sky-100 to-blue-100' },
-  { id: 'garden_match', emoji: '🌼', art: '/games/garden.svg', color: 'from-amber-100 to-pink-100' },
-  { id: 'word_picker', emoji: '🎈', art: '/games/balloons.svg', color: 'from-violet-100 to-pink-100' },
-  { id: 'sound_echo', emoji: '🎵', art: '/games/echo.svg', color: 'from-fuchsia-100 to-sky-100' },
-  { id: 'dino_picnic', emoji: '🦖', art: '/games/dino.svg', color: 'from-lime-100 to-yellow-100' },
+const GAMES: Array<{ id: GameMechanic; art: string; color: string }> = [
+  { id: 'safari', art: '/games/safari.svg', color: 'from-lime-100 to-emerald-100' },
+  { id: 'word_train', art: '/games/train.svg', color: 'from-sky-100 to-blue-100' },
+  { id: 'garden_match', art: '/games/garden.svg', color: 'from-amber-100 to-pink-100' },
+  { id: 'word_picker', art: '/games/balloons.svg', color: 'from-violet-100 to-pink-100' },
+  { id: 'sound_echo', art: '/games/echo.svg', color: 'from-fuchsia-100 to-sky-100' },
+  { id: 'dino_picnic', art: '/games/dino.svg', color: 'from-lime-100 to-yellow-100' },
+  { id: 'line_match', art: '/games/lines.svg', color: 'from-sky-100 to-indigo-100' },
+  { id: 'draw_word', art: '/games/draw.svg', color: 'from-teal-100 to-cyan-100' },
+  { id: 'letter_puzzle', art: '/games/letters.svg', color: 'from-orange-100 to-rose-100' },
+  { id: 'word_sort', art: '/games/sort.svg', color: 'from-lime-100 to-emerald-100' },
 ];
 
 export const WorldHub: React.FC = () => {
@@ -37,7 +41,15 @@ export const WorldHub: React.FC = () => {
             ? copy.gameNames.wordPicker
             : game.id === 'sound_echo'
               ? copy.gameNames.soundEcho
-              : copy.gameNames.dinoPicnic,
+              : game.id === 'dino_picnic'
+                ? copy.gameNames.dinoPicnic
+                : game.id === 'line_match'
+                  ? copy.gameNames.lineMatch
+                  : game.id === 'draw_word'
+                    ? copy.gameNames.drawWord
+                    : game.id === 'letter_puzzle'
+                      ? copy.gameNames.letterPuzzle
+                      : copy.gameNames.wordSort,
     description: game.id === 'safari'
       ? copy.gameDescriptions.safari
       : game.id === 'word_train'
@@ -48,7 +60,15 @@ export const WorldHub: React.FC = () => {
             ? copy.gameDescriptions.wordPicker
             : game.id === 'sound_echo'
               ? copy.gameDescriptions.soundEcho
-              : copy.gameDescriptions.dinoPicnic,
+              : game.id === 'dino_picnic'
+                ? copy.gameDescriptions.dinoPicnic
+                : game.id === 'line_match'
+                  ? copy.gameDescriptions.lineMatch
+                  : game.id === 'draw_word'
+                    ? copy.gameDescriptions.drawWord
+                    : game.id === 'letter_puzzle'
+                      ? copy.gameDescriptions.letterPuzzle
+                      : copy.gameDescriptions.wordSort,
   }));
 
   const playGame = (gameId: GameMechanic) => {
@@ -96,7 +116,6 @@ export const WorldHub: React.FC = () => {
           >
             <div className={`relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br ${game.color}`}>
               <img src={game.art} alt="" className="h-24 w-24 object-contain transition-transform duration-300 group-hover:scale-105 sm:h-36 sm:w-full lg:h-44" />
-              <span className="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full bg-white text-sm shadow-sm sm:right-3 sm:top-3 sm:h-11 sm:w-11 sm:text-xl" aria-hidden="true">{game.emoji}</span>
             </div>
             <div className="min-w-0 flex-1 sm:block">
               <h2 className="text-base font-black leading-tight text-slate-900 sm:mt-4 sm:text-xl">{game.name}</h2>

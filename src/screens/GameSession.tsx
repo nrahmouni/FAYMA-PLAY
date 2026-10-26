@@ -51,7 +51,15 @@ export const GameSession: React.FC = () => {
             ? copy.soundEchoVoiceGuide
             : activeGameId === 'dino_picnic'
               ? copy.dinoPicnicVoiceGuide
-              : copy.trainVoiceGuide;
+              : activeGameId === 'line_match'
+                ? copy.lineMatchVoiceGuide
+                : activeGameId === 'draw_word'
+                  ? copy.drawWordVoiceGuide
+                  : activeGameId === 'letter_puzzle'
+                    ? copy.letterPuzzleVoiceGuide
+                    : activeGameId === 'word_sort'
+                      ? copy.wordSortVoiceGuide
+                      : copy.trainVoiceGuide;
     speak(
       `${copy.ready.replace('{name}', activePlayer.displayName)} ${copy.startTurn} ${guide}`,
       language,
