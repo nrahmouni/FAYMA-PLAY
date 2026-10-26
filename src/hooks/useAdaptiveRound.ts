@@ -24,11 +24,21 @@ export function useAdaptiveRound() {
   const selectRoundWords = useCallback((player: PlayerProfile): Word[] => {
     if (!worldPool.length) return [];
 
+    const difficulty = difficulties[player.uid] || 1;
+    const beginnerWords = worldPool.filter(word =>
+      ['animales', 'comida', 'colores'].includes(word.theme) && !word.text.trim().includes(' '),
+    );
+    const singleWords = worldPool.filter(word => !word.text.trim().includes(' '));
+    const practicePool = difficulty === 1 && beginnerWords.length >= 3
+      ? beginnerWords
+      : difficulty <= 2 && singleWords.length >= 3
+        ? singleWords
+        : worldPool;
     const newOrLearning: Word[] = [];
     const reviewWords: Word[] = [];
     const masteredWords: Word[] = [];
 
-    worldPool.forEach(word => {
+    practicePool.forEach(word => {
       const m = player.mastery[word.id];
       if (!m || m.level === 'new' || m.level === 'learning') {
         newOrLearning.push(word);
@@ -48,7 +58,7 @@ export function useAdaptiveRound() {
 
     // Child-friendly sessions: start with a short, encouraging deck of 4-6 words
     // so levels feel readable, fair, and actually teach the target vocabulary.
-    const targetCount = Math.min(6, Math.max(4, worldPool.length));
+    const targetCount = Math.min(6, difficulty + 2, practicePool.length);
 
     if (shuffledNew.length > 0) {
       selected.push(...shuffledNew.slice(0, Math.min(3, targetCount)));
@@ -71,11 +81,11 @@ export function useAdaptiveRound() {
 
     // Fallback if pool is small
     if (selected.length === 0) {
-      return worldPool.slice(0, 6);
+      return practicePool.slice(0, targetCount);
     }
 
     return selected;
-  }, [worldPool]);
+  }, [difficulties, worldPool]);
 
   // Get current difficulty for player
   const getPlayerDifficulty = useCallback((playerUid: string): DifficultyLevel => {

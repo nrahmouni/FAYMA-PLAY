@@ -2,7 +2,11 @@ import { useRef, useCallback, useState, useEffect } from 'react';
 
 class SoundSynthesizer {
   private ctx: AudioContext | null = null;
+  private musicOscillator: OscillatorNode | null = null;
+  private musicGain: GainNode | null = null;
+  private musicTimer: number | null = null;
   public isMuted: boolean = false;
+  public musicEnabled: boolean = true;
 
   constructor() {
     // Lazy AudioContext to satisfy autoplay policies
@@ -17,6 +21,58 @@ class SoundSynthesizer {
     }
     if (this.ctx && this.ctx.state === 'suspended') {
       this.ctx.resume().catch(() => {});
+    }
+  }
+
+  public startBackgroundMusic() {
+    if (this.isMuted || !this.musicEnabled || this.musicOscillator) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const notes = [523.25, 659.25, 587.33, 783.99, 659.25, 587.33, 523.25, 392];
+    const oscillator = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(notes[0], this.ctx.currentTime);
+    gain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.018, this.ctx.currentTime + 0.8);
+    oscillator.connect(gain);
+    gain.connect(this.ctx.destination);
+    oscillator.start();
+    this.musicOscillator = oscillator;
+    this.musicGain = gain;
+
+    let noteIndex = 0;
+    this.musicTimer = window.setInterval(() => {
+      if (!this.ctx || !this.musicOscillator) return;
+      noteIndex = (noteIndex + 1) % notes.length;
+      const now = this.ctx.currentTime;
+      this.musicOscillator.frequency.setTargetAtTime(notes[noteIndex], now, 0.12);
+    }, 600);
+  }
+
+  public stopBackgroundMusic() {
+    if (this.musicTimer !== null) {
+      window.clearInterval(this.musicTimer);
+      this.musicTimer = null;
+    }
+    if (this.musicGain && this.ctx) {
+      this.musicGain.gain.setTargetAtTime(0.0001, this.ctx.currentTime, 0.04);
+    }
+    if (this.musicOscillator) {
+      const oscillator = this.musicOscillator;
+      const gain = this.musicGain;
+      window.setTimeout(() => {
+        try {
+          oscillator.stop();
+          oscillator.disconnect();
+          gain?.disconnect();
+        } catch {
+          // The oscillator may already have stopped during page teardown.
+        }
+      }, 180);
+      this.musicOscillator = null;
+      this.musicGain = null;
     }
   }
 
@@ -238,17 +294,27 @@ export function isAudioMuted() {
 
 export function useSound() {
   const [muted, setMuted] = useState(synthInstance.isMuted);
+  const [musicOn, setMusicOn] = useState(synthInstance.musicEnabled);
 
   const toggleMute = useCallback(() => {
     synthInstance.isMuted = !synthInstance.isMuted;
     if (synthInstance.isMuted && typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
+    if (synthInstance.isMuted) synthInstance.stopBackgroundMusic();
+    else synthInstance.startBackgroundMusic();
     setMuted(synthInstance.isMuted);
   }, []);
 
   const unlockAudio = useCallback(() => {
     synthInstance.init();
+    synthInstance.startBackgroundMusic();
+  }, []);
+  const toggleMusic = useCallback(() => {
+    synthInstance.musicEnabled = !synthInstance.musicEnabled;
+    if (synthInstance.musicEnabled) synthInstance.startBackgroundMusic();
+    else synthInstance.stopBackgroundMusic();
+    setMusicOn(synthInstance.musicEnabled);
   }, []);
   const playSuccess = useCallback(() => synthInstance.playSuccess(), []);
   const playError = useCallback(() => synthInstance.playError(), []);
@@ -262,7 +328,9 @@ export function useSound() {
 
   return {
     isMuted: muted,
+    musicOn,
     toggleMute,
+    toggleMusic,
     unlockAudio,
     playSuccess,
     playError,

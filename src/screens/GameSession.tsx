@@ -7,6 +7,7 @@ import { useSound } from '../hooks/useSound';
 import { InteractiveChallengeModal } from '../modals/InteractiveChallengeModal';
 import { TurnResultModal } from '../modals/TurnResultModal';
 import { GameProps, GameResult } from '../types';
+import { GAME_COPY } from '../data/gameCopy';
 
 export const GameSession: React.FC = () => {
   const language = useGameStore(s => s.language);
@@ -25,6 +26,7 @@ export const GameSession: React.FC = () => {
   const profiles = useProfileStore(s => s.profiles);
   const { speak } = useSpeech();
   const { playTurnStart } = useSound();
+  const copy = GAME_COPY[language];
   const addRewards = useProfileStore(s => s.addRewards);
   const { selectRoundWords, getPlayerDifficulty, handleAnswer, adaptDifficultyAfterTurn } = useAdaptiveRound();
 
@@ -37,8 +39,8 @@ export const GameSession: React.FC = () => {
     if (sessionPhase !== 'CHALLENGE_PHASE' || !activePlayer || announcedTurn.current === turnKey) return;
     announcedTurn.current = turnKey;
     playTurnStart();
-    speak(`¿Estás preparado, ${activePlayer.displayName}? ¡Empieza tu turno!`, 'es');
-  }, [activePlayer?.displayName, playTurnStart, sessionPhase, speak, turnKey]);
+    speak(`${copy.ready.replace('{name}', activePlayer.displayName)} ${copy.startTurn}`, language);
+  }, [activePlayer?.displayName, copy, language, playTurnStart, sessionPhase, speak, turnKey]);
 
   const roundWords = useMemo(
     () => activePlayer ? selectRoundWords(activePlayer) : [],

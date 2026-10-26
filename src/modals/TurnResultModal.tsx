@@ -6,6 +6,7 @@ import { useSpeech } from '../hooks/useSpeech';
 import { useSound } from '../hooks/useSound';
 import { VOCABULARY_BANK } from '../data/vocabulary';
 import { JuiceBurst } from '../components/JuiceBurst';
+import { GAME_COPY } from '../data/gameCopy';
 
 interface TurnResultModalProps {
   result: GameResult;
@@ -30,26 +31,20 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
   const { playCardFlip, playFanfare, playSuccess } = useSound();
   const celebrationPlayed = useRef(false);
   const turnAnnounced = useRef(false);
+  const copy = GAME_COPY[language];
 
   const total = result.correct + result.wrong;
   const accuracy = total > 0 ? Math.round((result.correct / total) * 100) : 100;
   const isArabic = language === 'ar';
-  const celebrationCopy: Record<Language, string> = {
-    es: '¡Muy bien! ¡Has completado la misión!',
-    ar: 'أحسنت! لقد أكملت المهمة!',
-    fr: 'Bravo ! Tu as terminé la mission !',
-    'nl-BE': 'Goed gedaan! Je hebt de missie voltooid!',
-  };
-
   useEffect(() => {
     if (turnAnnounced.current) return;
     turnAnnounced.current = true;
     playSuccess();
     const message = isFinalTurn
-      ? `¡Muy bien, ${player.displayName}! Terminaste todas las rondas. ¡Lo habéis hecho genial!`
-      : `¡Muy bien, ${player.displayName}! Ahora le toca a ${nextPlayerName}. ¿Estás preparado, ${nextPlayerName}?`;
-    speak(message, 'es');
-  }, [isFinalTurn, nextPlayerName, playSuccess, player.displayName, speak]);
+      ? `${copy.goodWork.replace('{name}', player.displayName)} ${copy.finished}`
+      : `${copy.goodWork.replace('{name}', player.displayName)} ${copy.nextTurn.replace('{name}', nextPlayerName || '')}`;
+    speak(message, language);
+  }, [copy, isFinalTurn, language, nextPlayerName, playSuccess, player.displayName, speak]);
 
   useEffect(() => {
     if (!missionCompleted || celebrationPlayed.current) return;
@@ -63,7 +58,7 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
     .filter((w): w is Word => Boolean(w));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-sky-100/80 p-3 backdrop-blur-sm animate-fadeIn sm:p-5">
+    <div lang={language} dir={isArabic ? 'rtl' : 'ltr'} className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-sky-100/80 p-3 backdrop-blur-sm animate-fadeIn sm:p-5">
       <JuiceBurst trigger={missionCompleted} type="victory" />
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
@@ -79,12 +74,12 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
           >
             <div className="text-xs font-black uppercase tracking-[.18em] text-amber-800">¡Has ganado una estrella!</div>
             <div className="mt-1 flex items-center justify-center gap-2 text-sm font-bold text-slate-800">
-              <span>{celebrationCopy[language]}</span>
+              <span>{copy.correct}</span>
               <button
                 type="button"
-                onClick={() => speak(celebrationCopy[language], language)}
+                onClick={() => speak(copy.correct, language)}
                 className="rounded-lg p-1.5 text-sky-700 transition hover:bg-white/70"
-                aria-label="Escuchar felicitación"
+                aria-label={copy.listen}
               >
                 <Volume2 className="h-4 w-4" />
               </button>
@@ -95,15 +90,11 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
           {accuracy >= 75 ? '🏆' : accuracy >= 40 ? '👍' : '💪'}
         </div>
 
-        <h2 className="mb-1 text-2xl font-black text-slate-900 sm:text-3xl">
-          {accuracy === 100
-            ? '¡Ronda Perfecta!'
-            : accuracy >= 70
-            ? '¡Excelente Trabajo!'
-            : '¡Buen Intento!'}
+        <h2 lang={language} className="mb-1 text-2xl font-black text-slate-900 sm:text-3xl">
+          {accuracy === 100 ? copy.perfectRound : accuracy >= 70 ? copy.excellentWork : copy.goodTry}
         </h2>
         <p className="mb-5 text-sm text-slate-600">
-          ¡Buen trabajo, <strong className="text-emerald-800">{player.displayName}</strong>!
+          {copy.goodWork.replace('{name}', player.displayName)}
         </p>
 
         {/* Stats Grid */}
@@ -111,13 +102,13 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
           <div className="flex flex-col items-center rounded-2xl border border-emerald-100 bg-emerald-50 p-3">
             <CheckCircle2 className="mb-1 h-5 w-5 text-emerald-600" />
             <span className="text-lg font-black text-slate-900">{result.correct}</span>
-            <span className="text-[10px] font-bold uppercase text-slate-600">Aciertos</span>
+            <span className="text-[10px] font-bold uppercase text-slate-600">{copy.correctAnswers}</span>
           </div>
 
           <div className="flex flex-col items-center rounded-2xl border border-amber-100 bg-amber-50 p-3">
             <Coins className="mb-1 h-5 w-5 text-amber-600" />
             <span className="text-lg font-black text-amber-800">+{result.coinsEarned}</span>
-            <span className="text-[10px] font-bold uppercase text-slate-600">Monedas</span>
+            <span className="text-[10px] font-bold uppercase text-slate-600">{copy.coins}</span>
           </div>
         </div>
 
@@ -125,7 +116,7 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
         {wordsSeenList.length > 0 && (
           <div className="w-full text-left mb-6">
             <span className="mb-2 block px-1 text-xs font-extrabold uppercase tracking-wider text-slate-600">
-              Palabras de esta ronda:
+              {copy.roundWords}:
             </span>
             <div className="space-y-2 max-h-36 overflow-y-auto pr-1">
               {wordsSeenList.map(w => (
@@ -157,7 +148,7 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
                       speak(w.audioText || w.text, language);
                     }}
                     className="rounded-lg p-2 text-sky-700 transition hover:bg-sky-100 active:scale-95"
-                    title="Escuchar"
+                    title={copy.listen}
                   >
                     <Volume2 className="w-4 h-4" />
                   </button>
@@ -173,7 +164,7 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
           onClick={onContinue}
           className="flex min-h-14 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-lime-500 px-6 py-4 text-lg font-black text-white shadow-[0_5px_0_#35824a] transition hover:brightness-105 active:translate-y-1 active:shadow-none"
         >
-          <span>{isFinalTurn ? '¡Ver celebración!' : '¡Siguiente turno!'}</span>
+          <span>{copy.continue}</span>
           <ArrowRight className="w-6 h-6" />
         </button>
       </motion.div>

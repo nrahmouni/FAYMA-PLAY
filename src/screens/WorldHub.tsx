@@ -4,12 +4,13 @@ import { ArrowLeft, BookOpen, Play, Sparkles } from 'lucide-react';
 import { GameMechanic, useGameStore } from '../store/gameStore';
 import { useProfileStore } from '../store/profileStore';
 import { LANGUAGES } from '../data/languages';
+import { GAME_COPY } from '../data/gameCopy';
 import { useSound } from '../hooks/useSound';
 
-const GAMES: Array<{ id: GameMechanic; name: string; description: string; emoji: string; art: string; color: string }> = [
-  { id: 'safari', name: 'Safari de palabras', description: 'Encuentra el dibujo que corresponde a la palabra.', emoji: '🦒', art: '/games/safari.svg', color: 'from-lime-100 to-emerald-100' },
-  { id: 'word_train', name: 'Tren de palabras', description: 'Completa la frase para ayudar al tren a viajar.', emoji: '🚂', art: '/games/train.svg', color: 'from-sky-100 to-blue-100' },
-  { id: 'garden_match', name: 'Jardín de parejas', description: 'Encuentra las parejas y haz crecer el jardín.', emoji: '🌼', art: '/games/garden.svg', color: 'from-amber-100 to-pink-100' },
+const GAMES: Array<{ id: GameMechanic; emoji: string; art: string; color: string }> = [
+  { id: 'safari', emoji: '🦒', art: '/games/safari.svg', color: 'from-lime-100 to-emerald-100' },
+  { id: 'word_train', emoji: '🚂', art: '/games/train.svg', color: 'from-sky-100 to-blue-100' },
+  { id: 'garden_match', emoji: '🌼', art: '/games/garden.svg', color: 'from-amber-100 to-pink-100' },
 ];
 
 export const WorldHub: React.FC = () => {
@@ -20,6 +21,12 @@ export const WorldHub: React.FC = () => {
   const profiles = useProfileStore(state => state.profiles);
   const { unlockAudio } = useSound();
   const meta = LANGUAGES[language];
+  const copy = GAME_COPY[language];
+  const localizedGames = GAMES.map(game => ({
+    ...game,
+    name: game.id === 'safari' ? copy.gameNames.safari : game.id === 'word_train' ? copy.gameNames.train : copy.gameNames.garden,
+    description: game.id === 'safari' ? copy.gameDescriptions.safari : game.id === 'word_train' ? copy.gameDescriptions.train : copy.gameDescriptions.garden,
+  }));
 
   const playGame = (gameId: GameMechanic) => {
     unlockAudio();
@@ -34,7 +41,7 @@ export const WorldHub: React.FC = () => {
         onClick={() => setScreen('HOME')}
         className="mb-5 inline-flex min-h-11 w-fit items-center gap-2 rounded-xl px-3 text-sm font-bold text-slate-700 transition hover:bg-white/80"
       >
-        <ArrowLeft className="h-4 w-4" /> Cambiar bandera
+        <ArrowLeft className="h-4 w-4" /> {copy.changeFlag}
       </button>
 
       <header className="mb-6 flex items-center gap-4 rounded-[2rem] border-4 border-white bg-gradient-to-r from-yellow-50 via-white to-sky-50 p-4 shadow-sm sm:mb-8 sm:p-6">
@@ -42,17 +49,17 @@ export const WorldHub: React.FC = () => {
           {meta.flag}
         </span>
         <div className="min-w-0 flex-1">
-          <span className="text-xs font-black uppercase tracking-wider text-emerald-700">¡Bienvenidos, {profiles.map(profile => profile.displayName).join(' y ')}!</span>
+          <span className="text-xs font-black uppercase tracking-wider text-emerald-700">{copy.welcome} {profiles.map(profile => profile.displayName).join(copy.joiner)}</span>
           <h1 className="mt-1 text-2xl font-black text-slate-900 sm:text-4xl">
-            ¿Qué juego elegimos?
+            {copy.chooseGame}
           </h1>
-          <p className="mt-1 text-sm font-semibold text-slate-600">{meta.country} · {meta.name}</p>
+          <p className="mt-1 text-sm font-semibold text-slate-600">{copy.place} · {meta.nativeName}</p>
         </div>
         <span className="hidden text-4xl sm:block" aria-hidden="true">🎈</span>
       </header>
 
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label={`Juegos en ${meta.name}`}>
-        {GAMES.map((game, index) => (
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label={`${copy.gamesIn} ${meta.nativeName}`}>
+        {localizedGames.map((game, index) => (
           <motion.button
             key={game.id}
             type="button"
@@ -72,7 +79,7 @@ export const WorldHub: React.FC = () => {
               <h2 className="text-base font-black leading-tight text-slate-900 sm:mt-4 sm:text-xl">{game.name}</h2>
               <p className="mt-1 hidden min-h-12 text-sm leading-6 text-slate-600 sm:block">{game.description}</p>
             <span className="mt-2 flex min-h-10 items-center justify-center gap-2 rounded-xl bg-emerald-500 text-sm font-black text-white shadow-[0_3px_0_#328248] transition group-hover:bg-emerald-600 group-active:translate-y-1 group-active:shadow-none sm:mt-3 sm:min-h-12 sm:rounded-2xl sm:text-base">
-              <Play className="h-5 w-5 fill-current" /> ¡Jugar!
+              <Play className="h-5 w-5 fill-current" /> {copy.play}
             </span>
             </div>
           </motion.button>
@@ -89,8 +96,8 @@ export const WorldHub: React.FC = () => {
         >
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-3xl shadow-sm" aria-hidden="true">🦁</span>
           <span className="min-w-0 flex-1">
-            <span className="block text-lg font-black text-slate-900">Aprender flamenco</span>
-            <span className="mt-0.5 block text-sm font-semibold text-slate-600">120 palabras, frases y un mini quiz</span>
+            <span className="block text-lg font-black text-slate-900">{copy.learn}</span>
+            <span className="mt-0.5 block text-sm font-semibold text-slate-600">{copy.learnDescription}</span>
           </span>
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-emerald-700 shadow-sm" aria-hidden="true">
             <BookOpen className="h-5 w-5" />
@@ -99,7 +106,7 @@ export const WorldHub: React.FC = () => {
       )}
 
       <div className="mt-6 flex items-center justify-center gap-2 text-center text-xs font-bold text-slate-500">
-        <Sparkles className="h-4 w-4 text-amber-500" /> {profiles.length} {profiles.length === 1 ? 'jugador' : 'jugadores'} · Turnos por rondas · ¡Sin prisas!
+        <Sparkles className="h-4 w-4 text-amber-500" /> {profiles.length} {profiles.length === 1 ? copy.player : copy.players} · {copy.turnsNote}
       </div>
     </main>
   );

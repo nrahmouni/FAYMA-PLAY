@@ -1,19 +1,22 @@
 import React from 'react';
+import { GAME_COPY } from '../data/gameCopy';
+import { Language } from '../types';
 
 interface GameProgressProps {
   current: number;
   total: number;
   label: string;
   icon: string;
+  language?: Language;
 }
 
-export const GameProgress: React.FC<GameProgressProps> = ({ current, total, label, icon }) => (
-  <div className="mb-4 flex items-center gap-3 rounded-2xl bg-white/90 px-4 py-3 shadow-sm ring-1 ring-emerald-100">
+export const GameProgress: React.FC<GameProgressProps> = ({ current, total, label, icon, language = 'es' }) => (
+  <div lang={language} dir={language === 'ar' ? 'rtl' : 'ltr'} className="mb-4 flex items-center gap-3 rounded-2xl bg-white/90 px-4 py-3 shadow-sm ring-1 ring-emerald-100">
     <span className="text-2xl" aria-hidden="true">{icon}</span>
     <div className="min-w-0 flex-1">
       <div className="mb-1 flex justify-between gap-2 text-xs font-extrabold text-emerald-900">
         <span>{label}</span>
-        <span>{Math.min(current, total)} de {total}</span>
+        <span>{Math.min(current, total)}/{total}</span>
       </div>
       <div
         className="h-2.5 overflow-hidden rounded-full bg-emerald-100"
@@ -32,9 +35,9 @@ export const GameProgress: React.FC<GameProgressProps> = ({ current, total, labe
   </div>
 );
 
-export const EmptyGame: React.FC = () => (
-  <div className="w-full rounded-3xl bg-white p-8 text-center shadow-sm ring-1 ring-amber-100">
+export const EmptyGame: React.FC<{ language?: Language }> = ({ language = 'es' }) => (
+  <div lang={language} dir={language === 'ar' ? 'rtl' : 'ltr'} className="w-full rounded-3xl bg-white p-8 text-center shadow-sm ring-1 ring-amber-100">
     <span className="text-5xl" aria-hidden="true">🌱</span>
-    <p className="mt-3 font-bold text-slate-700">Estamos preparando nuevas palabras para este juego.</p>
+    <p className="mt-3 font-bold text-slate-700">{GAME_COPY[language].empty}</p>
   </div>
 );

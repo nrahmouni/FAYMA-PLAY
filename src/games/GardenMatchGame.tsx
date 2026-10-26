@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { GameProps } from '../types';
 import { shuffleArray } from '../lib/utils';
+import { GAME_COPY } from '../data/gameCopy';
+import { useSpeech } from '../hooks/useSpeech';
 import { GameProgress, EmptyGame } from './GameProgress';
 import { useGameProgress } from './useGameProgress';
 
@@ -13,8 +15,8 @@ interface FlowerCard {
   language?: string;
 }
 
-export const GardenMatchGame: React.FC<GameProps> = ({ words, onCorrect, onWrong, onComplete }) => {
-  const roundWords = useMemo(() => words.slice(0, Math.min(5, words.length)), [words]);
+export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, language, onCorrect, onWrong, onComplete }) => {
+  const roundWords = useMemo(() => words.slice(0, Math.min(difficulty + 2, words.length)), [difficulty, words]);
   const cards = useMemo(() => shuffleArray(roundWords.flatMap<FlowerCard>(word => [
     { id: `${word.id}-picture`, wordId: word.id, kind: 'picture', content: word.imageUrl || '🌱' },
     { id: `${word.id}-word`, wordId: word.id, kind: 'word', content: word.text, language: word.language },
@@ -24,6 +26,8 @@ export const GardenMatchGame: React.FC<GameProps> = ({ words, onCorrect, onWrong
   const [attempts, setAttempts] = useState(0);
   const [locked, setLocked] = useState(false);
   const { recordAnswer, finish } = useGameProgress('garden_match', { onCorrect, onWrong, onComplete });
+  const { speak } = useSpeech();
+  const copy = GAME_COPY[language];
 
   useEffect(() => {
     if (openIds.length !== 2) return;
@@ -52,14 +56,14 @@ export const GardenMatchGame: React.FC<GameProps> = ({ words, onCorrect, onWrong
 
   const completedPairs = matchedIds.length / 2;
   return (
-    <section className="mx-auto w-full max-w-3xl rounded-[2rem] bg-[#fffaf4] p-4 shadow-[0_18px_45px_rgba(150,97,58,.13)] ring-1 ring-amber-100 sm:p-6">
-      <GameProgress current={completedPairs} total={roundWords.length} label="Flores que ya crecieron" icon="🌼" />
+    <section lang={language} dir={language === 'ar' ? 'rtl' : 'ltr'} className="mx-auto w-full max-w-3xl rounded-[2rem] bg-[#fffaf4] p-4 shadow-[0_18px_45px_rgba(150,97,58,.13)] ring-1 ring-amber-100 sm:p-6">
+      <GameProgress current={completedPairs} total={roundWords.length} label={copy.gardenProgress} icon="🌼" language={language} />
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-3xl bg-gradient-to-r from-amber-100 via-pink-50 to-lime-100 p-4">
         <div>
-          <h2 className="text-xl font-black text-slate-900 sm:text-2xl">¡Despierta el jardín!</h2>
-          <p className="mt-1 text-sm font-semibold text-slate-600">Busca una flor y su palabra gemela.</p>
+          <h2 className="text-xl font-black text-slate-900 sm:text-2xl">{copy.gardenTitle}</h2>
+          <p className="mt-1 text-sm font-semibold text-slate-600">{copy.gardenHint}</p>
         </div>
-        <div className="rounded-2xl bg-white/80 px-3 py-2 text-sm font-extrabold text-amber-800">Intentos: {attempts}</div>
+        <div className="rounded-2xl bg-white/80 px-3 py-2 text-sm font-extrabold text-amber-800">{copy.attempts}: {attempts}</div>
       </div>
       <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-5 sm:gap-3">
         {cards.map((card, index) => {
@@ -70,7 +74,13 @@ export const GardenMatchGame: React.FC<GameProps> = ({ words, onCorrect, onWrong
               type="button"
               disabled={locked || matchedIds.includes(card.id) || openIds.includes(card.id)}
               whileTap={{ scale: 0.96 }}
-              onClick={() => setOpenIds(ids => [...ids, card.id])}
+              onClick={() => {
+                setOpenIds(ids => [...ids, card.id]);
+                if (card.kind === 'word') {
+                  const word = roundWords.find(item => item.id === card.wordId);
+                  if (word) speak(word.audioText || word.text, language);
+                }
+              }}
               aria-label={open ? (card.kind === 'picture' ? card.content : card.content) : `Flor tapada ${index + 1}`}
               className={`flex aspect-square min-h-20 items-center justify-center rounded-2xl border-2 p-2 text-center shadow-sm transition sm:rounded-3xl ${
                 matchedIds.includes(card.id)
