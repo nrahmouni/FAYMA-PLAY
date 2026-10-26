@@ -169,7 +169,6 @@ export const BubblePopperGame: React.FC<GameProps> = ({ words, difficulty, onCor
           while (row < ROWS - 1 && g.grid[row][col]) row += 1;
           if (g.grid[row][col]) {
             g.misses += 1;
-            callbacks.current.onWrong(shot.word.id);
           } else {
             g.grid[row][col] = { color: shot.color, word: shot.word };
             const group: [number, number][] = [];
@@ -243,7 +242,6 @@ export const BubblePopperGame: React.FC<GameProps> = ({ words, difficulty, onCor
               }));
             } else {
               g.misses += 1;
-              callbacks.current.onWrong(shot.word.id);
               setHud(value => ({ ...value, misses: g.misses, message: 'Rebote. Busca un grupo del mismo color.' }));
             }
           }

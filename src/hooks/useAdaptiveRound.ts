@@ -20,7 +20,7 @@ export function useAdaptiveRound() {
     return matchesTheme.length >= 3 ? matchesTheme : matchesLang;
   }, [language, activeWorldId]);
 
-  // Select 2-3 target words tailored to the current player's SRS status
+  // Keep a larger deck so each level offers enough varied practice.
   const selectRoundWords = useCallback((player: PlayerProfile): Word[] => {
     if (!worldPool.length) return [];
 
@@ -41,33 +41,33 @@ export function useAdaptiveRound() {
 
     const selected: Word[] = [];
 
-    // Aim for 60% new/learning (approx 2 words)
+    // Balance new vocabulary with spaced review.
     const shuffledNew = shuffleArray(newOrLearning);
     const shuffledReview = shuffleArray(reviewWords);
     const shuffledMastered = shuffleArray(masteredWords);
 
     if (shuffledNew.length > 0) {
-      selected.push(...shuffledNew.slice(0, 2));
+      selected.push(...shuffledNew.slice(0, 3));
     }
 
-    if (shuffledReview.length > 0 && selected.length < 3) {
-      selected.push(shuffledReview[0]);
+    if (shuffledReview.length > 0 && selected.length < 6) {
+      selected.push(...shuffledReview.slice(0, 2));
     }
 
     // Fill remaining spots if needed
-    if (selected.length < 3) {
-      const remaining = [...shuffledNew.slice(2), ...shuffledReview.slice(1), ...shuffledMastered];
+    if (selected.length < 6) {
+      const remaining = [...shuffledNew.slice(3), ...shuffledReview.slice(2), ...shuffledMastered];
       for (const w of remaining) {
         if (!selected.some(s => s.id === w.id)) {
           selected.push(w);
-          if (selected.length >= 3) break;
+          if (selected.length >= 6) break;
         }
       }
     }
 
     // Fallback if pool is small
     if (selected.length === 0) {
-      return worldPool.slice(0, 3);
+      return worldPool.slice(0, 6);
     }
 
     return selected;
@@ -78,28 +78,33 @@ export function useAdaptiveRound() {
     return (difficulties[playerUid] || 2) as DifficultyLevel;
   }, [difficulties]);
 
-  // Process attempt & update adaptive difficulty + SRS
+  // Keep game difficulty fixed during a turn; update it once the level is complete.
   const handleAnswer = useCallback((
     playerUid: string,
     wordId: string,
-    isCorrect: boolean,
-    streak: number
+    isCorrect: boolean
   ) => {
+    if (!wordId) return;
     recordWordAttempt(playerUid, wordId, isCorrect);
+  }, [recordWordAttempt]);
 
-    if (isCorrect) {
-      if (streak >= 3) {
-        adjustDifficulty(playerUid, 1);
-      }
-    } else {
+  const adaptDifficultyAfterTurn = useCallback((playerUid: string, correct: number, wrong: number) => {
+    const total = correct + wrong;
+    if (total < 3) return;
+
+    const accuracy = correct / total;
+    if (accuracy >= 0.8) {
+      adjustDifficulty(playerUid, 1);
+    } else if (accuracy <= 0.4) {
       adjustDifficulty(playerUid, -1);
     }
-  }, [recordWordAttempt, adjustDifficulty]);
+  }, [adjustDifficulty]);
 
   return {
     worldPool,
     selectRoundWords,
     getPlayerDifficulty,
     handleAnswer,
+    adaptDifficultyAfterTurn,
   };
 }

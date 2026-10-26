@@ -133,7 +133,6 @@ export const FruitNinjaGame: React.FC<GameProps> = ({ words, onCorrect, onWrong,
           g.wrong += 1;
           g.lives -= 1;
           g.combo = 0;
-          callbacks.current.onWrong(deck[fruit.wordIndex]?.id || '');
           setHud(value => ({ ...value, lives: g.lives, combo: 0, message: '💥 ¡Bomba! La racha se ha roto. Evita las bombas.' }));
           if (g.lives <= 0) finish();
           continue;
@@ -216,8 +215,6 @@ export const FruitNinjaGame: React.FC<GameProps> = ({ words, onCorrect, onWrong,
             fruit.cut = true;
             g.missed += 1;
             g.wrong += 1;
-            const word = deck[fruit.wordIndex];
-            if (word) callbacks.current.onWrong(word.id);
             if (g.missed >= 5) finish();
           }
         }

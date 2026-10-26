@@ -44,7 +44,7 @@ export const MemoryGame: React.FC<GameProps> = ({
   const { playCardFlip, playSuccess, playError, playFanfare } = useSound();
 
   // Determine pair count: 3 pairs for diff 1, 4 pairs for diff 2-3, 6 pairs for diff 4-5
-  const pairCount = difficulty >= 4 ? 6 : difficulty >= 2 ? 4 : 3;
+  const pairCount = Math.min(words.length, difficulty >= 4 ? 6 : difficulty >= 2 ? 4 : 3);
 
   useEffect(() => {
     const selectedWords = words.slice(0, pairCount);

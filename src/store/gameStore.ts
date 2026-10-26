@@ -24,6 +24,8 @@ interface GameState {
   currentRound: number;
   currentPlayerIndex: number;
   activeWorldId: string;
+  activeWorldNodeId: string | null;
+  activeWorldDifficulty: DifficultyLevel | null;
   activeGameId: string;
   sessionPhase: GameSessionPhase;
   scores: Record<string, number>; // playerUid -> total score
@@ -35,7 +37,7 @@ interface GameState {
   setScreen: (screen: Screen) => void;
   setLanguage: (lang: Language) => void;
   setTotalRounds: (rounds: number) => void;
-  setActiveWorld: (worldId: string, gameId: string) => void;
+  setActiveWorld: (worldId: string, gameId: string, worldNodeId?: string | null, minDifficulty?: DifficultyLevel) => void;
   setSessionPhase: (phase: GameSessionPhase) => void;
   startSession: (players: PlayerProfile[]) => void;
   recordTurnResult: (result: GameResult) => void;
@@ -101,6 +103,39 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       unlocked: false,
       completed: false,
     },
+    {
+      id: 'es_w6',
+      theme: 'saludos',
+      name: 'Taller de Palabras',
+      icon: '🧩',
+      gameId: 'sentence_builder',
+      gameName: 'SENTENCE BUILDER',
+      minDifficulty: 2,
+      unlocked: false,
+      completed: false,
+    },
+    {
+      id: 'es_w7',
+      theme: 'colores',
+      name: 'Caverna de Burbujas',
+      icon: '🫧',
+      gameId: 'bubble_popper',
+      gameName: 'BUBBLE POPPER',
+      minDifficulty: 2,
+      unlocked: false,
+      completed: false,
+    },
+    {
+      id: 'es_w8',
+      theme: 'viajes',
+      name: 'Ruta del Explorador',
+      icon: '🛣️',
+      gameId: 'drag_match',
+      gameName: 'DRIVE CHALLENGE',
+      minDifficulty: 3,
+      unlocked: false,
+      completed: false,
+    },
   ],
   ar: [
     {
@@ -154,6 +189,39 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       icon: '🌌',
       gameId: 'memory',
       gameName: 'MEMORY QUEST',
+      minDifficulty: 3,
+      unlocked: false,
+      completed: false,
+    },
+    {
+      id: 'ar_w6',
+      theme: 'comida',
+      name: 'Mercado de Frases',
+      icon: '🧩',
+      gameId: 'sentence_builder',
+      gameName: 'SENTENCE BUILDER',
+      minDifficulty: 2,
+      unlocked: false,
+      completed: false,
+    },
+    {
+      id: 'ar_w7',
+      theme: 'colores',
+      name: 'Cúpula de Color',
+      icon: '🫧',
+      gameId: 'bubble_popper',
+      gameName: 'BUBBLE POPPER',
+      minDifficulty: 2,
+      unlocked: false,
+      completed: false,
+    },
+    {
+      id: 'ar_w8',
+      theme: 'viajes',
+      name: 'Carretera del Viajero',
+      icon: '🛣️',
+      gameId: 'drag_match',
+      gameName: 'DRIVE CHALLENGE',
       minDifficulty: 3,
       unlocked: false,
       completed: false,
@@ -215,6 +283,39 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       unlocked: false,
       completed: false,
     },
+    {
+      id: 'nl_w6',
+      theme: 'saludos',
+      name: 'Zinnenatelier',
+      icon: '🧩',
+      gameId: 'sentence_builder',
+      gameName: 'SENTENCE BUILDER',
+      minDifficulty: 2,
+      unlocked: false,
+      completed: false,
+    },
+    {
+      id: 'nl_w7',
+      theme: 'colores',
+      name: 'Bellenkoepel',
+      icon: '🫧',
+      gameId: 'bubble_popper',
+      gameName: 'BUBBLE POPPER',
+      minDifficulty: 2,
+      unlocked: false,
+      completed: false,
+    },
+    {
+      id: 'nl_w8',
+      theme: 'viajes',
+      name: 'Ontdekkersroute',
+      icon: '🛣️',
+      gameId: 'drag_match',
+      gameName: 'DRIVE CHALLENGE',
+      minDifficulty: 3,
+      unlocked: false,
+      completed: false,
+    },
   ],
   fr: [
     {
@@ -272,6 +373,39 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
       unlocked: false,
       completed: false,
     },
+    {
+      id: 'fr_w6',
+      theme: 'saludos',
+      name: 'Atelier des phrases',
+      icon: '🧩',
+      gameId: 'sentence_builder',
+      gameName: 'SENTENCE BUILDER',
+      minDifficulty: 2,
+      unlocked: false,
+      completed: false,
+    },
+    {
+      id: 'fr_w7',
+      theme: 'colores',
+      name: 'Dôme des bulles',
+      icon: '🫧',
+      gameId: 'bubble_popper',
+      gameName: 'BUBBLE POPPER',
+      minDifficulty: 2,
+      unlocked: false,
+      completed: false,
+    },
+    {
+      id: 'fr_w8',
+      theme: 'viajes',
+      name: 'Route des explorateurs',
+      icon: '🛣️',
+      gameId: 'drag_match',
+      gameName: 'DRIVE CHALLENGE',
+      minDifficulty: 3,
+      unlocked: false,
+      completed: false,
+    },
   ],
 };
 
@@ -305,6 +439,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   currentRound: 1,
   currentPlayerIndex: 0,
   activeWorldId: 'saludos',
+  activeWorldNodeId: null,
+  activeWorldDifficulty: null,
   activeGameId: 'drag_match',
   sessionPhase: 'CHALLENGE_PHASE',
   scores: {},
@@ -317,19 +453,22 @@ export const useGameStore = create<GameState>((set, get) => ({
   setLanguage: (lang) => set({ language: lang }),
   setTotalRounds: (rounds) => set({ totalRounds: rounds }),
 
-  setActiveWorld: (worldId, gameId) => set({
+  setActiveWorld: (worldId, gameId, worldNodeId = null, minDifficulty: DifficultyLevel | null = null) => set({
     activeWorldId: worldId,
+    activeWorldNodeId: worldNodeId,
+    activeWorldDifficulty: minDifficulty,
     activeGameId: gameId,
   }),
 
   setSessionPhase: (phase) => set({ sessionPhase: phase }),
 
   startSession: (players) => {
+    const { activeWorldDifficulty } = get();
     const initialScores: Record<string, number> = {};
     const initialDiffs: Record<string, DifficultyLevel> = {};
     players.forEach(p => {
       initialScores[p.uid] = 0;
-      initialDiffs[p.uid] = 2; // Medium start
+      initialDiffs[p.uid] = activeWorldDifficulty || 2;
     });
 
     set({
@@ -345,11 +484,11 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   recordTurnResult: (result) => {
-    const { scores, results, worldNodes, language, activeWorldId } = get();
+    const { scores, results, worldNodes, language, activeWorldNodeId } = get();
     const prevScore = scores[result.playerId] || 0;
     const gained = (result.correct * 10) + Math.max(0, result.coinsEarned);
     const nodes = [...(worldNodes[language] || [])];
-    const activeIndex = nodes.findIndex(node => node.theme === activeWorldId);
+    const activeIndex = nodes.findIndex(node => node.id === activeWorldNodeId);
     const total = result.correct + result.wrong;
     const passed = total > 0 && result.correct / total >= 0.6;
 

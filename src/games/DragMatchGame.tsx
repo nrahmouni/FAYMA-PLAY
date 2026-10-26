@@ -142,7 +142,6 @@ export const DragMatchGame: React.FC<GameProps> = ({ words, difficulty, onCorrec
               g.misses += 1;
               g.combo = 0;
               g.invulnerable = 900;
-              callbacks.current.onWrong(deck[g.wordIndex % Math.max(1, deck.length)]?.id || '');
               setHud(value => ({ ...value, lives: g.lives, message: '¡Golpe! Salta antes del siguiente obstáculo.' }));
               if (g.lives <= 0) finish();
             } else {

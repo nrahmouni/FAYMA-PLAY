@@ -34,7 +34,7 @@ export const WorldHub: React.FC = () => {
   const themeWords = VOCABULARY_BANK.filter(w => w.language === language).slice(0, 6);
 
   const handleSelectNode = (node: WorldNode) => {
-    setActiveWorld(node.theme, node.gameId);
+    setActiveWorld(node.theme, node.gameId, node.id, node.minDifficulty);
     startSession(profiles);
   };
   const startArcadeGame = (gameId: GameMechanic) => {
