@@ -33,8 +33,8 @@ export const HeaderHUD: React.FC = () => {
             title="Ir al Menú Principal"
           >
             <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-pink-500 p-0.5 shadow-lg group-hover:scale-105 transition">
-              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center text-lg select-none">
-                🎮
+              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center text-lg select-none border border-white/10 shadow-inner">
+                <span className="font-black bg-gradient-to-r from-cyan-300 via-pink-300 to-amber-200 bg-clip-text text-transparent">F</span>
               </div>
             </div>
             <div className="hidden sm:block text-left">

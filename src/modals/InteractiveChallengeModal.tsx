@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { Gamepad2 } from 'lucide-react';
+import { QuestMissionPanel } from '../components/QuestMissionPanel';
 import { GameProps, DifficultyLevel, PlayerProfile } from '../types';
 
 // Lazy loading minigames
@@ -23,25 +24,19 @@ const DriveGame = React.lazy(() => import('../games/DriveGame').then(m => ({ def
 const FruitNinjaGame = React.lazy(() => import('../games/FruitNinjaGame').then(m => ({ default: m.FruitNinjaGame })));
 
 const GAME_TITLES: Record<string, string> = {
-  combat: 'FAYMA BATTLE',
-  drive: 'FAYMA RUSH',
-  fruit: 'FAYMA SLICE',
-  drag_match: 'DRIVE CHALLENGE',
-  slingshot: 'SLINGSHOT ADVENTURE',
+  drive: 'CITY RUNNER',
+  drag_match: 'MAP MATCH',
   memory: 'MEMORY QUEST',
   sentence_builder: 'SENTENCE BUILDER',
   bubble_popper: 'BUBBLE POPPER',
 };
 
 const GAME_HELP: Record<string, string> = {
-  combat: 'Pulsa y esquiva para aprender palabras mientras juegas.',
-  drive: 'Mueve de carril, salta y recoge palabras en una carrera tranquila.',
-  fruit: 'Corta frutas para ganar puntos y evita las bombas.',
-  drag_match: 'Arrastra la palabra correcta hasta su pareja.',
-  slingshot: 'Apunta con calma y lanza para resolver el reto.',
-  memory: 'Busca parejas de palabra e imagen para memorizar mejor.',
-  sentence_builder: 'Ordena las palabras para formar frases útiles.',
-  bubble_popper: 'Haz clic en las burbujas correctas para crear cadenas.',
+  drive: 'Corre por la ciudad, recoge palabras útiles y sigue la ruta segura del viaje.',
+  drag_match: 'Une cada palabra con su lugar en el mapa para aprender su contexto real.',
+  memory: 'Busca parejas de palabra e imagen para memorizar mejor y fortalecer la vista.',
+  sentence_builder: 'Ordena las palabras para formar frases útiles y claras en cada misión.',
+  bubble_popper: 'Haz clic en las burbujas correctas para crear cadenas y despejar el tablero.',
 };
 
 interface InteractiveChallengeModalProps {
@@ -82,6 +77,8 @@ export const InteractiveChallengeModal: React.FC<InteractiveChallengeModalProps>
 
   return (
     <div className="fayma-game-world relative isolate flex w-full flex-col items-center">
+      <QuestMissionPanel gameId={gameId} player={player} difficulty={difficulty} />
+
       <div className="relative z-10 mb-4 flex w-full max-w-2xl flex-col gap-3 rounded-2xl border border-indigo-200 bg-white/80 px-4 py-3 shadow-xl backdrop-blur">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">

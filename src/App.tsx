@@ -15,6 +15,7 @@ import { HomeScreen } from './screens/HomeScreen';
 import { AuthScreen } from './screens/AuthScreen';
 import { PlayerSetup } from './screens/PlayerSetup';
 import { WorldHub } from './screens/WorldHub';
+import { PassportScreen } from './screens/PassportScreen';
 import { GameSession } from './screens/GameSession';
 import { PodiumScreen } from './screens/PodiumScreen';
 import { GarageShop } from './screens/GarageShop';
@@ -92,8 +93,12 @@ export default function App() {
               className="max-w-md w-full glass-panel p-8 sm:p-10 rounded-3xl border-2 border-cyan-400/40 shadow-2xl relative overflow-hidden"
             >
               <div className="w-20 h-20 mx-auto mb-4 rounded-3xl bg-gradient-to-tr from-cyan-500 via-pink-500 to-amber-500 p-1 shadow-2xl animate-float">
-                <div className="w-full h-full bg-slate-950 rounded-[20px] flex items-center justify-center text-4xl select-none">
-                  🎮
+                <div className="w-full h-full bg-slate-950 rounded-[20px] flex items-center justify-center select-none border border-white/10 shadow-inner">
+                  <div className="relative h-10 w-10 rounded-2xl bg-gradient-to-br from-sky-400 via-indigo-500 to-fuchsia-500 shadow-[0_0_20px_rgba(125,211,252,0.3)]">
+                    <div className="absolute inset-2 rounded-xl border border-white/60" />
+                    <div className="absolute left-1/2 top-1/2 h-5 w-[2px] -translate-x-1/2 -translate-y-1/2 bg-white/80" />
+                    <div className="absolute left-1/2 top-1/2 h-[2px] w-5 -translate-x-1/2 -translate-y-1/2 bg-white/80" />
+                  </div>
                 </div>
               </div>
 
@@ -105,7 +110,7 @@ export default function App() {
               </p>
 
               <p className="text-sm text-slate-300 mb-8 leading-relaxed">
-                Un viaje educativo para niños: explora ciudades, aprende palabras y vive misiones en español, árabe, francés y flamenco.
+                Un viaje educativo para niños: explora ciudades, aprende palabras y vive misiones en español, árabe, francés y neerlandés de Flandes.
               </p>
 
               <div className="space-y-3">
@@ -139,6 +144,8 @@ export default function App() {
         return <HomeScreen />;
       case 'WORLD_HUB':
         return <WorldHub />;
+      case 'PASSPORT':
+        return <PassportScreen />;
       case 'GAME_SESSION':
         return <GameSession />;
       case 'PODIUM':

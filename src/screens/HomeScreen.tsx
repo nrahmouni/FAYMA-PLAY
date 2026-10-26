@@ -13,6 +13,8 @@ export const HomeScreen: React.FC = () => {
   const profiles = useProfileStore(s => s.profiles);
   const activePlayer = profiles[0];
   const langMeta = LANGUAGES[language];
+  const masteryCount = Object.keys(activePlayer?.mastery ?? {}).length;
+  const explorerRank = masteryCount >= 18 ? 'Políglota' : masteryCount >= 8 ? 'Explorador' : 'Principiante';
 
   return (
     <div className="fayma-home relative mx-auto flex w-full max-w-6xl flex-col gap-8 overflow-hidden px-4 py-8 sm:px-8 sm:py-12">
@@ -29,7 +31,7 @@ export const HomeScreen: React.FC = () => {
             FAYMA <span className="fayma-title-gradient">WORLD</span>
           </h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-slate-700 sm:text-lg">
-            Conquista rutas, ciudades y culturas reales mientras aprendes español, árabe, francés y flamenco. Cada misión convierte palabras en un viaje épico para niños.
+            Conquista rutas, ciudades y culturas reales mientras aprendes español, árabe, francés y neerlandés de Flandes. Cada misión convierte palabras en un viaje épico para niños.
           </p>
 
           <div className="mt-7 flex flex-wrap items-center gap-3">
@@ -67,7 +69,16 @@ export const HomeScreen: React.FC = () => {
             className="fayma-hero-arcade"
           >
             <div className="fayma-arcade-screen">
-              <span className="text-7xl drop-shadow-[0_12px_24px_rgba(0,0,0,.45)] sm:text-8xl">🗺️</span>
+              <div className="relative flex h-28 w-28 items-center justify-center sm:h-32 sm:w-32">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-sky-400 via-indigo-500 to-fuchsia-500 opacity-90 blur-md" />
+                <div className="relative h-24 w-24 rounded-full border-[10px] border-white/80 bg-[radial-gradient(circle_at_30%_30%,#e0f2fe,transparent_20%),linear-gradient(135deg,#7dd3fc,#60a5fa_38%,#a78bfa_70%,#f9a8d4)] shadow-[0_18px_35px_rgba(59,130,246,0.25)] sm:h-28 sm:w-28" />
+                <div className="absolute h-20 w-[2px] rotate-45 rounded-full bg-white/80 sm:h-24" />
+                <div className="absolute h-20 w-[2px] -rotate-45 rounded-full bg-white/80 sm:h-24" />
+                <div className="absolute h-full w-full rounded-full border border-white/50" />
+                <div className="absolute bottom-2 right-2 rounded-full bg-amber-300 px-2 py-1 text-[9px] font-black uppercase tracking-[.18em] text-slate-900 shadow-lg">
+                  PASS
+                </div>
+              </div>
               <span className="mt-1 text-[10px] font-black uppercase tracking-[.28em] text-slate-800">world passport</span>
             </div>
             <div className="fayma-arcade-controls">
@@ -142,6 +153,37 @@ export const HomeScreen: React.FC = () => {
           >
             <ShieldCheck className="h-4 w-4 text-emerald-300" /> Sincronizar progreso
           </button>
+        </div>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-3">
+        <div className="rounded-[2rem] border border-indigo-200 bg-white/80 p-4 shadow-[0_20px_40px_rgba(59,130,246,0.12)]">
+          <div className="text-[10px] font-black uppercase tracking-[.2em] text-slate-500">Rango</div>
+          <div className="mt-2 flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-pink-500 text-xl shadow-lg">🏆</div>
+            <div>
+              <div className="text-xl font-black text-slate-900">{explorerRank}</div>
+              <div className="text-xs text-slate-500">Nivel activo</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-[2rem] border border-indigo-200 bg-white/80 p-4 shadow-[0_20px_40px_rgba(59,130,246,0.12)]">
+          <div className="text-[10px] font-black uppercase tracking-[.2em] text-slate-500">Recompensas</div>
+          <div className="mt-2 flex items-center justify-between">
+            <div className="text-2xl font-black text-slate-900">{activePlayer?.coins ?? 0}</div>
+            <div className="text-2xl">🪙</div>
+          </div>
+          <div className="mt-2 text-xs text-slate-600">Monedas para garaje y objetos del mundo.</div>
+        </div>
+
+        <div className="rounded-[2rem] border border-indigo-200 bg-gradient-to-br from-sky-100 via-white to-pink-100 p-4 shadow-[0_20px_40px_rgba(59,130,246,0.12)]">
+          <div className="text-[10px] font-black uppercase tracking-[.2em] text-slate-500">Memoria</div>
+          <div className="mt-2 flex items-center justify-between">
+            <div className="text-2xl font-black text-slate-900">{masteryCount}</div>
+            <div className="text-2xl">✨</div>
+          </div>
+          <div className="mt-2 text-xs text-slate-600">Palabras ya practicadas con tus retos.</div>
         </div>
       </section>
     </div>

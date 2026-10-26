@@ -24,8 +24,8 @@ export const LANGUAGES: Record<Language, LanguageMeta> = {
     themeColor: '#f59e0b', // Amber / Gold
     accentColor: '#06b6d4', // Cyan / Turquoise
     bgGradient: 'from-amber-950/40 via-slate-950 to-cyan-950/30',
-    voiceLang: 'ar-SA',
-    voiceFallbacks: ['ar', 'ar-EG', 'ar-AE', 'ar-MA'],
+    voiceLang: 'ar-MA',
+    voiceFallbacks: ['ar', 'ar-SA', 'ar-EG', 'ar-AE'],
     dir: 'rtl',
     description: 'Aprende caligrafía, saludos y vocabulario del mundo árabe con fonética clara.',
   },

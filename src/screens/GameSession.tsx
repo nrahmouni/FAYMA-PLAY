@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useRef } from 'react';
+import React, { useMemo, useCallback, useRef, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useProfileStore } from '../store/profileStore';
 import { useAdaptiveRound } from '../hooks/useAdaptiveRound';
@@ -15,6 +15,9 @@ export const GameSession: React.FC = () => {
   const recordTurnResult = useGameStore(s => s.recordTurnResult);
   const advanceTurn = useGameStore(s => s.advanceTurn);
   const currentTurnResult = useGameStore(s => s.currentTurnResult);
+  const activeWorldNodeId = useGameStore(s => s.activeWorldNodeId);
+  const worldNodes = useGameStore(s => s.worldNodes);
+  const [missionCompleted, setMissionCompleted] = useState(false);
 
   const profiles = useProfileStore(s => s.profiles);
   const addRewards = useProfileStore(s => s.addRewards);
@@ -46,6 +49,14 @@ export const GameSession: React.FC = () => {
 
   const handleGameComplete = useCallback((result: GameResult) => {
     if (!activePlayer) return;
+    const totalAnswers = result.correct + result.wrong;
+    const alreadyCompleted = worldNodes[language]?.find(node => node.id === activeWorldNodeId)?.completed ?? false;
+    setMissionCompleted(
+      Boolean(activeWorldNodeId) &&
+      !alreadyCompleted &&
+      totalAnswers > 0 &&
+      result.correct / totalAnswers >= 0.45,
+    );
     const finalizedResult: GameResult = {
       ...result,
       playerId: activePlayer.uid,
@@ -54,9 +65,10 @@ export const GameSession: React.FC = () => {
     adaptDifficultyAfterTurn(activePlayer.uid, result.correct, result.wrong);
     addRewards(activePlayer.uid, finalizedResult.coinsEarned, 0);
     recordTurnResult(finalizedResult);
-  }, [activePlayer?.uid, adaptDifficultyAfterTurn, addRewards, recordTurnResult]);
+  }, [activePlayer?.uid, activeWorldNodeId, worldNodes, language, adaptDifficultyAfterTurn, addRewards, recordTurnResult]);
 
   const handleContinueNextTurn = () => {
+    setMissionCompleted(false);
     advanceTurn(profiles.length);
   };
 
@@ -86,6 +98,7 @@ export const GameSession: React.FC = () => {
           result={currentTurnResult}
           player={activePlayer}
           language={language}
+          missionCompleted={missionCompleted}
           onContinue={handleContinueNextTurn}
         />
       )}
