@@ -151,7 +151,7 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen bg-slate-950 text-slate-100 flex flex-col relative overflow-x-hidden selection:bg-cyan-500 selection:text-black bg-gradient-to-br ${langMeta?.bgGradient || 'from-slate-950 to-slate-900'} transition-colors duration-700`}>
+    <div className="min-h-screen text-slate-900 flex flex-col relative overflow-x-hidden selection:bg-pink-300 selection:text-slate-900 bg-gradient-to-br from-sky-100 via-pink-50 to-yellow-100 transition-colors duration-700">
       {/* Audio Unlocker & Offline Indicator */}
       <AudioUnlocker />
       <OfflineIndicator />

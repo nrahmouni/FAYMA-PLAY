@@ -19,17 +19,17 @@ export const HomeScreen: React.FC = () => {
       <div className="pointer-events-none absolute -right-28 -top-20 h-80 w-80 rounded-full bg-fuchsia-500/20 blur-[100px]" />
       <div className="pointer-events-none absolute -bottom-20 -left-24 h-80 w-80 rounded-full bg-cyan-400/15 blur-[110px]" />
 
-      <section className="relative grid items-center gap-10 lg:grid-cols-[1.1fr_.9fr]">
+      <section className="relative grid items-center gap-10 lg:grid-cols-[1.15fr_.85fr]">
         <div className="z-10">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/[.08] px-3 py-1.5 text-xs font-black uppercase tracking-[.22em] text-cyan-200">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-white/85 px-3 py-1.5 text-[10px] font-black uppercase tracking-[.22em] text-indigo-700 shadow-sm">
             <Sparkles className="h-3.5 w-3.5" />
-            El aprendizaje se juega
+            4 países • 4 idiomas • 1 aventura global
           </div>
-          <h1 className="max-w-3xl text-5xl font-black leading-[.95] tracking-[-.06em] text-white sm:text-7xl">
-            FAYMA <span className="fayma-title-gradient">PLAY</span>
+          <h1 className="max-w-3xl text-5xl font-black leading-[.95] tracking-[-.06em] text-slate-900 sm:text-7xl">
+            FAYMA <span className="fayma-title-gradient">WORLD</span>
           </h1>
-          <p className="mt-5 max-w-xl text-base leading-7 text-slate-300 sm:text-lg">
-            Ocho mundos. Ocho formas de jugar. Corre, lucha, apunta y explora mientras las palabras se vuelven parte de la aventura.
+          <p className="mt-5 max-w-xl text-base leading-7 text-slate-700 sm:text-lg">
+            Conquista rutas, ciudades y culturas reales mientras aprendes español, árabe, francés y flamenco. Cada misión convierte palabras en un viaje épico para niños.
           </p>
 
           <div className="mt-7 flex flex-wrap items-center gap-3">
@@ -38,15 +38,15 @@ export const HomeScreen: React.FC = () => {
               whileHover={{ y: -3, scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => setScreen('WORLD_HUB')}
-              className="fayma-primary-button inline-flex items-center gap-3 rounded-2xl px-6 py-4 text-base font-black text-slate-950 sm:text-lg"
+              className="fayma-primary-button inline-flex items-center gap-3 rounded-2xl px-6 py-4 text-base font-black text-slate-900 sm:text-lg"
             >
               <Play className="h-5 w-5 fill-current" />
-              ENTRAR AL ARCADE
+              EMPEZAR EL VIAJE
               <ArrowRight className="h-5 w-5" />
             </motion.button>
-            <div className="rounded-2xl border border-white/10 bg-white/[.04] px-4 py-3 text-left">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400">Piloto</div>
-              <div className="font-black text-white">{activePlayer?.displayName || 'Crea tu perfil'}</div>
+            <div className="rounded-2xl border border-indigo-200 bg-white/80 px-4 py-3 text-left shadow-sm">
+              <div className="text-xs font-bold uppercase tracking-wider text-slate-500">Explorador</div>
+              <div className="font-black text-slate-900">{activePlayer?.displayName || 'Crea tu perfil'}</div>
             </div>
           </div>
         </div>
@@ -56,7 +56,7 @@ export const HomeScreen: React.FC = () => {
           animate={{ opacity: 1, rotateY: -10, rotateX: 4, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="fayma-hero-stage relative mx-auto flex aspect-[1.15] w-full max-w-lg items-center justify-center"
-          aria-label="Escenario arcade futurista"
+          aria-label="Escenario de aventura global"
         >
           <div className="fayma-orbit fayma-orbit-back" />
           <div className="fayma-orbit fayma-orbit-front" />
@@ -67,8 +67,8 @@ export const HomeScreen: React.FC = () => {
             className="fayma-hero-arcade"
           >
             <div className="fayma-arcade-screen">
-              <span className="text-7xl drop-shadow-[0_12px_24px_rgba(0,0,0,.6)] sm:text-8xl">🦊</span>
-              <span className="mt-1 text-[10px] font-black uppercase tracking-[.28em] text-cyan-100">player one</span>
+              <span className="text-7xl drop-shadow-[0_12px_24px_rgba(0,0,0,.45)] sm:text-8xl">🗺️</span>
+              <span className="mt-1 text-[10px] font-black uppercase tracking-[.28em] text-slate-800">world passport</span>
             </div>
             <div className="fayma-arcade-controls">
               <span className="fayma-arcade-stick" />
@@ -76,20 +76,20 @@ export const HomeScreen: React.FC = () => {
               <span className="fayma-arcade-button fayma-arcade-button-cyan" />
             </div>
           </motion.div>
-          <div className="absolute left-[9%] top-[22%] rounded-2xl border border-cyan-200/20 bg-slate-950/80 px-3 py-2 text-xs font-black text-cyan-200 shadow-xl backdrop-blur">
-            <Gamepad2 className="mr-1 inline h-4 w-4" /> 8 JUEGOS
+          <div className="absolute left-[9%] top-[22%] rounded-2xl border border-sky-200 bg-white/80 px-3 py-2 text-xs font-black text-sky-700 shadow-xl backdrop-blur">
+            <Gamepad2 className="mr-1 inline h-4 w-4" /> 4 MUNDOS
           </div>
-          <div className="absolute bottom-[21%] right-[1%] rounded-2xl border border-amber-200/20 bg-slate-950/80 px-3 py-2 text-xs font-black text-amber-200 shadow-xl backdrop-blur">
+          <div className="absolute bottom-[21%] right-[1%] rounded-2xl border border-amber-200 bg-white/80 px-3 py-2 text-xs font-black text-amber-700 shadow-xl backdrop-blur">
             ✦ APRENDE JUGANDO
           </div>
         </motion.div>
       </section>
 
-      <section className="relative grid gap-4 rounded-[2rem] border border-white/10 bg-slate-950/65 p-4 shadow-2xl backdrop-blur-xl sm:grid-cols-[1fr_auto] sm:items-center sm:p-6">
+      <section className="relative grid gap-4 rounded-[2rem] border border-indigo-200 bg-white/70 p-4 shadow-[0_20px_50px_rgba(59,130,246,0.12)] backdrop-blur-xl sm:grid-cols-[1fr_auto] sm:items-center sm:p-6">
         <div>
-          <div className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[.18em] text-slate-400">
+          <div className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[.18em] text-slate-600">
             <span className="text-lg">{langMeta.flag}</span>
-            Elige tu mundo e idioma
+            País principal: {langMeta.country}
           </div>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             {(Object.keys(LANGUAGES) as Language[]).map(langKey => {
@@ -104,12 +104,15 @@ export const HomeScreen: React.FC = () => {
                   aria-pressed={selected}
                   className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left transition ${
                     selected
-                      ? 'border-cyan-300/70 bg-cyan-300/10 text-white shadow-[0_0_22px_rgba(34,211,238,.12)]'
-                      : 'border-white/10 bg-white/[.03] text-slate-400 hover:border-white/25 hover:text-white'
+                      ? 'border-indigo-300 bg-gradient-to-r from-sky-100 to-pink-100 text-slate-900 shadow-[0_0_22px_rgba(125,211,252,.18)]'
+                      : 'border-slate-200 bg-white/80 text-slate-600 hover:border-indigo-200 hover:text-slate-900'
                   }`}
                 >
                   <span className="text-xl">{meta.flag}</span>
-                  <span className="text-xs font-black">{meta.name}</span>
+                  <span className="text-left text-[10px] font-black leading-tight">
+                    <span className="block">{meta.country}</span>
+                    <span className="text-[9px] uppercase tracking-wide text-slate-500">{meta.name}</span>
+                  </span>
                 </motion.button>
               );
             })}

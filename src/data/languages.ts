@@ -3,6 +3,7 @@ import { Language, LanguageMeta } from '../types';
 export const LANGUAGES: Record<Language, LanguageMeta> = {
   es: {
     code: 'es',
+    country: 'España',
     name: 'Español',
     nativeName: 'Español',
     flag: '🇪🇸',
@@ -16,6 +17,7 @@ export const LANGUAGES: Record<Language, LanguageMeta> = {
   },
   ar: {
     code: 'ar',
+    country: 'Marruecos',
     name: 'Árabe',
     nativeName: 'العربية',
     flag: '🌟',
@@ -29,6 +31,7 @@ export const LANGUAGES: Record<Language, LanguageMeta> = {
   },
   'nl-BE': {
     code: 'nl-BE',
+    country: 'Bélgica / Flandes',
     name: 'Flamenco',
     nativeName: 'Vlaams (Nederlands)',
     flag: '🦁',
@@ -42,6 +45,7 @@ export const LANGUAGES: Record<Language, LanguageMeta> = {
   },
   fr: {
     code: 'fr',
+    country: 'Francia',
     name: 'Francés',
     nativeName: 'Français',
     flag: '🥐',

@@ -46,21 +46,25 @@ export function useAdaptiveRound() {
     const shuffledReview = shuffleArray(reviewWords);
     const shuffledMastered = shuffleArray(masteredWords);
 
+    // Child-friendly sessions: start with a short, encouraging deck of 4-6 words
+    // so levels feel readable, fair, and actually teach the target vocabulary.
+    const targetCount = Math.min(6, Math.max(4, worldPool.length));
+
     if (shuffledNew.length > 0) {
-      selected.push(...shuffledNew.slice(0, 3));
+      selected.push(...shuffledNew.slice(0, Math.min(3, targetCount)));
     }
 
-    if (shuffledReview.length > 0 && selected.length < 6) {
-      selected.push(...shuffledReview.slice(0, 2));
+    if (shuffledReview.length > 0 && selected.length < targetCount) {
+      selected.push(...shuffledReview.slice(0, Math.min(2, targetCount - selected.length)));
     }
 
     // Fill remaining spots if needed
-    if (selected.length < 6) {
+    if (selected.length < targetCount) {
       const remaining = [...shuffledNew.slice(3), ...shuffledReview.slice(2), ...shuffledMastered];
       for (const w of remaining) {
         if (!selected.some(s => s.id === w.id)) {
           selected.push(w);
-          if (selected.length >= 6) break;
+          if (selected.length >= targetCount) break;
         }
       }
     }
@@ -75,7 +79,7 @@ export function useAdaptiveRound() {
 
   // Get current difficulty for player
   const getPlayerDifficulty = useCallback((playerUid: string): DifficultyLevel => {
-    return (difficulties[playerUid] || 2) as DifficultyLevel;
+    return (difficulties[playerUid] || 1) as DifficultyLevel;
   }, [difficulties]);
 
   // Keep game difficulty fixed during a turn; update it once the level is complete.

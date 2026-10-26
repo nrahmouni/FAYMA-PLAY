@@ -33,6 +33,17 @@ const GAME_TITLES: Record<string, string> = {
   bubble_popper: 'BUBBLE POPPER',
 };
 
+const GAME_HELP: Record<string, string> = {
+  combat: 'Pulsa y esquiva para aprender palabras mientras juegas.',
+  drive: 'Mueve de carril, salta y recoge palabras en una carrera tranquila.',
+  fruit: 'Corta frutas para ganar puntos y evita las bombas.',
+  drag_match: 'Arrastra la palabra correcta hasta su pareja.',
+  slingshot: 'Apunta con calma y lanza para resolver el reto.',
+  memory: 'Busca parejas de palabra e imagen para memorizar mejor.',
+  sentence_builder: 'Ordena las palabras para formar frases útiles.',
+  bubble_popper: 'Haz clic en las burbujas correctas para crear cadenas.',
+};
+
 interface InteractiveChallengeModalProps {
   gameId: string;
   gameProps: GameProps;
@@ -71,20 +82,23 @@ export const InteractiveChallengeModal: React.FC<InteractiveChallengeModalProps>
 
   return (
     <div className="fayma-game-world relative isolate flex w-full flex-col items-center">
-      <div className="relative z-10 mb-4 flex w-full max-w-2xl items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-950/75 px-4 py-3 shadow-xl backdrop-blur">
-        <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full ring-4 ring-white/5" style={{ backgroundColor: player.color }} />
-          <div>
-            <div className="text-[9px] font-black uppercase tracking-[.18em] text-cyan-300">En partida</div>
-            <div className="text-xs font-extrabold text-slate-100 sm:text-sm">{GAME_TITLES[gameId] || 'FAYMA ARCADE'}</div>
+      <div className="relative z-10 mb-4 flex w-full max-w-2xl flex-col gap-3 rounded-2xl border border-indigo-200 bg-white/80 px-4 py-3 shadow-xl backdrop-blur">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full ring-4 ring-white/5" style={{ backgroundColor: player.color }} />
+            <div>
+              <div className="text-[9px] font-black uppercase tracking-[.18em] text-indigo-600">En partida</div>
+              <div className="text-xs font-extrabold text-slate-900 sm:text-sm">{GAME_TITLES[gameId] || 'FAYMA ARCADE'}</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-1" title={`Dificultad adaptativa: ${difficulty}/3`} aria-label={`Dificultad ${difficulty} de 3`}>
+            <span className="mr-1 text-[9px] font-black uppercase tracking-wider text-slate-500">Reto</span>
+            {[1, 2, 3].map(level => (
+              <span key={level} className={`text-xs ${level <= difficulty ? 'font-bold text-amber-500' : 'text-slate-300'}`}>★</span>
+            ))}
           </div>
         </div>
-        <div className="flex items-center gap-1" title={`Dificultad adaptativa: ${difficulty}/5`} aria-label={`Dificultad ${difficulty} de 5`}>
-          <span className="mr-1 text-[9px] font-black uppercase tracking-wider text-slate-400">Reto</span>
-          {[1, 2, 3, 4, 5].map(level => (
-            <span key={level} className={`text-xs ${level <= difficulty ? 'font-bold text-amber-300' : 'text-slate-700'}`}>★</span>
-          ))}
-        </div>
+        <p className="text-[11px] leading-5 text-slate-600">{GAME_HELP[gameId] || 'Aprende jugando con palabras sencillas y desafíos de la vida real.'}</p>
       </div>
 
       <Suspense

@@ -58,21 +58,21 @@ export const WorldHub: React.FC = () => {
           </span>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-100">
-                {language === 'es' ? 'España' : language === 'fr' ? 'Francia' : language === 'ar' ? 'Marruecos' : 'Bélgica'}
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900">
+                {langMeta.country}
               </h1>
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-cyan-300 font-mono border border-cyan-500/20">
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-white/80 text-indigo-700 font-mono border border-indigo-200">
                 {langMeta.nativeName}
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-slate-400 max-w-lg mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-600 max-w-lg mt-0.5">
               {langMeta.description}
             </p>
           </div>
         </div>
 
         {/* Language Tabs */}
-        <div className="flex items-center gap-1.5 p-1 rounded-2xl glass-card border border-white/10 self-start sm:self-auto">
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl glass-card border border-indigo-200 bg-white/70 self-start sm:self-auto">
           {(Object.keys(LANGUAGES) as Language[]).map(langKey => {
             const meta = LANGUAGES[langKey];
             const isActive = language === langKey;
@@ -82,12 +82,12 @@ export const WorldHub: React.FC = () => {
                 onClick={() => setLanguage(langKey)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                   isActive
-                    ? 'bg-slate-800 text-cyan-300 border border-cyan-400 shadow-md'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
+                    ? 'bg-gradient-to-r from-sky-100 to-pink-100 text-slate-900 border border-indigo-200 shadow-md'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
                 }`}
               >
                 <span>{meta.flag}</span>
-                <span>{meta.name}</span>
+                <span>{meta.country}</span>
               </button>
             );
           })}

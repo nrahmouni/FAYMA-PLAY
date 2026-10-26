@@ -93,6 +93,7 @@ export interface ShopItem {
 
 export interface LanguageMeta {
   code: Language;
+  country: string;
   name: string;
   nativeName: string;
   flag: string;

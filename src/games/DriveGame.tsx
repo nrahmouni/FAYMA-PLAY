@@ -20,7 +20,7 @@ export const DriveGame: React.FC<GameProps> = ({ words, onCorrect, onComplete, d
     things: [] as Thing[],
     distance: 0,
     score: 0,
-    lives: 3,
+    lives: 4,
     collisions: 0,
     spawn: 0,
     last: 0,
@@ -35,7 +35,7 @@ export const DriveGame: React.FC<GameProps> = ({ words, onCorrect, onComplete, d
   });
   const [hud, setHud] = useState({
     score: 0,
-    lives: 3,
+    lives: 4,
     level: 1,
     combo: 0,
     message: '¡Arranca! Cambia de carril, salta y recoge fichas.',
@@ -68,7 +68,7 @@ export const DriveGame: React.FC<GameProps> = ({ words, onCorrect, onComplete, d
     g.things = [];
     g.distance = 0;
     g.score = 0;
-    g.lives = 3;
+    g.lives = 4;
     g.collisions = 0;
     g.spawn = 0;
     g.last = performance.now();
@@ -80,7 +80,7 @@ export const DriveGame: React.FC<GameProps> = ({ words, onCorrect, onComplete, d
     g.jumpStarted = 0;
     g.jumpUntil = 0;
     g.boostUntil = 0;
-    setHud({ score: 0, lives: 3, level: 1, combo: 0, message: '¡Arranca! Cambia de carril, salta y recoge fichas.' });
+    setHud({ score: 0, lives: 4, level: 1, combo: 0, message: '¡Arranca! Cambia de carril, salta y recoge fichas.' });
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
@@ -133,8 +133,8 @@ export const DriveGame: React.FC<GameProps> = ({ words, onCorrect, onComplete, d
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
       const stage = Math.min(3, Math.floor(g.distance / STAGE_DISTANCE) + 1);
-      const baseSpeed = 0.31 + difficulty * 0.032;
-      const speed = baseSpeed * (1 + (stage - 1) * 0.14) * (now < g.boostUntil ? 1.45 : 1);
+      const baseSpeed = 0.24 + difficulty * 0.024;
+      const speed = baseSpeed * (1 + (stage - 1) * 0.12) * (now < g.boostUntil ? 1.35 : 1);
       const playerY = height - 76;
 
       if (!g.done) {
@@ -158,7 +158,7 @@ export const DriveGame: React.FC<GameProps> = ({ words, onCorrect, onComplete, d
             wordIndex,
             resolved: false,
           });
-          g.spawn = Math.max(430, 930 - difficulty * 65 - (stage - 1) * 75);
+          g.spawn = Math.max(560, 1200 - difficulty * 60 - (stage - 1) * 70);
         }
 
         for (const thing of g.things) {

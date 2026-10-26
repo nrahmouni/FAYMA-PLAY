@@ -435,7 +435,7 @@ function loadSavedWorlds(): Record<Language, WorldNode[]> {
 export const useGameStore = create<GameState>((set, get) => ({
   currentScreen: 'BOOT',
   language: 'es',
-  totalRounds: 3,
+  totalRounds: 4,
   currentRound: 1,
   currentPlayerIndex: 0,
   activeWorldId: 'saludos',
@@ -468,7 +468,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     const initialDiffs: Record<string, DifficultyLevel> = {};
     players.forEach(p => {
       initialScores[p.uid] = 0;
-      initialDiffs[p.uid] = activeWorldDifficulty || 2;
+      initialDiffs[p.uid] = activeWorldDifficulty || 1;
     });
 
     set({
@@ -490,7 +490,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     const nodes = [...(worldNodes[language] || [])];
     const activeIndex = nodes.findIndex(node => node.id === activeWorldNodeId);
     const total = result.correct + result.wrong;
-    const passed = total > 0 && result.correct / total >= 0.6;
+    const passed = total > 0 && result.correct / total >= 0.45;
 
     if (activeIndex >= 0 && passed) {
       nodes[activeIndex] = { ...nodes[activeIndex], completed: true };
@@ -536,8 +536,8 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   adjustDifficulty: (playerUid, delta) => {
     const { difficulties } = get();
-    const current = difficulties[playerUid] || 2;
-    const next = Math.min(5, Math.max(1, current + delta)) as DifficultyLevel;
+    const current = difficulties[playerUid] || 1;
+    const next = Math.min(3, Math.max(1, current + delta)) as DifficultyLevel;
     set({
       difficulties: {
         ...difficulties,
