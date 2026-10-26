@@ -14,6 +14,7 @@ export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, o
   );
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answerId, setAnswerId] = useState<string | null>(null);
+  const [wrongIds, setWrongIds] = useState<string[]>([]);
   const { recordAnswer, finish } = useGameProgress('safari', { onCorrect, onWrong, onComplete });
   const { speak } = useSpeech();
   const copy = GAME_COPY[language];
@@ -33,6 +34,7 @@ export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, o
         return;
       }
       setAnswerId(null);
+      setWrongIds([]);
       setQuestionIndex(index => index + 1);
     }, 850);
     return () => window.clearTimeout(timeout);
@@ -47,7 +49,6 @@ export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, o
         <div className="min-w-0 flex-1">
           <p className="text-xs font-black uppercase tracking-wider text-emerald-800">{copy.safariPrompt}</p>
           <h2 className="mt-1 flex items-center gap-3 text-xl font-black leading-tight text-slate-900 sm:text-3xl">
-            <span className="text-4xl" aria-hidden="true">{question.imageUrl || '✨'}</span>
             <span className="text-emerald-700">{question.translation}</span>
           </h2>
           <p className="mt-2 text-sm font-semibold text-slate-600">{copy.safariHint}</p>
@@ -67,15 +68,17 @@ export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, o
         {options.map((option, index) => {
           const selected = answerId === option.id;
           const correct = option.id === question.id;
-          const revealed = answerId !== null && selected;
+          const eliminated = wrongIds.includes(option.id);
+          const revealed = selected || eliminated;
           return (
             <motion.button
               key={`${question.id}-${option.id}`}
               type="button"
-              disabled={answerId !== null}
+              disabled={answerId !== null || eliminated}
               whileTap={{ scale: 0.96 }}
               onClick={() => {
-                setAnswerId(option.id);
+                if (!correct) setWrongIds(ids => [...ids, option.id]);
+                else setAnswerId(option.id);
                 recordAnswer(question, correct, option);
               }}
               aria-label={`${option.imageUrl || ''}${revealed ? `: ${option.text}` : ''}`}
@@ -83,12 +86,14 @@ export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, o
               dir={option.language === 'ar' ? 'rtl' : 'auto'}
               className={`flex min-h-28 flex-col items-center justify-center rounded-3xl border-2 p-3 text-center transition sm:min-h-36 ${
                 revealed
-                  ? correct ? 'border-emerald-400 bg-emerald-100' : 'border-rose-200 bg-rose-50'
+                  ? correct && selected
+                    ? 'border-emerald-500 bg-emerald-100 text-emerald-900'
+                    : 'border-rose-500 bg-rose-100 text-rose-900 opacity-70'
                   : 'border-white bg-white shadow-[0_5px_0_#d9e9c9] hover:-translate-y-1 hover:bg-lime-50'
               }`}
             >
               <span className="text-4xl sm:text-5xl" aria-hidden="true">{option.imageUrl || '✨'}</span>
-              {revealed && <span className="mt-1 text-sm font-black text-emerald-800" lang={option.language}>{option.text}</span>}
+              {revealed && <span className={`mt-1 text-sm font-black ${correct && selected ? 'text-emerald-800' : 'text-rose-800'}`} lang={option.language}>{option.text}</span>}
               <span className="sr-only">{copy.optionLabel} {index + 1}</span>
             </motion.button>
           );
@@ -96,7 +101,12 @@ export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, o
       </div>
       {answerId && (
         <p aria-live="polite" className="mt-4 text-center text-lg font-black text-emerald-800">
-          {answerId === question.id ? `${copy.correct} ${question.text} · ${question.translation}` : `${copy.tryAgain} ${question.text} · ${question.translation}`}
+          {`${copy.correct} ${question.text} · ${question.translation} 🎉`}
+        </p>
+      )}
+      {!answerId && wrongIds.length > 0 && (
+        <p aria-live="polite" className="mt-4 text-center text-lg font-black text-rose-700">
+          {copy.tryAgain} 💪
         </p>
       )}
     </section>

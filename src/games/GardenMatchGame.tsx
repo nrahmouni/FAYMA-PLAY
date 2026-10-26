@@ -26,6 +26,7 @@ export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, langua
   ])), [roundWords]);
   const [openIds, setOpenIds] = useState<string[]>([]);
   const [matchedIds, setMatchedIds] = useState<string[]>([]);
+  const [wrongIds, setWrongIds] = useState<string[]>([]);
   const [attempts, setAttempts] = useState(0);
   const [locked, setLocked] = useState(false);
   const { recordAnswer, finish } = useGameProgress('garden_match', { onCorrect, onWrong, onComplete });
@@ -41,6 +42,7 @@ export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, langua
     const matched = first.wordId === second.wordId && first.kind !== second.kind;
     setLocked(true);
     setAttempts(count => count + 1);
+    setWrongIds(matched ? [] : [first.id, second.id]);
     const timeout = window.setTimeout(() => {
       const matchedWord = roundWords.find(word => word.id === first.wordId);
       if (matchedWord) recordAnswer(matchedWord, matched, matchedWord, false);
@@ -50,6 +52,7 @@ export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, langua
         if (nextMatched.length === cards.length) finish(roundWords.map(word => word.id));
       }
       setOpenIds([]);
+      setWrongIds([]);
       setLocked(false);
     }, matched ? 450 : 900);
     return () => window.clearTimeout(timeout);
@@ -86,6 +89,7 @@ export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, langua
               className={`flex aspect-square min-h-20 items-center justify-center rounded-2xl border-2 p-2 text-center shadow-sm transition sm:rounded-3xl ${
                 matchedIds.includes(card.id)
                   ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                  : wrongIds.includes(card.id) ? 'border-rose-500 bg-rose-100 text-rose-900'
                   : open ? 'border-amber-300 bg-white text-slate-800' : 'border-white bg-gradient-to-br from-pink-200 to-amber-200 text-5xl shadow-[0_5px_0_#e8c9a0] hover:-translate-y-1'
               }`}
             >
@@ -96,6 +100,11 @@ export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, langua
           );
         })}
       </div>
+      {wrongIds.length > 0 && (
+        <p aria-live="polite" className="mt-4 text-center text-lg font-black text-rose-700">
+          {copy.tryAgain} 💪
+        </p>
+      )}
     </section>
   );
 };

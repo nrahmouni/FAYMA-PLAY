@@ -119,6 +119,7 @@ export const WordTrainGame: React.FC<GameProps> = ({
     slots: [],
   });
   const [solved, setSolved] = useState(false);
+  const [orderWrong, setOrderWrong] = useState(false);
   const [draggedTokenId, setDraggedTokenId] = useState<string | null>(null);
   const errorReported = useRef(-1);
   const { recordAnswer, finish } = useGameProgress('word_train', { onCorrect, onWrong, onComplete });
@@ -148,6 +149,7 @@ export const WordTrainGame: React.FC<GameProps> = ({
 
   const updateSlots = (nextSlots: Array<string | null>) => {
     setPlacedState({ questionIndex, slots: nextSlots });
+    setOrderWrong(false);
   };
 
   const placeToken = (tokenId: string, targetIndex: number) => {
@@ -187,6 +189,7 @@ export const WordTrainGame: React.FC<GameProps> = ({
         errorReported.current = questionIndex;
         recordAnswer(question, false, question, false);
       }
+      setOrderWrong(true);
       speak(copy.tryAgain, language);
       return;
     }
@@ -203,6 +206,7 @@ export const WordTrainGame: React.FC<GameProps> = ({
       setPlacedState({ questionIndex: questionIndex + 1, slots: [] });
       setQuestionIndex(index => index + 1);
       setSolved(false);
+      setOrderWrong(false);
     }, 1300);
   };
 
@@ -221,7 +225,7 @@ export const WordTrainGame: React.FC<GameProps> = ({
           <div>
             <p className="text-xs font-black uppercase tracking-wider text-amber-800">{copy.trainTitle}</p>
             <h2 className="mt-1 text-xl font-black leading-tight text-slate-900 sm:text-3xl">{copy.sentencePrompt}</h2>
-            <p className="mt-2 text-lg font-extrabold text-orange-800 sm:text-2xl">{challenge.clue} 💡</p>
+            <p className="mt-2 text-lg font-extrabold text-orange-800 sm:text-2xl">{challenge.clue}</p>
           </div>
           <button
             type="button"
@@ -239,6 +243,7 @@ export const WordTrainGame: React.FC<GameProps> = ({
       <div className="mb-5 grid gap-2" aria-label={copy.orderSentence}>
         {slots.map((tokenId, slotIndex) => {
           const token = tokens.find(item => item.id === tokenId);
+          const misplaced = Boolean(token && token.text !== challenge.words[slotIndex]);
           return (
             <div key={`${questionIndex}-slot-${slotIndex}`} className="flex min-w-0 items-center gap-2">
               <button
@@ -260,7 +265,9 @@ export const WordTrainGame: React.FC<GameProps> = ({
                 aria-label={token ? `${copy.removeWord}: ${token.text}` : `${copy.emptySlot} ${slotIndex + 1}`}
                 className={`flex min-h-14 min-w-0 flex-1 items-center justify-center rounded-2xl border-2 border-dashed px-3 text-lg font-black transition sm:min-h-16 sm:text-xl ${
                   token
-                    ? solved ? 'border-emerald-400 bg-emerald-100 text-emerald-900' : 'border-orange-300 bg-white text-slate-900'
+                    ? solved ? 'border-emerald-400 bg-emerald-100 text-emerald-900'
+                      : orderWrong && misplaced ? 'border-rose-500 bg-rose-100 text-rose-900'
+                        : 'border-orange-300 bg-white text-slate-900'
                     : 'border-amber-300 bg-amber-50 text-amber-700'
                 }`}
               >
@@ -327,6 +334,11 @@ export const WordTrainGame: React.FC<GameProps> = ({
       {solved && (
         <p aria-live="polite" className="mt-4 text-center text-xl font-black text-emerald-800">
           {copy.correct} {challenge.clue} 🎉
+        </p>
+      )}
+      {orderWrong && !solved && (
+        <p aria-live="polite" className="mt-4 text-center text-lg font-black text-rose-700">
+          {copy.tryAgain} 💪
         </p>
       )}
 
