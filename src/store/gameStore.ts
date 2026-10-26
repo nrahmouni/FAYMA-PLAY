@@ -3,7 +3,7 @@ import { Screen, Language, DifficultyLevel, GameResult, PlayerProfile } from '..
 
 export type GameSessionPhase = 'CHALLENGE_PHASE' | 'RESULT_PHASE';
 
-export type GameMechanic = 'safari' | 'garden_match' | 'word_train';
+export type GameMechanic = 'safari' | 'garden_match' | 'word_train' | 'word_picker';
 
 export interface WorldNode {
   id: string;
@@ -121,7 +121,7 @@ function loadSavedDifficulties(): Record<string, DifficultyLevel> {
 
 export const useGameStore = create<GameState>((set, get) => ({
   currentScreen: 'BOOT',
-  language: 'es',
+  language: 'nl-BE',
   totalRounds: 3,
   currentRound: 1,
   currentPlayerIndex: 0,

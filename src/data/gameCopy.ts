@@ -1,8 +1,8 @@
 import { Language } from '../types';
 
 export const GAME_COPY: Record<Language, {
-  gameNames: { safari: string; train: string; garden: string };
-  gameDescriptions: { safari: string; train: string; garden: string };
+  gameNames: { safari: string; train: string; garden: string; wordPicker: string };
+  gameDescriptions: { safari: string; train: string; garden: string; wordPicker: string };
   welcome: string;
   chooseGame: string;
   changeFlag: string;
@@ -10,6 +10,9 @@ export const GAME_COPY: Record<Language, {
   safariProgress: string;
   safariPrompt: string;
   safariHint: string;
+  wordPickerProgress: string;
+  wordPickerTitle: string;
+  wordPickerHint: string;
   trainProgress: string;
   trainTitle: string;
   trainHint: string;
@@ -50,6 +53,7 @@ export const GAME_COPY: Record<Language, {
   safariVoiceGuide: string;
   trainVoiceGuide: string;
   gardenVoiceGuide: string;
+  wordPickerVoiceGuide: string;
   sayWord: string;
   orderSentence: string;
   sentencePrompt: string;
@@ -70,8 +74,8 @@ export const GAME_COPY: Record<Language, {
   moveLater: string;
 }> = {
   es: {
-    gameNames: { safari: 'Safari de palabras', train: 'Tren de palabras', garden: 'Jardín de parejas' },
-    gameDescriptions: { safari: 'Escucha una palabra y elige el dibujo.', train: 'Escucha la frase y ordena sus palabras.', garden: 'Une cada dibujo con su palabra.' },
+    gameNames: { safari: 'Safari de palabras', train: 'Tren de palabras', garden: 'Jardín de parejas', wordPicker: 'Globos de palabras' },
+    gameDescriptions: { safari: 'Escucha una palabra y elige el dibujo.', train: 'Escucha la frase y ordena sus palabras.', garden: 'Une cada dibujo con su palabra.', wordPicker: 'Escucha la palabra y elige su significado.' },
     welcome: '¡Bienvenidos!',
     chooseGame: '¿Qué juego elegimos?',
     changeFlag: 'Cambiar idioma',
@@ -79,6 +83,9 @@ export const GAME_COPY: Record<Language, {
     safariProgress: 'Safari',
     safariPrompt: 'Busca:',
     safariHint: 'Toca el dibujo correcto.',
+    wordPickerProgress: 'Globos encontrados',
+    wordPickerTitle: '¡Escucha y elige!',
+    wordPickerHint: 'Busca la palabra flamenca que significa esto.',
     trainProgress: 'Viaje en tren',
     trainTitle: '¡El tren de palabras!',
     trainHint: 'Escucha la frase y coloca sus palabras en orden.',
@@ -89,7 +96,7 @@ export const GAME_COPY: Record<Language, {
     attempts: 'Intentos',
     empty: '¡Preparando nuevas palabras!',
     correct: '¡Muy bien!',
-    tryAgain: 'No es correcto. ¡Inténtalo de nuevo!',
+    tryAgain: '¡Buen intento! ¡Prueba otra!',
     musicOn: 'Música activada',
     musicOff: 'Activar música',
     soundOn: 'Activar sonido',
@@ -119,6 +126,7 @@ export const GAME_COPY: Record<Language, {
     safariVoiceGuide: 'Escucha la palabra y toca el dibujo que la representa.',
     trainVoiceGuide: 'Escucha la frase y ordena sus palabras en los huecos.',
     gardenVoiceGuide: 'Encuentra las parejas: toca dos flores para descubrirlas.',
+    wordPickerVoiceGuide: 'Escucha la palabra flamenca y toca su significado en español.',
     sayWord: 'La palabra es',
     orderSentence: 'Arrastra las palabras para ordenar la frase.',
     sentencePrompt: 'Forma esta frase:',
@@ -139,8 +147,8 @@ export const GAME_COPY: Record<Language, {
     moveLater: 'Mover después',
   },
   fr: {
-    gameNames: { safari: 'Safari des mots', train: 'Train des mots', garden: 'Jardin des paires' },
-    gameDescriptions: { safari: 'Écoute un mot et choisis le dessin.', train: 'Écoute la phrase et remets les mots en ordre.', garden: 'Relie chaque dessin à son mot.' },
+    gameNames: { safari: 'Safari des mots', train: 'Train des mots', garden: 'Jardin des paires', wordPicker: 'Ballons de mots' },
+    gameDescriptions: { safari: 'Écoute un mot et choisis le dessin.', train: 'Écoute la phrase et remets les mots en ordre.', garden: 'Relie chaque dessin à son mot.', wordPicker: 'Écoute le mot et choisis sa signification.' },
     welcome: 'Bienvenue !',
     chooseGame: 'À quel jeu joue-t-on ?',
     changeFlag: 'Changer de langue',
@@ -148,6 +156,9 @@ export const GAME_COPY: Record<Language, {
     safariProgress: 'Safari',
     safariPrompt: 'Cherche :',
     safariHint: 'Touche le bon dessin.',
+    wordPickerProgress: 'Ballons trouvés',
+    wordPickerTitle: 'Écoute et choisis !',
+    wordPickerHint: 'Trouve le mot flamand qui a cette signification.',
     trainProgress: 'Voyage en train',
     trainTitle: 'Le train des mots !',
     trainHint: 'Écoute la phrase et place les mots dans l’ordre.',
@@ -158,7 +169,7 @@ export const GAME_COPY: Record<Language, {
     attempts: 'Essais',
     empty: 'Préparation de nouveaux mots !',
     correct: 'Bravo !',
-    tryAgain: 'Ce n’est pas correct. Réessaie !',
+    tryAgain: 'Bien essayé ! Essaie encore !',
     musicOn: 'Musique activée',
     musicOff: 'Activer la musique',
     soundOn: 'Activer le son',
@@ -188,6 +199,7 @@ export const GAME_COPY: Record<Language, {
     safariVoiceGuide: 'Écoute le mot et touche le dessin correspondant.',
     trainVoiceGuide: 'Écoute la phrase et range les mots dans les cases.',
     gardenVoiceGuide: 'Trouve les paires : touche deux fleurs pour les découvrir.',
+    wordPickerVoiceGuide: 'Écoute le mot flamand et touche sa signification en espagnol.',
     sayWord: 'Le mot est',
     orderSentence: 'Fais glisser les mots pour former la phrase.',
     sentencePrompt: 'Forme cette phrase :',
@@ -208,8 +220,8 @@ export const GAME_COPY: Record<Language, {
     moveLater: 'Déplacer après',
   },
   'nl-BE': {
-    gameNames: { safari: 'Woordensafari', train: 'Woordentrein', garden: 'Paren in de tuin' },
-    gameDescriptions: { safari: 'Luister naar een woord en kies het plaatje.', train: 'Luister naar de zin en zet de woorden in de juiste volgorde.', garden: 'Koppel elk plaatje aan het juiste woord.' },
+    gameNames: { safari: 'Woordensafari', train: 'Woordentrein', garden: 'Paren in de tuin', wordPicker: 'Woordballonnen' },
+    gameDescriptions: { safari: 'Luister naar een woord en kies het plaatje.', train: 'Luister naar de zin en zet de woorden in de juiste volgorde.', garden: 'Koppel elk plaatje aan het juiste woord.', wordPicker: 'Luister naar het woord en kies de betekenis.' },
     welcome: 'Welkom!',
     chooseGame: 'Welk spel kiezen we?',
     changeFlag: 'Taal veranderen',
@@ -217,6 +229,9 @@ export const GAME_COPY: Record<Language, {
     safariProgress: 'Safari',
     safariPrompt: 'Zoek:',
     safariHint: 'Tik op het juiste plaatje.',
+    wordPickerProgress: 'Ballonnen gevonden',
+    wordPickerTitle: 'Luister en kies!',
+    wordPickerHint: 'Zoek het Vlaamse woord met deze betekenis.',
     trainProgress: 'Treinreis',
     trainTitle: 'De woordentrein!',
     trainHint: 'Luister naar de zin en zet de woorden op de juiste plek.',
@@ -227,7 +242,7 @@ export const GAME_COPY: Record<Language, {
     attempts: 'Pogingen',
     empty: 'Nieuwe woorden klaarmaken!',
     correct: 'Goed gedaan!',
-    tryAgain: 'Dat is niet juist. Probeer het opnieuw!',
+    tryAgain: 'Goed geprobeerd! Probeer nog eens!',
     musicOn: 'Muziek aan',
     musicOff: 'Muziek aanzetten',
     soundOn: 'Geluid aanzetten',
@@ -257,6 +272,7 @@ export const GAME_COPY: Record<Language, {
     safariVoiceGuide: 'Luister naar het woord en tik op het bijpassende plaatje.',
     trainVoiceGuide: 'Luister naar de zin en zet de woorden in de juiste volgorde.',
     gardenVoiceGuide: 'Zoek de paren: tik op twee bloemen om ze te ontdekken.',
+    wordPickerVoiceGuide: 'Luister naar het Vlaamse woord en tik op de Spaanse betekenis.',
     sayWord: 'Het woord is',
     orderSentence: 'Sleep de woorden naar de juiste plek.',
     sentencePrompt: 'Maak deze zin:',
@@ -277,8 +293,8 @@ export const GAME_COPY: Record<Language, {
     moveLater: 'Later zetten',
   },
   ar: {
-    gameNames: { safari: 'سفاري الكلمات', train: 'قطار الكلمات', garden: 'حديقة الأزواج' },
-    gameDescriptions: { safari: 'استمع إلى كلمة واختر الصورة.', train: 'استمع إلى الجملة ورتّب كلماتها.', garden: 'اربط كل صورة بكلمتها.' },
+    gameNames: { safari: 'سفاري الكلمات', train: 'قطار الكلمات', garden: 'حديقة الأزواج', wordPicker: 'بالونات الكلمات' },
+    gameDescriptions: { safari: 'استمع إلى كلمة واختر الصورة.', train: 'استمع إلى الجملة ورتّب كلماتها.', garden: 'اربط كل صورة بكلمتها.', wordPicker: 'استمع إلى الكلمة واختر معناها.' },
     welcome: 'أهلاً وسهلاً!',
     chooseGame: 'أي لعبة نختار؟',
     changeFlag: 'تغيير اللغة',
@@ -286,6 +302,9 @@ export const GAME_COPY: Record<Language, {
     safariProgress: 'السفاري',
     safariPrompt: 'ابحث عن:',
     safariHint: 'المس الصورة الصحيحة.',
+    wordPickerProgress: 'بالونات مكتشفة',
+    wordPickerTitle: 'استمع واختر!',
+    wordPickerHint: 'ابحث عن الكلمة الفلمنكية بهذا المعنى.',
     trainProgress: 'رحلة القطار',
     trainTitle: 'قطار الكلمات!',
     trainHint: 'استمع إلى الجملة وضع الكلمات في ترتيبها.',
@@ -296,7 +315,7 @@ export const GAME_COPY: Record<Language, {
     attempts: 'المحاولات',
     empty: 'نحضّر كلمات جديدة!',
     correct: 'أحسنت!',
-    tryAgain: 'إجابة غير صحيحة. حاول مرة أخرى!',
+    tryAgain: 'محاولة جيدة! حاول مرة أخرى!',
     musicOn: 'الموسيقى تعمل',
     musicOff: 'تشغيل الموسيقى',
     soundOn: 'تشغيل الصوت',
@@ -326,6 +345,7 @@ export const GAME_COPY: Record<Language, {
     safariVoiceGuide: 'استمع إلى الكلمة والمس الصورة المناسبة.',
     trainVoiceGuide: 'استمع إلى الجملة ورتّب كلماتها في الأماكن الفارغة.',
     gardenVoiceGuide: 'ابحث عن الأزواج: المس زهرتين لاكتشافهما.',
+    wordPickerVoiceGuide: 'استمع إلى الكلمة الفلمنكية والمس معناها بالإسبانية.',
     sayWord: 'الكلمة هي',
     orderSentence: 'اسحب الكلمات إلى ترتيبها الصحيح.',
     sentencePrompt: 'رتّب هذه الجملة:',

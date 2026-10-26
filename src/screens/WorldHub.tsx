@@ -11,6 +11,7 @@ const GAMES: Array<{ id: GameMechanic; emoji: string; art: string; color: string
   { id: 'safari', emoji: '🦒', art: '/games/safari.svg', color: 'from-lime-100 to-emerald-100' },
   { id: 'word_train', emoji: '🚂', art: '/games/train.svg', color: 'from-sky-100 to-blue-100' },
   { id: 'garden_match', emoji: '🌼', art: '/games/garden.svg', color: 'from-amber-100 to-pink-100' },
+  { id: 'word_picker', emoji: '🎈', art: '/games/balloons.svg', color: 'from-violet-100 to-pink-100' },
 ];
 
 export const WorldHub: React.FC = () => {
@@ -24,8 +25,20 @@ export const WorldHub: React.FC = () => {
   const copy = GAME_COPY[language];
   const localizedGames = GAMES.map(game => ({
     ...game,
-    name: game.id === 'safari' ? copy.gameNames.safari : game.id === 'word_train' ? copy.gameNames.train : copy.gameNames.garden,
-    description: game.id === 'safari' ? copy.gameDescriptions.safari : game.id === 'word_train' ? copy.gameDescriptions.train : copy.gameDescriptions.garden,
+    name: game.id === 'safari'
+      ? copy.gameNames.safari
+      : game.id === 'word_train'
+        ? copy.gameNames.train
+        : game.id === 'garden_match'
+          ? copy.gameNames.garden
+          : copy.gameNames.wordPicker,
+    description: game.id === 'safari'
+      ? copy.gameDescriptions.safari
+      : game.id === 'word_train'
+        ? copy.gameDescriptions.train
+        : game.id === 'garden_match'
+          ? copy.gameDescriptions.garden
+          : copy.gameDescriptions.wordPicker,
   }));
 
   const playGame = (gameId: GameMechanic) => {

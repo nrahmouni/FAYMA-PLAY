@@ -45,7 +45,9 @@ export const GameSession: React.FC = () => {
       ? copy.safariVoiceGuide
       : activeGameId === 'garden_match'
         ? copy.gardenVoiceGuide
-        : copy.trainVoiceGuide;
+        : activeGameId === 'word_picker'
+          ? copy.wordPickerVoiceGuide
+          : copy.trainVoiceGuide;
     speak(
       `${copy.ready.replace('{name}', activePlayer.displayName)} ${copy.startTurn} ${guide}`,
       language,

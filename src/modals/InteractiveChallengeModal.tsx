@@ -5,6 +5,7 @@ import { GameProps, DifficultyLevel, PlayerProfile } from '../types';
 const SafariGame = React.lazy(() => import('../games/SafariGame').then(m => ({ default: m.SafariGame })));
 const GardenMatchGame = React.lazy(() => import('../games/GardenMatchGame').then(m => ({ default: m.GardenMatchGame })));
 const WordTrainGame = React.lazy(() => import('../games/WordTrainGame').then(m => ({ default: m.WordTrainGame })));
+const WordPickerGame = React.lazy(() => import('../games/WordPickerGame').then(m => ({ default: m.WordPickerGame })));
 
 interface InteractiveChallengeModalProps {
   gameId: string;
@@ -25,6 +26,8 @@ export const InteractiveChallengeModal: React.FC<InteractiveChallengeModalProps>
         return <GardenMatchGame {...gameProps} />;
       case 'word_train':
         return <WordTrainGame {...gameProps} />;
+      case 'word_picker':
+        return <WordPickerGame {...gameProps} />;
       default:
         return <SafariGame {...gameProps} />;
     }
