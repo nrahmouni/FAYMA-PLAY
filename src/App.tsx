@@ -22,6 +22,7 @@ import { GarageShop } from './screens/GarageShop';
 export default function App() {
   const currentScreen = useGameStore(s => s.currentScreen);
   const { playClick } = useSound();
+  const isGameSession = currentScreen === 'GAME_SESSION';
   // Boot initialization
   useEffect(() => {
     testConnection();
@@ -66,7 +67,7 @@ export default function App() {
         const button = target.closest('button');
         if (button && !button.disabled && !button.hasAttribute('data-silent-click')) playClick();
       }}
-      className="min-h-screen text-slate-900 flex flex-col relative overflow-x-hidden selection:bg-pink-300 selection:text-slate-900 bg-gradient-to-br from-sky-100 via-pink-50 to-yellow-100 transition-colors duration-700"
+      className="flex h-dvh min-h-0 flex-col overflow-hidden text-slate-900 relative selection:bg-pink-300 selection:text-slate-900 bg-gradient-to-br from-sky-100 via-pink-50 to-yellow-100 transition-colors duration-700"
     >
       {/* Audio Unlocker & Offline Indicator */}
       <AudioUnlocker />
@@ -76,15 +77,15 @@ export default function App() {
       <HeaderHUD />
 
       {/* Main Viewport */}
-      <main className="flex-1 flex flex-col justify-start pb-4">
+      <main className={`flex min-h-0 flex-1 flex-col justify-start ${isGameSession ? 'overflow-hidden' : 'overflow-y-auto overscroll-contain pb-4'}`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={currentScreen}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.22 }}
-            className="w-full flex-1"
+            className={`w-full flex-1 ${isGameSession ? 'min-h-0' : ''}`}
           >
             {renderScreen()}
           </motion.div>

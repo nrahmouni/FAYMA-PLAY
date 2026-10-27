@@ -6,6 +6,7 @@ import { useSpeech } from '../hooks/useSpeech';
 import { useSound } from '../hooks/useSound';
 import { VOCABULARY_BANK } from '../data/vocabulary';
 import { JuiceBurst } from '../components/JuiceBurst';
+import { FitGame } from '../components/FitGame';
 import { GAME_COPY } from '../data/gameCopy';
 
 interface TurnResultModalProps {
@@ -60,13 +61,14 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
     .filter((w): w is Word => Boolean(w));
 
   return (
-    <div lang={language} dir={isArabic ? 'rtl' : 'ltr'} className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-sky-100/80 p-3 backdrop-blur-sm animate-fadeIn sm:p-5">
+    <div lang={language} dir={isArabic ? 'rtl' : 'ltr'} className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-sky-100/80 p-2 backdrop-blur-sm animate-fadeIn sm:p-4">
       <JuiceBurst trigger={missionCompleted} type="victory" />
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        className="relative my-auto w-full max-w-lg overflow-hidden rounded-[2rem] border-4 border-white bg-gradient-to-br from-white via-yellow-50 to-sky-50 p-5 text-center shadow-[0_20px_55px_rgba(51,92,130,.2)] sm:p-7"
-      >
+      <FitGame>
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border-4 border-white bg-gradient-to-br from-white via-yellow-50 to-sky-50 p-3 text-center shadow-[0_20px_55px_rgba(51,92,130,.2)] sm:p-5"
+        >
         {/* Confetti / Trophy header */}
         {missionCompleted && (
           <motion.div
@@ -95,19 +97,19 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
         <h2 lang={language} className="mb-1 text-2xl font-black text-slate-900 sm:text-3xl">
           {accuracy === 100 ? copy.perfectRound : accuracy >= 70 ? copy.excellentWork : copy.goodTry}
         </h2>
-        <p className="mb-5 text-sm text-slate-600">
+        <p className="mb-3 text-sm text-slate-600">
           {copy.goodWork.replace('{name}', player.displayName)}
         </p>
 
         {/* Stats Grid */}
-        <div className="mb-6 grid grid-cols-2 gap-2.5">
-          <div className="flex flex-col items-center rounded-2xl border border-emerald-100 bg-emerald-50 p-3">
+        <div className="mb-3 grid grid-cols-2 gap-2">
+          <div className="flex flex-col items-center rounded-2xl border border-emerald-100 bg-emerald-50 p-2">
             <CheckCircle2 className="mb-1 h-5 w-5 text-emerald-600" />
             <span className="text-lg font-black text-slate-900">{result.correct}</span>
             <span className="text-[10px] font-bold uppercase text-slate-600">{copy.correctAnswers}</span>
           </div>
 
-          <div className="flex flex-col items-center rounded-2xl border border-amber-100 bg-amber-50 p-3">
+          <div className="flex flex-col items-center rounded-2xl border border-amber-100 bg-amber-50 p-2">
             <Coins className="mb-1 h-5 w-5 text-amber-600" />
             <span className="text-lg font-black text-amber-800">+{result.coinsEarned}</span>
             <span className="text-[10px] font-bold uppercase text-slate-600">{copy.coins}</span>
@@ -120,8 +122,8 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
             <span className="mb-2 block px-1 text-xs font-extrabold uppercase tracking-wider text-slate-600">
               {copy.roundWords}:
             </span>
-            <div className="space-y-2 max-h-36 overflow-y-auto pr-1">
-              {wordsSeenList.map(w => (
+            <div className="space-y-1.5 pr-1">
+              {wordsSeenList.slice(0, 2).map(w => (
                 <div
                   key={w.id}
                   className="flex items-center justify-between rounded-xl border border-sky-100 bg-white p-2.5"
@@ -156,6 +158,9 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
                   </button>
                 </div>
               ))}
+              {wordsSeenList.length > 2 && (
+                <p className="text-center text-xs font-bold text-slate-500">+{wordsSeenList.length - 2}</p>
+              )}
             </div>
           </div>
         )}
@@ -164,12 +169,13 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
         <button
           type="button"
           onClick={onContinue}
-          className="flex min-h-14 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-lime-500 px-6 py-4 text-lg font-black text-white shadow-[0_5px_0_#35824a] transition hover:brightness-105 active:translate-y-1 active:shadow-none"
+          className="flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-lime-500 px-4 py-2 text-lg font-black text-white shadow-[0_5px_0_#35824a] transition hover:brightness-105 active:translate-y-1 active:shadow-none"
         >
           <span>{copy.continue}</span>
           <ArrowRight className="w-6 h-6" />
         </button>
-      </motion.div>
+        </motion.div>
+      </FitGame>
     </div>
   );
 };

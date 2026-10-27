@@ -163,7 +163,7 @@ export const GameSession: React.FC = () => {
   }), [roundWords, difficulty, handleGameCorrect, handleGameWrong, handleGameComplete, language, introSpokenForTurn, turnKey]);
 
   return (
-    <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center px-2 py-2 sm:px-4 sm:py-3">
+    <div className="relative mx-auto flex h-full min-h-0 w-full max-w-5xl flex-col items-center overflow-hidden px-2 py-1 sm:px-4 sm:py-2">
       {sessionPhase === 'CHALLENGE_PHASE' && activePlayer && (
         <>
           {readyConfirmedForTurn !== turnKey && (

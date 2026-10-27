@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { Gamepad2 } from 'lucide-react';
 import { GameProps, DifficultyLevel, PlayerProfile } from '../types';
+import { FitGame } from '../components/FitGame';
 
 const SafariGame = React.lazy(() => import('../games/SafariGame').then(m => ({ default: m.SafariGame })));
 const GardenMatchGame = React.lazy(() => import('../games/GardenMatchGame').then(m => ({ default: m.GardenMatchGame })));
@@ -76,16 +77,18 @@ export const InteractiveChallengeModal: React.FC<InteractiveChallengeModalProps>
   };
 
   return (
-    <div className="fayma-game-world relative isolate flex w-full flex-col items-center">
+    <div className="fayma-game-world relative isolate flex h-full min-h-0 w-full flex-col items-center overflow-hidden">
       <Suspense
         fallback={
-          <div className="relative z-10 flex h-48 w-full max-w-2xl flex-col items-center justify-center rounded-3xl border border-emerald-100 bg-white p-8">
+          <div className="relative z-10 flex h-full w-full flex-col items-center justify-center rounded-3xl border border-emerald-100 bg-white p-8">
             <Gamepad2 className="mb-3 h-12 w-12 animate-bounce text-emerald-500" />
             <p className="text-sm font-bold text-emerald-800">Preparando el juego...</p>
           </div>
         }
       >
-        <div className="fayma-game-view relative z-10 w-full">{renderGame()}</div>
+        <FitGame>
+          <div className="fayma-game-view relative z-10 w-full">{renderGame()}</div>
+        </FitGame>
       </Suspense>
     </div>
   );

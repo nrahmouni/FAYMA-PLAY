@@ -1,6 +1,7 @@
 import React, { Suspense, useState } from 'react';
 import { ArrowLeft, Play, Sparkles } from 'lucide-react';
 import { Language } from '../types';
+import { FitGame } from '../components/FitGame';
 
 const MagicWorldGame = React.lazy(() => import('./MagicWorldGame').then(module => ({ default: module.MagicWorldGame })));
 const MagicMemoryGame = React.lazy(() => import('./MagicMemoryGame').then(module => ({ default: module.MagicMemoryGame })));
@@ -83,22 +84,24 @@ export const OriginalGames: React.FC<OriginalGamesProps> = ({ language }) => {
   return (
     <section lang={language} dir={direction} className="mx-auto w-full max-w-5xl">
       {activeGame ? (
-        <>
+        <div className="fixed inset-x-0 bottom-0 top-[60px] z-30 flex flex-col overflow-hidden bg-gradient-to-br from-sky-100 via-pink-50 to-yellow-100 p-2 sm:p-4">
           <button
             type="button"
             onClick={() => setActiveGame(null)}
-            className="mb-4 inline-flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-bold text-slate-700 transition hover:bg-white/80"
+            className="mb-1 inline-flex min-h-10 shrink-0 items-center gap-2 self-start rounded-xl px-3 text-sm font-bold text-slate-700 transition hover:bg-white/80"
           >
             <ArrowLeft className="h-4 w-4" /> {copy.back}
           </button>
-          <Suspense fallback={<div className="rounded-3xl bg-white p-8 text-center font-black text-slate-700">✨</div>}>
-            {activeGame === 'magic-world' && <MagicWorldGame language={language} />}
-            {activeGame === 'magic-memory' && <MagicMemoryGame language={language} />}
-            {activeGame === 'star-catch' && <StarCatchGame language={language} />}
-            {activeGame === 'color-echo' && <ColorEchoGame language={language} />}
-            {activeGame === 'mole-dash' && <MoleDashGame language={language} />}
-          </Suspense>
-        </>
+          <FitGame>
+            <Suspense fallback={<div className="rounded-3xl bg-white p-8 text-center font-black text-slate-700">✨</div>}>
+              {activeGame === 'magic-world' && <MagicWorldGame language={language} />}
+              {activeGame === 'magic-memory' && <MagicMemoryGame language={language} />}
+              {activeGame === 'star-catch' && <StarCatchGame language={language} />}
+              {activeGame === 'color-echo' && <ColorEchoGame language={language} />}
+              {activeGame === 'mole-dash' && <MoleDashGame language={language} />}
+            </Suspense>
+          </FitGame>
+        </div>
       ) : (
         <>
           <header className="mb-5 rounded-[2rem] border-4 border-white bg-gradient-to-r from-sky-50 via-white to-violet-50 p-5 shadow-sm sm:p-7">

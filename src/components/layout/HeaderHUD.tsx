@@ -23,7 +23,7 @@ export const HeaderHUD: React.FC = () => {
   if (currentScreen === 'BOOT') return null;
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/80 bg-white/85 px-3 py-2.5 shadow-sm backdrop-blur-xl sm:px-6">
+    <header className="sticky top-0 z-40 h-[60px] w-full shrink-0 border-b border-white/80 bg-white/85 px-3 py-2 shadow-sm backdrop-blur-xl sm:px-6">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           <button
