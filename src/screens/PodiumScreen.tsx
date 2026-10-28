@@ -32,7 +32,7 @@ export const PodiumScreen: React.FC = () => {
   return (
     <main className="mx-auto flex min-h-[calc(100vh-76px)] w-full max-w-2xl flex-col justify-center px-4 py-6 sm:px-8">
       <JuiceBurst trigger={burst} type="victory" />
-      <section className="rounded-[2rem] border-4 border-white bg-gradient-to-br from-yellow-100 via-pink-50 to-sky-100 p-5 text-center shadow-[0_20px_50px_rgba(83,111,155,.14)] sm:p-8">
+      <section className="rounded-[2rem] border-4 border-white bg-gradient-to-br from-yellow-200 via-rose-100 to-sky-200 p-5 text-center shadow-[0_20px_50px_rgba(36,107,253,.16)] sm:p-8">
         <motion.div
           initial={{ scale: 0.7, rotate: -10 }}
           animate={{ scale: 1, rotate: 0 }}
@@ -54,7 +54,9 @@ export const PodiumScreen: React.FC = () => {
               className="flex items-center gap-3 rounded-2xl border-2 border-white bg-white/90 p-3 text-left shadow-sm sm:p-4"
             >
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-3xl" aria-hidden="true">
-                {player.avatarUrl?.startsWith('data:') ? '🙂' : player.avatarUrl || '⭐'}
+                {player.avatarUrl?.startsWith('data:') || player.avatarUrl?.startsWith('/')
+                  ? <img src={player.avatarUrl} alt="" className="h-12 w-12 rounded-2xl object-cover" />
+                  : player.avatarUrl || '⭐'}
               </span>
               <span className="min-w-0 flex-1 truncate font-black text-slate-900">{player.displayName}</span>
               <span className="rounded-full bg-amber-100 px-3 py-1.5 text-sm font-black text-amber-900">⭐ {scores[player.uid] || 0}</span>

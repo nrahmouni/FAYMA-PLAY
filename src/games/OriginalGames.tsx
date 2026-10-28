@@ -11,6 +11,13 @@ const MoleDashGame = React.lazy(() => import('./MoleDashGame').then(module => ({
 
 type OriginalGameId = 'magic-world' | 'magic-memory' | 'star-catch' | 'color-echo' | 'mole-dash';
 
+const FREE_GAME_ART: Partial<Record<OriginalGameId, string>> = {
+  'magic-world': '/games/magic-world.png',
+  'magic-memory': '/games/magic-memory.png',
+  'star-catch': '/games/star-catch.png',
+  'color-echo': '/games/color-echo.png',
+};
+
 const COPY: Record<Language, {
   title: string;
   subtitle: string;
@@ -24,11 +31,11 @@ const COPY: Record<Language, {
     back: 'Volver a los juegos',
     play: '¡Jugar!',
     games: {
-      'magic-world': { title: 'Mundo Mágico', description: 'Sigue el camino, esquiva obstáculos y recoge estrellas con tus amigos.', icon: '🦄', color: 'from-sky-200 via-cyan-100 to-emerald-100' },
-      'magic-memory': { title: 'Memoria mágica', description: 'Encuentra las parejas de criaturas mágicas y entrena tu memoria.', icon: '🪄', color: 'from-violet-200 via-fuchsia-100 to-pink-100' },
-      'star-catch': { title: 'Atrapaestrellas', description: '¡Toca tantas estrellas fugaces como puedas antes de que se acabe el tiempo!', icon: '🌟', color: 'from-amber-200 via-yellow-100 to-orange-100' },
-      'color-echo': { title: 'Eco de colores', description: 'Observa los colores y repite la secuencia. ¿Hasta qué nivel llegarás?', icon: '🎨', color: 'from-sky-200 via-violet-100 to-fuchsia-100' },
-      'mole-dash': { title: '¡Topo al hoyo!', description: 'Atrapa los topos antes de que se escondan y no pulses las bombas.', icon: '🐹', color: 'from-lime-200 via-emerald-100 to-amber-100' },
+      'magic-world': { title: 'Mundo Mágico', description: 'Sigue el camino, esquiva obstáculos y recoge estrellas con tus amigos.', icon: '🦄', color: 'from-sky-300 via-cyan-200 to-emerald-200' },
+      'magic-memory': { title: 'Memoria mágica', description: 'Encuentra las parejas de criaturas mágicas y entrena tu memoria.', icon: '🪄', color: 'from-violet-300 via-fuchsia-200 to-pink-200' },
+      'star-catch': { title: 'Atrapaestrellas', description: '¡Toca tantas estrellas fugaces como puedas antes de que se acabe el tiempo!', icon: '🌟', color: 'from-amber-300 via-yellow-200 to-orange-200' },
+      'color-echo': { title: 'Eco de colores', description: 'Observa los colores y repite la secuencia. ¿Hasta qué nivel llegarás?', icon: '🎨', color: 'from-sky-300 via-blue-200 to-fuchsia-200' },
+      'mole-dash': { title: '¡Topo al hoyo!', description: 'Atrapa los topos antes de que se escondan y no pulses las bombas.', icon: '🐹', color: 'from-lime-300 via-emerald-200 to-amber-200' },
     },
   },
   'nl-BE': {
@@ -111,8 +118,10 @@ export const OriginalGames: React.FC<OriginalGamesProps> = ({ language }) => {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {(Object.entries(copy.games) as Array<[OriginalGameId, typeof copy.games[OriginalGameId]]>).map(([id, game]) => (
               <article key={id} className="overflow-hidden rounded-[1.75rem] border-4 border-white bg-white p-3 shadow-[0_5px_0_rgba(71,85,105,.1),0_12px_24px_rgba(71,85,105,.08)]">
-                <div className={`flex h-32 items-center justify-center rounded-[1.3rem] bg-gradient-to-br text-7xl sm:h-40 ${game.color}`} aria-hidden="true">
-                  {game.icon}
+                <div className={`flex h-32 items-center justify-center overflow-hidden rounded-[1.3rem] bg-gradient-to-br text-7xl sm:h-40 ${game.color}`} aria-hidden="true">
+                  {FREE_GAME_ART[id]
+                    ? <img src={FREE_GAME_ART[id]} alt="" className="h-full w-full object-contain p-2" />
+                    : game.icon}
                 </div>
                 <h3 className="mt-3 text-lg font-black text-slate-900">{game.title}</h3>
                 <p className="mt-1 min-h-12 text-sm leading-6 text-slate-600">{game.description}</p>

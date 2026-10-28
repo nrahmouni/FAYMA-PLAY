@@ -67,7 +67,7 @@ export default function App() {
         const button = target.closest('button');
         if (button && !button.disabled && !button.hasAttribute('data-silent-click')) playClick();
       }}
-      className="flex h-dvh min-h-0 flex-col overflow-hidden text-slate-900 relative selection:bg-pink-300 selection:text-slate-900 bg-gradient-to-br from-sky-100 via-pink-50 to-yellow-100 transition-colors duration-700"
+      className="fayma-app-shell relative flex h-dvh min-h-0 flex-col overflow-hidden text-slate-900 selection:bg-amber-300 selection:text-slate-900 transition-colors duration-700"
     >
       {/* Audio Unlocker & Offline Indicator */}
       <AudioUnlocker />

@@ -28,7 +28,7 @@ export const PassportScreen: React.FC = () => {
         <ArrowLeft className="h-4 w-4" /> Volver al mapa
       </button>
 
-      <section className="relative overflow-hidden rounded-[2rem] border border-indigo-200 bg-gradient-to-br from-indigo-700 via-violet-700 to-pink-600 p-6 text-white shadow-[0_24px_60px_rgba(79,70,229,0.24)] sm:p-8">
+      <section className="relative overflow-hidden rounded-[2rem] border border-blue-500 bg-gradient-to-br from-blue-700 via-blue-600 to-emerald-600 p-6 text-white shadow-[0_24px_60px_rgba(36,107,253,0.24)] sm:p-8">
         <div className="pointer-events-none absolute -right-14 -top-20 h-64 w-64 rounded-full bg-amber-300/30 blur-3xl" />
         <div className="relative grid gap-6 sm:grid-cols-[1fr_auto] sm:items-center">
           <div>

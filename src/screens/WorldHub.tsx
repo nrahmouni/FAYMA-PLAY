@@ -12,24 +12,24 @@ import { Language } from '../types';
 import { OriginalGames } from '../games/OriginalGames';
 
 const GAMES: Array<{ id: GameMechanic; art: string; color: string; icon?: string }> = [
-  { id: 'safari', art: '/games/safari.svg', color: 'from-lime-100 to-emerald-100' },
-  { id: 'word_train', art: '/games/train.svg', color: 'from-sky-100 to-blue-100' },
-  { id: 'garden_match', art: '/games/garden.svg', color: 'from-amber-100 to-pink-100' },
-  { id: 'word_picker', art: '/games/balloons.svg', color: 'from-violet-100 to-pink-100' },
-  { id: 'sound_echo', art: '/games/echo.svg', color: 'from-fuchsia-100 to-sky-100' },
-  { id: 'dino_picnic', art: '/games/dino.svg', color: 'from-lime-100 to-yellow-100' },
-  { id: 'line_match', art: '/games/lines.svg', color: 'from-sky-100 to-indigo-100' },
-  { id: 'draw_word', art: '/games/draw.svg', color: 'from-teal-100 to-cyan-100' },
-  { id: 'letter_puzzle', art: '/games/letters.svg', color: 'from-orange-100 to-rose-100' },
-  { id: 'word_sort', art: '/games/sort.svg', color: 'from-lime-100 to-emerald-100' },
-  { id: 'comet_dash', art: '/games/comet.svg', color: 'from-indigo-200 to-sky-200' },
-  { id: 'cookie_count', art: '/games/cookies.svg', color: 'from-amber-200 to-rose-200' },
-  { id: 'number_bridge', art: '/games/number-bridge.svg', color: 'from-cyan-200 to-blue-200' },
-  { id: 'treasure_trail', art: '/games/treasure.svg', color: 'from-lime-200 to-yellow-200' },
-  { id: 'body_detective', art: '/games/body.svg', color: 'from-rose-200 to-pink-200' },
-  { id: 'habitat_rescue', art: '/games/habitat.svg', color: 'from-lime-200 to-emerald-200' },
-  { id: 'space_explorer', art: '/games/space.svg', color: 'from-indigo-200 to-violet-200' },
-  { id: 'eco_mission', art: '/games/eco.svg', color: 'from-emerald-200 to-cyan-200' },
+  { id: 'safari', art: '/games/safari.png', color: 'from-lime-200 to-emerald-200' },
+  { id: 'word_train', art: '/games/train.png', color: 'from-sky-200 to-blue-200' },
+  { id: 'garden_match', art: '/games/garden.png', color: 'from-amber-200 to-pink-200' },
+  { id: 'word_picker', art: '/games/balloons.png', color: 'from-violet-200 to-pink-200' },
+  { id: 'sound_echo', art: '/games/echo.png', color: 'from-fuchsia-200 to-sky-200' },
+  { id: 'dino_picnic', art: '/games/dino.png', color: 'from-lime-200 to-yellow-200' },
+  { id: 'line_match', art: '/games/lines.png', color: 'from-sky-200 to-indigo-200' },
+  { id: 'draw_word', art: '/games/draw.png', color: 'from-teal-200 to-cyan-200' },
+  { id: 'letter_puzzle', art: '/games/letters.png', color: 'from-orange-200 to-rose-200' },
+  { id: 'word_sort', art: '/games/sort.png', color: 'from-lime-200 to-emerald-200' },
+  { id: 'comet_dash', art: '/games/comet.png', color: 'from-indigo-300 to-sky-300' },
+  { id: 'cookie_count', art: '/games/cookies.png', color: 'from-amber-300 to-rose-300' },
+  { id: 'number_bridge', art: '/games/number-bridge.png', color: 'from-cyan-300 to-blue-300' },
+  { id: 'treasure_trail', art: '/games/treasure.png', color: 'from-lime-300 to-yellow-300' },
+  { id: 'body_detective', art: '/games/body.png', color: 'from-rose-300 to-pink-300' },
+  { id: 'habitat_rescue', art: '/games/habitat.png', color: 'from-lime-200 to-emerald-200' },
+  { id: 'space_explorer', art: '/games/space.png', color: 'from-indigo-300 to-violet-300' },
+  { id: 'eco_mission', art: '/games/eco.png', color: 'from-emerald-300 to-cyan-300' },
 ];
 
 const isMathGame = (id: GameMechanic): id is MathGameId =>
@@ -131,7 +131,7 @@ export const WorldHub: React.FC = () => {
         <ArrowLeft className="h-4 w-4" /> {copy.changeFlag}
       </button>
 
-      <header className="mb-6 flex items-center gap-4 rounded-[2rem] border-4 border-white bg-gradient-to-r from-yellow-50 via-white to-sky-50 p-4 shadow-sm sm:mb-8 sm:p-6">
+      <header className="mb-6 flex items-center gap-4 rounded-[2rem] border-4 border-white bg-gradient-to-r from-yellow-100 via-white to-sky-100 p-4 shadow-[0_12px_30px_rgba(36,107,253,.1)] sm:mb-8 sm:p-6">
         <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white text-5xl shadow-sm sm:h-20 sm:w-20 sm:text-6xl" aria-hidden="true">
           {meta.flag}
         </span>
@@ -206,7 +206,7 @@ export const WorldHub: React.FC = () => {
                 <div className="min-w-0 flex-1 sm:block">
                   <h2 className="text-base font-black leading-tight text-slate-900 sm:mt-4 sm:text-xl">{game.name}</h2>
                   <p className="mt-1 hidden min-h-12 text-sm leading-6 text-slate-600 sm:block">{game.description}</p>
-                  <span className="mt-2 flex min-h-10 items-center justify-center gap-2 rounded-xl bg-emerald-500 text-sm font-black text-white shadow-[0_3px_0_#328248] transition group-hover:bg-emerald-600 group-active:translate-y-1 group-active:shadow-none sm:mt-3 sm:min-h-12 sm:rounded-2xl sm:text-base">
+                  <span className="mt-2 flex min-h-10 items-center justify-center gap-2 rounded-xl bg-emerald-600 text-sm font-black text-white shadow-[0_3px_0_#287b42] transition group-hover:bg-emerald-700 group-active:translate-y-1 group-active:shadow-none sm:mt-3 sm:min-h-12 sm:rounded-2xl sm:text-base">
                     <Play className="h-5 w-5 fill-current" /> {copy.play}
                   </span>
                 </div>

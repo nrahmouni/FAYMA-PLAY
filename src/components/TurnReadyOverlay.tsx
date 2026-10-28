@@ -4,24 +4,24 @@ import { Sparkles } from 'lucide-react';
 import { Language, PlayerProfile } from '../types';
 
 const GAME_ART: Record<string, string> = {
-  safari: '/games/safari.svg',
-  word_train: '/games/train.svg',
-  garden_match: '/games/garden.svg',
-  word_picker: '/games/balloons.svg',
-  sound_echo: '/games/echo.svg',
-  dino_picnic: '/games/dino.svg',
-  line_match: '/games/lines.svg',
-  draw_word: '/games/draw.svg',
-  letter_puzzle: '/games/letters.svg',
-  word_sort: '/games/sort.svg',
-  comet_dash: '/games/comet.svg',
-  cookie_count: '/games/cookies.svg',
-  number_bridge: '/games/number-bridge.svg',
-  treasure_trail: '/games/treasure.svg',
-  body_detective: '/games/body.svg',
-  habitat_rescue: '/games/habitat.svg',
-  space_explorer: '/games/space.svg',
-  eco_mission: '/games/eco.svg',
+  safari: '/games/safari.png',
+  word_train: '/games/train.png',
+  garden_match: '/games/garden.png',
+  word_picker: '/games/balloons.png',
+  sound_echo: '/games/echo.png',
+  dino_picnic: '/games/dino.png',
+  line_match: '/games/lines.png',
+  draw_word: '/games/draw.png',
+  letter_puzzle: '/games/letters.png',
+  word_sort: '/games/sort.png',
+  comet_dash: '/games/comet.png',
+  cookie_count: '/games/cookies.png',
+  number_bridge: '/games/number-bridge.png',
+  treasure_trail: '/games/treasure.png',
+  body_detective: '/games/body.png',
+  habitat_rescue: '/games/habitat.png',
+  space_explorer: '/games/space.png',
+  eco_mission: '/games/eco.png',
 };
 
 const READY_COPY: Record<Language, { ready: string; yes: string; turn: string }> = {
@@ -40,7 +40,7 @@ interface TurnReadyOverlayProps {
 
 export const TurnReadyOverlay: React.FC<TurnReadyOverlayProps> = ({ player, gameId, language, onReady }) => {
   const copy = READY_COPY[language];
-  const isPhoto = player.avatarUrl?.startsWith('data:');
+  const isImageAvatar = player.avatarUrl?.startsWith('data:') || player.avatarUrl?.startsWith('/');
 
   return (
     <div
@@ -54,13 +54,13 @@ export const TurnReadyOverlay: React.FC<TurnReadyOverlayProps> = ({ player, game
       <motion.section
         initial={{ opacity: 0, scale: 0.9, y: 18 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="relative w-full max-w-md overflow-hidden rounded-[2rem] border-4 border-white bg-gradient-to-br from-white via-sky-50 to-violet-100 p-3 text-center shadow-[0_24px_80px_rgba(15,23,42,.35)] sm:p-5"
+        className="relative w-full max-w-md overflow-hidden rounded-[2rem] border-4 border-white bg-gradient-to-br from-white via-sky-50 to-sky-200 p-3 text-center shadow-[0_24px_80px_rgba(15,23,42,.35)] sm:p-5"
       >
         <div className="absolute -right-8 -top-10 h-32 w-32 rounded-full bg-yellow-200/60 blur-2xl" aria-hidden="true" />
         <div className="absolute -bottom-12 -left-8 h-36 w-36 rounded-full bg-pink-200/60 blur-2xl" aria-hidden="true" />
 
         <div className="relative mb-4 overflow-hidden rounded-3xl border-2 border-white bg-white shadow-sm">
-          <img src={GAME_ART[gameId] || '/games/safari.svg'} alt="" className="h-[min(18dvh,9rem)] w-full object-contain" />
+          <img src={GAME_ART[gameId] || '/games/safari.png'} alt="" className="h-[min(18dvh,9rem)] w-full object-contain" />
           <span className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-amber-500 shadow-sm" aria-hidden="true">
             <Sparkles size={20} />
           </span>
@@ -73,7 +73,7 @@ export const TurnReadyOverlay: React.FC<TurnReadyOverlayProps> = ({ player, game
           className="relative mx-auto flex h-[min(20dvh,7rem)] w-[min(20dvh,7rem)] items-center justify-center rounded-full border-[6px] border-white bg-gradient-to-br from-amber-200 via-pink-200 to-sky-200 text-6xl shadow-[0_8px_24px_rgba(99,102,241,.2)]"
           style={{ boxShadow: `0 8px 24px ${player.color}55` }}
         >
-          {isPhoto
+          {isImageAvatar
             ? <img src={player.avatarUrl} alt="" className="h-full w-full rounded-full object-cover" />
             : <span aria-hidden="true">{player.avatarUrl || '⭐'}</span>}
           <span className="absolute -bottom-1 -right-1 flex h-9 w-9 items-center justify-center rounded-full border-2 border-white bg-emerald-500 text-lg text-white" aria-hidden="true">✨</span>

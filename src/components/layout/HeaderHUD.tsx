@@ -32,7 +32,7 @@ export const HeaderHUD: React.FC = () => {
             aria-label={copy.changeFlag}
             className="flex shrink-0 items-center gap-2"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-300 via-pink-300 to-sky-300 text-xl shadow-sm" aria-hidden="true">🌈</span>
+            <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 via-orange-400 to-blue-500 text-xl shadow-sm" aria-hidden="true">🌈</span>
             <span className="hidden text-left sm:block">
               <span className="block text-sm font-black leading-tight text-slate-900">FAYMA PLAY</span>
               <span className="block text-[10px] font-bold text-emerald-700">{copy.appTagline}</span>
@@ -87,7 +87,7 @@ export const HeaderHUD: React.FC = () => {
           <button
             type="button"
             onClick={toggleMusic}
-            className={`flex h-10 w-10 items-center justify-center rounded-2xl transition ${musicOn ? 'bg-violet-100 text-violet-800' : 'bg-slate-100 text-slate-500'}`}
+              className={`flex h-10 w-10 items-center justify-center rounded-2xl transition ${musicOn ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-500'}`}
             title={musicOn ? copy.musicOn : copy.musicOff}
             aria-label={musicOn ? copy.musicOn : copy.musicOff}
             aria-pressed={musicOn}

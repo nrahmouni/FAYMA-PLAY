@@ -4,6 +4,11 @@
   :root {
     --font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
     --font-arabic: 'Cairo', 'Outfit', system-ui, sans-serif;
+    --fayma-blue: #246bfd;
+    --fayma-yellow: #ffd32a;
+    --fayma-coral: #ff5a36;
+    --fayma-green: #27b86a;
+    --fayma-ink: #17233b;
     height: 100%;
   }
 
@@ -23,10 +28,10 @@
     touch-action: manipulation;
     color: #1f2937;
     background:
-      radial-gradient(circle at top left, rgba(125, 211, 252, .7), transparent 28rem),
-      radial-gradient(circle at top right, rgba(253, 224, 71, .7), transparent 24rem),
-      radial-gradient(circle at bottom center, rgba(251, 146, 60, .34), transparent 26rem),
-      linear-gradient(180deg, #ebf7ff 0%, #fdf2f8 38%, #fff7d6 100%);
+      radial-gradient(circle at 8% 4%, rgba(36, 107, 253, .19), transparent 28rem),
+      radial-gradient(circle at 94% 8%, rgba(255, 90, 54, .14), transparent 25rem),
+      radial-gradient(circle at 52% 100%, rgba(255, 211, 42, .24), transparent 30rem),
+      linear-gradient(180deg, #f3f8ff 0%, #fffdf6 55%, #fff8e6 100%);
     background-attachment: fixed;
   }
 
@@ -37,23 +42,31 @@
 
 @layer components {
   .fayma-title-gradient {
-    background: linear-gradient(110deg, #3b82f6 0%, #8b5cf6 28%, #f472b6 58%, #fb7185 100%);
+    background: linear-gradient(110deg, #246bfd 0%, #ff5a36 60%, #ef8f00 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    filter: drop-shadow(0 12px 28px rgba(59, 130, 246, .18));
+    filter: drop-shadow(0 12px 28px rgba(36, 107, 253, .2));
   }
 
   .fayma-primary-button {
-    background: linear-gradient(115deg, #fde68a, #f9a8d4 30%, #7dd3fc 58%, #a7f3d0 100%);
-    box-shadow: 0 16px 32px rgba(125, 211, 252, .25), inset 0 2px rgba(255,255,255, .8);
+    background: linear-gradient(110deg, #246bfd, #ff5a36 72%, #f08a21);
+    box-shadow: 0 12px 28px rgba(36, 107, 253, .22), inset 0 2px rgba(255,255,255, .28);
     transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
-    color: #1f2937;
+    color: #fff;
   }
 
   .fayma-primary-button:hover {
     filter: saturate(1.08) brightness(1.02);
-    box-shadow: 0 18px 40px rgba(244, 114, 182, .2), inset 0 2px rgba(255,255,255, .8);
+    box-shadow: 0 16px 34px rgba(255, 90, 54, .24), inset 0 2px rgba(255,255,255, .28);
+  }
+
+  .fayma-app-shell {
+    background:
+      radial-gradient(circle at 8% 4%, rgba(36, 107, 253, .14), transparent 27rem),
+      radial-gradient(circle at 96% 8%, rgba(255, 90, 54, .1), transparent 24rem),
+      radial-gradient(circle at 48% 100%, rgba(255, 211, 42, .16), transparent 30rem),
+      #f8fbff;
   }
 
   .fayma-secondary-action {

@@ -71,16 +71,16 @@ export const GarageShop: React.FC = () => {
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-6 sm:py-8 space-y-6">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl glass-panel border border-amber-500/30 shadow-2xl relative overflow-hidden">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl glass-panel border border-amber-300 shadow-lg relative overflow-hidden">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl border border-amber-500/30">
+          <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-2xl border border-amber-300">
             🛍️
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-100 flex items-center gap-2">
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 flex items-center gap-2">
               <span>El Garaje Cosmético</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400">
+            <p className="text-xs sm:text-sm text-slate-600">
               Personaliza tu avatar y tu mascota con recompensas de tus victorias.
             </p>
           </div>
@@ -88,11 +88,11 @@ export const GarageShop: React.FC = () => {
 
         {/* Player Balances */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-card border border-amber-500/40 text-amber-400 font-extrabold text-sm">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-card border border-amber-300 text-amber-800 font-extrabold text-sm">
             <Coins className="w-4 h-4" />
             <span className="tabular-nums">{activePlayer?.coins ?? 0} monedas</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-card border border-purple-500/40 text-purple-300 font-extrabold text-sm">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-card border border-blue-200 text-blue-800 font-extrabold text-sm">
             <Gem className="w-4 h-4" />
             <span className="tabular-nums">{activePlayer?.gems ?? 0} gemas</span>
           </div>
@@ -147,10 +147,10 @@ export const GarageShop: React.FC = () => {
               whileHover={{ y: -3 }}
               className={`p-4 rounded-3xl glass-card border-2 transition-all flex flex-col justify-between shadow-xl relative overflow-hidden ${
                 isEquipped
-                  ? 'border-emerald-400 bg-emerald-950/20'
+                  ? 'border-emerald-500 bg-emerald-50'
                   : owned
-                  ? 'border-cyan-400/50 bg-slate-800/40'
-                  : 'border-white/10 hover:border-amber-400/50'
+                  ? 'border-sky-300 bg-sky-50'
+                  : 'border-slate-200 hover:border-orange-300'
               }`}
             >
               <div>
@@ -159,19 +159,19 @@ export const GarageShop: React.FC = () => {
                   <span
                     className={`text-[9px] uppercase font-black px-2 py-0.5 rounded-full border ${
                       item.rarity === 'legendary'
-                        ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+                        ? 'bg-violet-100 text-violet-800 border-violet-300'
                         : item.rarity === 'epic'
-                        ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                        ? 'bg-orange-100 text-orange-800 border-orange-300'
                         : item.rarity === 'rare'
-                        ? 'bg-blue-500/20 text-blue-300 border-blue-500/40'
-                        : 'bg-slate-800 text-slate-400 border-white/5'
+                        ? 'bg-blue-100 text-blue-800 border-blue-300'
+                        : 'bg-slate-100 text-slate-600 border-slate-200'
                     }`}
                   >
                     {item.rarity}
                   </span>
 
                   {owned && (
-                    <span className="text-[10px] uppercase font-black text-emerald-400 flex items-center gap-0.5">
+                    <span className="text-[10px] uppercase font-black text-emerald-700 flex items-center gap-0.5">
                       <Check className="w-3 h-3" /> Adquirido
                     </span>
                   )}
@@ -179,13 +179,15 @@ export const GarageShop: React.FC = () => {
 
                 {/* Preview Icon */}
                 <div className="w-16 h-16 mx-auto my-2 rounded-2xl glass-panel flex items-center justify-center text-3xl shadow-inner border border-white/10 select-none">
-                  {item.previewEmoji}
+                  {item.previewImage
+                    ? <img src={item.previewImage} alt="" className="h-full w-full rounded-2xl object-contain" />
+                    : item.previewEmoji}
                 </div>
 
-                <h3 className="font-extrabold text-slate-100 text-base text-center mt-1">
+                <h3 className="font-extrabold text-slate-900 text-base text-center mt-1">
                   {item.name}
                 </h3>
-                <p className="text-xs text-slate-400 text-center line-clamp-2 mt-1">
+                <p className="text-xs text-slate-600 text-center line-clamp-2 mt-1">
                   {item.description}
                 </p>
               </div>
@@ -198,8 +200,8 @@ export const GarageShop: React.FC = () => {
                     onClick={() => handleBuyOrEquip(item)}
                     className={`w-full py-2 px-3 rounded-xl text-xs font-black transition cursor-pointer flex items-center justify-center gap-1.5 ${
                       isEquipped
-                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/50'
-                        : 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 hover:bg-cyan-500/30'
+                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                        : 'bg-sky-100 text-sky-800 border border-sky-300 hover:bg-sky-200'
                     }`}
                   >
                     {isEquipped ? 'Equipado Actualmente' : 'Equipar'}
@@ -211,8 +213,8 @@ export const GarageShop: React.FC = () => {
                     onClick={() => handleBuyOrEquip(item)}
                     className={`w-full py-2 px-3 rounded-xl text-xs font-black transition flex items-center justify-center gap-1.5 ${
                       affordable
-                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 hover:from-amber-400 hover:to-orange-400 active:scale-95 cursor-pointer shadow-lg shadow-amber-500/20'
-                        : 'bg-slate-800/80 text-slate-500 border border-white/5 cursor-not-allowed'
+                        ? 'bg-gradient-to-r from-orange-500 to-rose-500 text-white hover:from-orange-600 hover:to-rose-600 active:scale-95 cursor-pointer shadow-md shadow-orange-500/20'
+                        : 'bg-slate-100 text-slate-500 border border-slate-200 cursor-not-allowed'
                     }`}
                   >
                     {affordable ? (

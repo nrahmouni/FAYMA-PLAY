@@ -95,6 +95,7 @@ export interface ShopItem {
   price: number;
   currency: 'coins' | 'gems';
   previewEmoji: string;
+  previewImage?: string;
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
   glowColor?: string;
 }

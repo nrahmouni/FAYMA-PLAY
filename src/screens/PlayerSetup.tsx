@@ -6,7 +6,7 @@ import { useGameStore } from '../store/gameStore';
 import { useSound } from '../hooks/useSound';
 
 const PLAYER_COLORS = ['#0f9f6e', '#f97316', '#ec4899', '#6366f1'];
-const PLAYER_AVATARS = ['🦊', '🦁', '🐼', '🦄', '🐸', '🐯', '🐶', '🐱'];
+const PLAYER_AVATARS = ['🦊', '/avatars/panda.png', '/avatars/tiger.png', '🦄', '🐸', '🐯', '🐶', '🐱'];
 const ROUND_OPTIONS = [1, 3, 5];
 
 export const PlayerSetup: React.FC = () => {
@@ -109,7 +109,7 @@ export const PlayerSetup: React.FC = () => {
 
   return (
     <main className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-3xl flex-col justify-center px-4 py-6 sm:px-8 sm:py-10">
-      <section className="overflow-hidden rounded-[2rem] border-4 border-white bg-gradient-to-br from-yellow-100 via-pink-50 to-sky-100 p-5 shadow-[0_20px_50px_rgba(83,111,155,.14)] sm:p-8">
+      <section className="overflow-hidden rounded-[2rem] border-4 border-white bg-gradient-to-br from-yellow-200 via-rose-100 to-sky-200 p-5 shadow-[0_20px_50px_rgba(36,107,253,.16)] sm:p-8">
         <header className="text-center">
           <span className="text-5xl" aria-hidden="true">🎈</span>
           <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-black text-violet-700 shadow-sm">
@@ -127,7 +127,7 @@ export const PlayerSetup: React.FC = () => {
               className="flex items-center gap-3 rounded-2xl border-2 border-white bg-white/90 p-3 shadow-sm sm:gap-4 sm:p-4"
             >
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-3xl" aria-hidden="true">
-                {profile.avatarUrl?.startsWith('data:')
+                {profile.avatarUrl?.startsWith('data:') || profile.avatarUrl?.startsWith('/')
                   ? <img src={profile.avatarUrl} alt={`Foto de ${names[profile.uid] || `jugador ${index + 1}`}`} className="h-12 w-12 rounded-2xl object-cover" />
                   : profile.avatarUrl || '⭐'}
               </span>
@@ -212,7 +212,7 @@ export const PlayerSetup: React.FC = () => {
         <button
           type="button"
           onClick={continueToLanguages}
-          className="mt-5 flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-lime-500 px-5 text-lg font-black text-white shadow-[0_5px_0_#35824a] transition hover:brightness-105 active:translate-y-1 active:shadow-none"
+          className="mt-5 flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-lime-500 px-5 text-lg font-black text-white shadow-[0_5px_0_#287b42] transition hover:brightness-105 active:translate-y-1 active:shadow-none"
         >
           ¡Listos! Elegir idioma <ArrowRight className="h-5 w-5" />
         </button>

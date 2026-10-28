@@ -10,10 +10,10 @@ import { useProfileStore } from '../store/profileStore';
 const LANGUAGE_ORDER: Language[] = ['es', 'fr', 'ar', 'nl-BE'];
 
 const FLAG_ART: Record<Language, string> = {
-  es: 'from-rose-100 to-amber-100',
-  fr: 'from-sky-100 to-indigo-100',
-  ar: 'from-amber-100 to-orange-100',
-  'nl-BE': 'from-yellow-100 to-lime-100',
+  es: 'from-rose-200 to-orange-200',
+  fr: 'from-sky-200 to-blue-200',
+  ar: 'from-amber-200 to-orange-200',
+  'nl-BE': 'from-yellow-200 to-lime-200',
 };
 
 export const HomeScreen: React.FC = () => {

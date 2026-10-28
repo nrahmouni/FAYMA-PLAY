@@ -16,7 +16,7 @@ export const RewardsMenu: React.FC = () => {
 
   return (
     <main className="mx-auto flex min-h-[calc(100vh-76px)] w-full max-w-3xl flex-col justify-center px-4 py-5 sm:px-8">
-      <section className="rounded-[2rem] border-4 border-white bg-gradient-to-br from-amber-50 via-white to-violet-50 p-5 shadow-sm sm:p-8">
+      <section className="rounded-[2rem] border-4 border-white bg-gradient-to-br from-amber-100 via-white to-sky-100 p-5 shadow-[0_16px_38px_rgba(36,107,253,.1)] sm:p-8">
         <button
           type="button"
           onClick={() => navigate('HOME')}
@@ -52,14 +52,14 @@ export const RewardsMenu: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate('PASSPORT')}
-            className="flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-violet-100 px-4 text-sm font-black text-violet-900 transition hover:bg-violet-200"
+            className="flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-blue-100 px-4 text-sm font-black text-blue-900 transition hover:bg-blue-200"
           >
             <BookOpen className="h-5 w-5" /> Ver colección de premios
           </button>
           <button
             type="button"
             onClick={() => navigate('GARAGE')}
-            className="flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-amber-100 px-4 text-sm font-black text-amber-900 transition hover:bg-amber-200"
+            className="flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-orange-100 px-4 text-sm font-black text-orange-900 transition hover:bg-orange-200"
           >
             <ShoppingBag className="h-5 w-5" /> Ver accesorios
           </button>
