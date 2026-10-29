@@ -6,6 +6,7 @@ import { MathGameId, MATH_GAME_COPY } from '../data/mathGameCopy';
 import { GameProgress } from './GameProgress';
 import { useGameProgress } from './useGameProgress';
 import { useSpeech } from '../hooks/useSpeech';
+import { LANGUAGES } from '../data/languages';
 
 interface MathQuestion {
   id: string;
@@ -86,6 +87,7 @@ const MathArcadeGame: React.FC<MathArcadeGameProps> = ({
   onWrong,
   onComplete,
   introSpoken = false,
+  nativeLanguage,
 }) => {
   const questions = useMemo(
     () => Array.from({ length: ROUND_LENGTH }, (_, index) => createQuestion(gameId, index, QUESTION_MAX_NUMBERS[index])),
@@ -100,16 +102,37 @@ const MathArcadeGame: React.FC<MathArcadeGameProps> = ({
   const question = questions[questionIndex];
   const spokenQuestionId = useRef('');
 
+  const speakNativeHelp = useCallback(() => {
+    if (!question || !nativeLanguage) return;
+    const { left, right, missing } = question;
+    const isPlus = question.operation === '+';
+    // Native language helper prompt (always uses nativeLanguage)
+    const speech = nativeLanguage === 'es'
+      ? missing === 'answer' ? `¿Cuánto es ${left} ${isPlus ? 'más' : 'menos'} ${right}?` : `Completa: ${expressionFor(question)}`
+      : nativeLanguage === 'fr'
+        ? missing === 'answer' ? `Combien font ${left} ${isPlus ? 'plus' : 'moins'} ${right} ?` : `Complète : ${expressionFor(question)}`
+        : nativeLanguage === 'nl-BE'
+          ? missing === 'answer' ? `Hoeveel is ${left} ${isPlus ? 'plus' : 'min'} ${right}?` : `Vul in: ${expressionFor(question)}`
+          : nativeLanguage === 'en'
+            ? missing === 'answer' ? `What is ${left} ${isPlus ? 'plus' : 'minus'} ${right}?` : `Complete: ${expressionFor(question)}`
+            : missing === 'answer' ? `كم يساوي ${left} ${isPlus ? 'زائد' : 'ناقص'} ${right}؟` : `أكمل: ${expressionFor(question)}`;
+    speak(speech, nativeLanguage);
+  }, [nativeLanguage, question, speak]);
+
   const speakQuestion = useCallback(() => {
     if (!question) return;
     const { left, right, missing } = question;
-    const speech = language === 'es'
-      ? missing === 'answer' ? `¿Cuánto es ${left} ${question.operation === '+' ? 'más' : 'menos'} ${right}?` : `Completa el número que falta: ${expressionFor(question)}`
-      : language === 'fr'
-        ? missing === 'answer' ? `Combien font ${left} ${question.operation === '+' ? 'plus' : 'moins'} ${right} ?` : `Complète le nombre manquant : ${expressionFor(question)}`
-        : language === 'nl-BE'
-          ? missing === 'answer' ? `Hoeveel is ${left} ${question.operation === '+' ? 'plus' : 'min'} ${right}?` : `Vul het ontbrekende getal in: ${expressionFor(question)}`
-          : missing === 'answer' ? `كم يساوي ${left} ${question.operation === '+' ? 'زائد' : 'ناقص'} ${right}؟` : `أكمل العدد الناقص: ${expressionFor(question)}`;
+    const isPlus = question.operation === '+';
+    // Target language prompt
+    const speech = language === 'en'
+        ? missing === 'answer' ? `What is ${left} ${isPlus ? 'plus' : 'minus'} ${right}?` : `Complete: ${expressionFor(question)}`
+        : language === 'es'
+          ? missing === 'answer' ? `¿Cuánto es ${left} ${isPlus ? 'más' : 'menos'} ${right}?` : `Completa: ${expressionFor(question)}`
+          : language === 'fr'
+            ? missing === 'answer' ? `Combien font ${left} ${isPlus ? 'plus' : 'moins'} ${right} ?` : `Complète : ${expressionFor(question)}`
+            : language === 'nl-BE'
+              ? missing === 'answer' ? `Hoeveel is ${left} ${isPlus ? 'plus' : 'min'} ${right}?` : `Vul in: ${expressionFor(question)}`
+              : missing === 'answer' ? `كم يساوي ${left} ${isPlus ? 'زائد' : 'ناقص'} ${right}؟` : `أكمل: ${expressionFor(question)}`;
     speak(speech, language);
   }, [language, question, speak]);
 
@@ -165,15 +188,28 @@ const MathArcadeGame: React.FC<MathArcadeGameProps> = ({
     >
       <GameProgress current={questionIndex + 1} total={questions.length} label={copy.progress} icon={gameId === 'comet_dash' ? '🚀' : gameId === 'cookie_count' ? '🍪' : gameId === 'number_bridge' ? '🌉' : '🗺️'} language={language} />
 
-      <button
-        type="button"
-        onClick={speakQuestion}
-        aria-label={language === 'es' ? 'Escuchar la pregunta' : language === 'fr' ? 'Écouter la question' : language === 'ar' ? 'استمع إلى السؤال' : 'Luister naar de vraag'}
-        className="mb-4 inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-amber-100 bg-white px-4 text-sm font-black text-amber-900 shadow-sm transition hover:bg-amber-50"
-      >
-        <Volume2 size={19} aria-hidden="true" />
-        {language === 'es' ? 'Escuchar pregunta' : language === 'fr' ? 'Écouter la question' : language === 'ar' ? 'استمع إلى السؤال' : 'Luister naar de vraag'}
-      </button>
+      <div className="flex gap-2 mb-4">
+        <button
+          type="button"
+          onClick={speakQuestion}
+          aria-label={language === 'es' ? 'Escuchar la pregunta' : language === 'fr' ? 'Écouter la question' : language === 'ar' ? 'استمع إلى السؤال' : 'Luister naar de vraag'}
+          className="inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-amber-100 bg-white px-4 text-sm font-black text-amber-900 shadow-sm transition hover:bg-amber-50"
+        >
+          <Volume2 size={19} aria-hidden="true" />
+          {language === 'es' ? 'Escuchar' : language === 'fr' ? 'Écouter' : language === 'ar' ? 'استمع' : 'Luister'}
+        </button>
+        {nativeLanguage && (
+          <button
+            type="button"
+            onClick={speakNativeHelp}
+            aria-label="Escuchar ayuda"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-sky-100 bg-sky-50 px-4 text-sm font-black text-sky-900 shadow-sm transition hover:bg-sky-100"
+          >
+            <Volume2 size={19} aria-hidden="true" />
+            ? {LANGUAGES[nativeLanguage].name}
+          </button>
+        )}
+      </div>
 
       {gameId === 'comet_dash' && (
         <div className="mb-5 rounded-3xl bg-gradient-to-br from-indigo-950 via-violet-900 to-sky-700 p-5 text-white sm:p-7">
@@ -212,7 +248,9 @@ const MathArcadeGame: React.FC<MathArcadeGameProps> = ({
               </div>
             </div>
           </div>
-          <p className="mt-3 text-center text-3xl font-black text-amber-950">? 🍪</p>
+          <div className="mt-4 rounded-2xl bg-white/90 p-3 text-center text-3xl font-black text-amber-950 sm:text-4xl">
+            {displayExpression}
+          </div>
         </div>
       )}
 

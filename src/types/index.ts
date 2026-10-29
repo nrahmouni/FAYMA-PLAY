@@ -1,4 +1,5 @@
-export type Language = 'ar' | 'nl-BE' | 'fr' | 'es';
+export type Language = 'ar' | 'nl-BE' | 'fr' | 'es' | 'en';
+export type NativeLanguage = Language;
 
 export type DifficultyLevel =
   | 1 | 2 | 3 | 4 | 5
@@ -19,6 +20,8 @@ export interface Word {
   exampleSentence?: string;
   exampleTranslation?: string;
   learningLevel?: DifficultyLevel;
+  category?: string;
+  english?: string;
 }
 
 export interface WordMastery {
@@ -31,9 +34,10 @@ export interface WordMastery {
 export interface PlayerProfile {
   uid: string;
   displayName: string;
-  avatarUrl?: string;      // Base64 de cámara o identificador de preset emoji
+  avatarUrl?: string;      // Animal avatar emoji or image URL
   color: string;
   createdAt: number;
+  age?: number;            // Edad del niño (1 a 13 años) para aprendizaje adaptativo
   mastery: Record<string, WordMastery>;
   coins: number;
   gems: number;
@@ -71,6 +75,7 @@ export interface GameProps {
   onWrong: (wordId: string) => void;
   onComplete: (result: GameResult) => void;
   language: Language;
+  nativeLanguage?: Language;
   introSpoken?: boolean;
 }
 
@@ -78,6 +83,7 @@ export type Screen =
   | 'BOOT' 
   | 'AUTH' 
   | 'PLAYER_SETUP' 
+  | 'NATIVE_LANG_SETUP'
   | 'HOME' 
   | 'WORLD_HUB' 
   | 'LEARN_FLEMISH'
@@ -101,7 +107,7 @@ export interface ShopItem {
 }
 
 export interface LanguageMeta {
-  code: Language;
+  code: NativeLanguage;
   country: string;
   name: string;
   nativeName: string;

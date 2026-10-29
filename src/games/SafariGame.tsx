@@ -1,13 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { motion } from 'motion/react';
 import { GameProps } from '../types';
 import { shuffleArray } from '../lib/utils';
 import { GAME_COPY } from '../data/gameCopy';
-import { GameProgress, EmptyGame } from './GameProgress';
 import { useGameProgress } from './useGameProgress';
 import { useSpeech } from '../hooks/useSpeech';
+import { WordIcon } from '../components/WordIcon';
+import { Volume2 } from 'lucide-react';
+import { LANGUAGES } from '../data/languages';
 
-export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, onCorrect, onWrong, onComplete }) => {
+export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, nativeLanguage, onCorrect, onWrong, onComplete }) => {
   const roundWords = useMemo(
     () => words.slice(0, Math.min(6, 2 + Math.floor((difficulty - 1) / 3))),
     [difficulty, words],
@@ -15,51 +17,52 @@ export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, o
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answerId, setAnswerId] = useState<string | null>(null);
   const [wrongIds, setWrongIds] = useState<string[]>([]);
-  const { recordAnswer, finish } = useGameProgress('safari', { onCorrect, onWrong, onComplete });
+  const { recordAnswer } = useGameProgress('safari', { onCorrect, onWrong, onComplete });
   const { speak } = useSpeech();
   const copy = GAME_COPY[language];
   const question = roundWords[questionIndex];
 
   const options = useMemo(() => {
-    if (!question) return [];
-    const otherWords = words.filter(word => word.id !== question.id);
-    return shuffleArray([question, ...shuffleArray(otherWords).slice(0, Math.min(5, Math.ceil(difficulty / 3)))]);
-  }, [difficulty, question, words]);
+    const others = shuffleArray(words.filter(w => w.id !== question.id)).slice(0, 3);
+    return shuffleArray([question, ...others]);
+  }, [question, words]);
 
-  useEffect(() => {
-    if (!answerId || !question) return;
-    const timeout = window.setTimeout(() => {
-      if (questionIndex + 1 === roundWords.length) {
-        finish(roundWords.map(word => word.id));
-        return;
-      }
-      setAnswerId(null);
-      setWrongIds([]);
-      setQuestionIndex(index => index + 1);
-    }, 850);
-    return () => window.clearTimeout(timeout);
-  }, [answerId, finish, question, questionIndex, roundWords]);
+  const speakQuestion = useCallback(() => {
+    if (!question) return;
+    speak(question.audioText || question.text, language);
+  }, [language, question, speak]);
 
-  if (!question) return <EmptyGame language={language} />;
+  const speakNativeHelp = useCallback(() => {
+    if (!question || !nativeLanguage) return;
+    speak(question.translation, nativeLanguage);
+  }, [nativeLanguage, question, speak]);
 
   return (
-    <section lang={language} dir={language === 'ar' ? 'rtl' : 'ltr'} className="mx-auto w-full max-w-3xl rounded-[2rem] bg-[#fffdf4] p-4 shadow-[0_18px_45px_rgba(63,115,64,.14)] ring-1 ring-lime-100 sm:p-6">
-      <GameProgress current={questionIndex + 1} total={roundWords.length} label={copy.safariProgress} icon="🧭" language={language} />
+    <section className="mx-auto w-full max-w-3xl rounded-[2rem] border-4 border-white bg-white/95 p-3 shadow-xl sm:p-5">
       <div className="mb-5 flex items-center gap-2 overflow-hidden rounded-3xl bg-gradient-to-br from-lime-100 via-emerald-50 to-sky-100 p-4 sm:gap-5 sm:p-6">
         <div className="min-w-0 flex-1">
           <p className="text-xs font-black uppercase tracking-wider text-emerald-800">{copy.safariPrompt}</p>
           <h2 className="mt-1 flex items-center gap-3 text-xl font-black leading-tight text-slate-900 sm:text-3xl">
             <span className="text-emerald-700">{question.translation}</span>
           </h2>
-          <p className="mt-2 text-sm font-semibold text-slate-600">{copy.safariHint}</p>
-          <button
-            type="button"
-            onClick={() => speak(question.audioText || question.text, language)}
-            className="mt-2 inline-flex min-h-10 items-center gap-2 rounded-full bg-white px-3 text-sm font-extrabold text-emerald-800 shadow-sm"
-            aria-label={copy.listen}
-          >
-            🔊 {copy.listen}
-          </button>
+          <div className="flex gap-2 mt-3">
+            <button
+              type="button"
+              onClick={speakQuestion}
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-white px-3 text-xs font-extrabold text-emerald-800 shadow-sm"
+            >
+              <Volume2 className="h-4 w-4" /> {copy.listen}
+            </button>
+            {nativeLanguage && (
+              <button
+                type="button"
+                onClick={speakNativeHelp}
+                className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-white px-3 text-xs font-extrabold text-sky-800 shadow-sm"
+              >
+                <Volume2 className="h-4 w-4" /> ? {LANGUAGES[nativeLanguage].name}
+              </button>
+            )}
+          </div>
         </div>
         <img src="/games/safari.svg" alt="" className="h-16 w-20 shrink-0 object-contain sm:h-32 sm:w-40" />
       </div>
@@ -92,7 +95,7 @@ export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, o
                   : 'border-white bg-white shadow-[0_5px_0_#d9e9c9] hover:-translate-y-1 hover:bg-lime-50'
               }`}
             >
-              <span className="text-4xl sm:text-5xl" aria-hidden="true">{option.imageUrl || '✨'}</span>
+              <WordIcon icon={option.imageUrl} esWord={option.translation} size="xl" className="text-4xl sm:text-5xl" />
               {revealed && <span className={`mt-1 text-sm font-black ${correct && selected ? 'text-emerald-800' : 'text-rose-800'}`} lang={option.language}>{option.text}</span>}
               <span className="sr-only">{copy.optionLabel} {index + 1}</span>
             </motion.button>

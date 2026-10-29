@@ -11,6 +11,7 @@ import { useSound } from './hooks/useSound';
 import { HomeScreen } from './screens/HomeScreen';
 import { AuthScreen } from './screens/AuthScreen';
 import { PlayerSetup } from './screens/PlayerSetup';
+import { NativeLangSetup } from './screens/NativeLangSetup';
 import { WorldHub } from './screens/WorldHub';
 import { FlemishLearningScreen } from './screens/FlemishLearningScreen';
 import { RewardsMenu } from './screens/RewardsMenu';
@@ -38,6 +39,8 @@ export default function App() {
         return <AuthScreen />;
       case 'PLAYER_SETUP':
         return <PlayerSetup />;
+      case 'NATIVE_LANG_SETUP':
+        return <NativeLangSetup />;
       case 'HOME':
         return <HomeScreen />;
       case 'WORLD_HUB':

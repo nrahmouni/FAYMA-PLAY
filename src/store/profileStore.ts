@@ -10,13 +10,14 @@ interface ProfileState {
   setProfiles: (profiles: PlayerProfile[]) => void;
   setActivePlayerIndex: (idx: number) => void;
   getActivePlayer: () => PlayerProfile | null;
-  addLocalPlayer: (name: string, color: string, avatarUrl?: string) => PlayerProfile;
+  addLocalPlayer: (name: string, color: string, avatarUrl?: string, age?: number) => PlayerProfile;
   removePlayer: (uid: string) => void;
   recordWordAttempt: (playerUid: string, wordId: string, isCorrect: boolean) => void;
   addRewards: (playerUid: string, coins: number, gems: number) => void;
   equipItem: (playerUid: string, category: 'avatar_frame' | 'mascot_skin' | 'badge', itemId: string) => void;
   updateProfile: (updated: PlayerProfile) => void;
   updateLocalAvatar: (playerUid: string, avatarUrl: string) => void;
+  updatePlayerAge: (playerUid: string, age: number) => void;
 }
 
 const DEFAULT_PROFILES: PlayerProfile[] = [
@@ -26,6 +27,7 @@ const DEFAULT_PROFILES: PlayerProfile[] = [
     color: '#06b6d4', // Cyan
     createdAt: Date.now(),
     avatarUrl: '🦊',
+    age: 6,
     mastery: {},
     coins: 50,
     gems: 2,
@@ -77,13 +79,14 @@ export const useProfileStore = create<ProfileState>((set, get) => {
       return profiles[activePlayerIndex] || profiles[0] || null;
     },
 
-    addLocalPlayer: (name, color, avatarUrl) => {
+    addLocalPlayer: (name, color, avatarUrl, age) => {
       const newPlayer: PlayerProfile = {
         uid: `player_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
         displayName: name.trim() || `Jugador ${get().profiles.length + 1}`,
         color,
         createdAt: Date.now(),
-        avatarUrl: avatarUrl || '⭐',
+        avatarUrl: avatarUrl || '🦊',
+        age: age || 6,
         mastery: {},
         coins: 30,
         gems: 1,
@@ -226,6 +229,20 @@ export const useProfileStore = create<ProfileState>((set, get) => {
       persistProfiles(newProfiles);
       localStorage.setItem(`juegofy_profile_${playerUid}`, JSON.stringify(updated));
       set({ profiles: newProfiles });
+    },
+
+    updatePlayerAge: (playerUid, age) => {
+      const { profiles } = get();
+      const idx = profiles.findIndex(profile => profile.uid === playerUid);
+      if (idx === -1) return;
+
+      const validAge = Math.min(13, Math.max(1, Math.round(age)));
+      const updated = { ...profiles[idx], age: validAge };
+      const newProfiles = [...profiles];
+      newProfiles[idx] = updated;
+      persistProfiles(newProfiles);
+      set({ profiles: newProfiles });
+      syncUserProfile(updated);
     },
   };
 });

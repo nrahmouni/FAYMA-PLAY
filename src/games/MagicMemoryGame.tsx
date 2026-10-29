@@ -10,6 +10,7 @@ const COPY: Record<Language, { title: string; hint: string; moves: string; pairs
   'nl-BE': { title: 'Magisch geheugen', hint: 'Zoek alle paren met dezelfde magische wezens.', moves: 'Pogingen', pairs: 'Paren', hiddenCard: 'Gesloten kaart', found: 'Je hebt alle paren gevonden!', again: 'Opnieuw spelen' },
   fr: { title: 'Mémoire magique', hint: 'Retrouve toutes les paires de créatures identiques.', moves: 'Essais', pairs: 'Paires', hiddenCard: 'Carte cachée', found: 'Tu as trouvé toutes les paires !', again: 'Rejouer' },
   ar: { title: 'الذاكرة السحرية', hint: 'اعثر على جميع أزواج المخلوقات المتشابهة.', moves: 'المحاولات', pairs: 'الأزواج', hiddenCard: 'بطاقة مقلوبة', found: 'لقد وجدت كل الأزواج!', again: 'العب مرة أخرى' },
+  en: { title: 'Magic Memory', hint: 'Find all matching pairs of creatures.', moves: 'Moves', pairs: 'Pairs', hiddenCard: 'Hidden card', found: 'You found all matching pairs!', again: 'Play again' },
 };
 
 const CREATURES = ['🦄', '🐉', '🧚', '🐸', '🦋', '🦉', '🐲', '🦊'];

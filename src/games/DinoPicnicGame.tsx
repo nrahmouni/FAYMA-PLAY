@@ -7,6 +7,7 @@ import { GAME_COPY } from '../data/gameCopy';
 import { GameProgress, EmptyGame } from './GameProgress';
 import { useGameProgress } from './useGameProgress';
 import { useSpeech } from '../hooks/useSpeech';
+import { WordIcon } from '../components/WordIcon';
 
 export const DinoPicnicGame: React.FC<GameProps> = ({
   difficulty,
@@ -66,7 +67,7 @@ export const DinoPicnicGame: React.FC<GameProps> = ({
         <span className="text-sm font-black text-emerald-900">{copy.dinoPlate}</span>
         {collectedIds.map(id => {
           const word = picnic.food.find(item => item.id === id);
-          return <span key={id} className="text-3xl" aria-label={word?.translation}>{word?.imageUrl}</span>;
+          return <WordIcon key={id} icon={word?.imageUrl} esWord={word?.translation} size="md" className="text-3xl" />;
         })}
         {collectedIds.length === 0 && <span className="text-2xl" aria-hidden="true">🍽️</span>}
       </div>
@@ -91,7 +92,7 @@ export const DinoPicnicGame: React.FC<GameProps> = ({
                     : 'border-white bg-white shadow-[0_5px_0_#d9e9c9] hover:-translate-y-1 hover:bg-lime-50'
               }`}
             >
-              <span className="text-4xl sm:text-5xl" aria-hidden="true">{word.imageUrl || '✨'}</span>
+              <WordIcon icon={word.imageUrl} esWord={word.translation} size="xl" className="text-4xl sm:text-5xl" />
               {(collected || discarded) && <span className="text-xs font-black">{word.text}</span>}
             </motion.button>
           );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowLeft, BookOpen, Play, Sparkles } from 'lucide-react';
+import { ArrowLeft, ChevronDown, ChevronUp, Play, Sparkles } from 'lucide-react';
 import { GameMechanic, useGameStore } from '../store/gameStore';
 import { useProfileStore } from '../store/profileStore';
 import { LANGUAGES } from '../data/languages';
@@ -54,10 +54,11 @@ const LEGACY_GAME_COPY_KEYS: Record<Exclude<GameMechanic, MathGameId | LearningG
 type GameSubject = 'all' | 'words' | 'math' | 'body' | 'animals' | 'space' | 'environment';
 
 const SUBJECT_LABELS: Record<Language, Record<GameSubject, string>> = {
-  es: { all: 'Todos', words: 'Palabras e idiomas', math: 'Matemáticas', body: 'Cuerpo humano', animals: 'Animales', space: 'Espacio', environment: 'Naturaleza' },
-  'nl-BE': { all: 'Alle', words: 'Woorden en talen', math: 'Wiskunde', body: 'Menselijk lichaam', animals: 'Dieren', space: 'Ruimte', environment: 'Natuur' },
-  fr: { all: 'Tout', words: 'Mots et langues', math: 'Mathématiques', body: 'Corps humain', animals: 'Animaux', space: 'Espace', environment: 'Nature' },
-  ar: { all: 'الكل', words: 'الكلمات واللغات', math: 'الرياضيات', body: 'جسم الإنسان', animals: 'الحيوانات', space: 'الفضاء', environment: 'الطبيعة' },
+  es: { all: 'Todos', words: 'Palabras', math: 'Mates', body: 'Cuerpo', animals: 'Animales', space: 'Espacio', environment: 'Naturaleza' },
+  'nl-BE': { all: 'Alle', words: 'Woorden', math: 'Wiskunde', body: 'Lichaam', animals: 'Dieren', space: 'Ruimte', environment: 'Natuur' },
+  fr: { all: 'Tout', words: 'Mots', math: 'Maths', body: 'Corps', animals: 'Animaux', space: 'Espace', environment: 'Nature' },
+  ar: { all: 'الكل', words: 'الكلمات', math: 'الرياضيات', body: 'الجسم', animals: 'الحيوانات', space: 'الفضاء', environment: 'الطبيعة' },
+  en: { all: 'All', words: 'Words', math: 'Maths', body: 'Body', animals: 'Animals', space: 'Space', environment: 'Nature' },
 };
 
 const GAME_SUBJECT: Record<GameMechanic, Exclude<GameSubject, 'all'>> = {
@@ -82,15 +83,18 @@ const GAME_SUBJECT: Record<GameMechanic, Exclude<GameSubject, 'all'>> = {
 };
 
 const SECTION_LABELS: Record<Language, { learning: string; free: string }> = {
-  es: { learning: 'Juegos de aprendizaje', free: 'Juegos libres' },
-  'nl-BE': { learning: 'Leerspelletjes', free: 'Vrije spelletjes' },
-  fr: { learning: 'Jeux éducatifs', free: 'Jeux libres' },
-  ar: { learning: 'ألعاب تعليمية', free: 'ألعاب حرة' },
+  es: { learning: 'Aprendizaje', free: 'Juegos libres' },
+  'nl-BE': { learning: 'Leren', free: 'Vrij' },
+  fr: { learning: 'Apprentissage', free: 'Libre' },
+  ar: { learning: 'تعلم', free: 'ألعاب حرة' },
+  en: { learning: 'Learning', free: 'Free Play' },
 };
 
 export const WorldHub: React.FC = () => {
   const [activeSubject, setActiveSubject] = useState<GameSubject>('all');
   const [activeSection, setActiveSection] = useState<'learning' | 'free'>('learning');
+  const [learningPage, setLearningPage] = useState(0);
+
   const language = useGameStore(state => state.language);
   const setScreen = useGameStore(state => state.setScreen);
   const setActiveWorld = useGameStore(state => state.setActiveWorld);
@@ -99,6 +103,7 @@ export const WorldHub: React.FC = () => {
   const { unlockAudio } = useSound();
   const meta = LANGUAGES[language];
   const copy = GAME_COPY[language];
+
   const localizedGames = GAMES.map(game => {
     if (isMathGame(game.id)) {
       const mathCopy = MATH_GAME_COPY[language][game.id];
@@ -111,9 +116,22 @@ export const WorldHub: React.FC = () => {
     const key = LEGACY_GAME_COPY_KEYS[game.id];
     return { ...game, name: copy.gameNames[key], description: copy.gameDescriptions[key] };
   });
+
   const visibleGames = localizedGames.filter(
     game => activeSubject === 'all' || GAME_SUBJECT[game.id] === activeSubject,
   );
+
+  const ITEMS_PER_PAGE = 4;
+  const totalLearningPages = Math.ceil(visibleGames.length / ITEMS_PER_PAGE);
+  const currentLearningGames = visibleGames.slice(learningPage * ITEMS_PER_PAGE, (learningPage + 1) * ITEMS_PER_PAGE);
+
+  const prevLearningSlide = () => {
+    if (learningPage > 0) setLearningPage(p => p - 1);
+  };
+
+  const nextLearningSlide = () => {
+    if (learningPage < totalLearningPages - 1) setLearningPage(p => p + 1);
+  };
 
   const playGame = (gameId: GameMechanic) => {
     unlockAudio();
@@ -122,121 +140,126 @@ export const WorldHub: React.FC = () => {
   };
 
   return (
-    <main className="mx-auto flex w-full max-w-5xl flex-col px-4 py-5 sm:px-8 sm:py-8">
-      <button
-        type="button"
-        onClick={() => setScreen('HOME')}
-        className="mb-5 inline-flex min-h-11 w-fit items-center gap-2 rounded-xl px-3 text-sm font-bold text-slate-700 transition hover:bg-white/80"
-      >
-        <ArrowLeft className="h-4 w-4" /> {copy.changeFlag}
-      </button>
+    <main className="mx-auto flex h-[calc(100vh-72px)] w-full max-w-3xl flex-col justify-between px-3 py-2 overflow-hidden">
+      {/* Unified Ultra-Compact Header */}
+      <header className="flex items-center justify-between gap-2 rounded-2xl border-3 border-white bg-gradient-to-r from-yellow-100 via-white to-sky-100 p-2 shadow-xs shrink-0">
+        <button
+          type="button"
+          onClick={() => setScreen('HOME')}
+          className="inline-flex min-h-8 items-center gap-1 rounded-xl bg-white px-2.5 text-xs font-black text-slate-700 shadow-2xs hover:bg-slate-50 transition shrink-0"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" /> {meta.flag} Cambiar
+        </button>
 
-      <header className="mb-6 flex items-center gap-4 rounded-[2rem] border-4 border-white bg-gradient-to-r from-yellow-100 via-white to-sky-100 p-4 shadow-[0_12px_30px_rgba(36,107,253,.1)] sm:mb-8 sm:p-6">
-        <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white text-5xl shadow-sm sm:h-20 sm:w-20 sm:text-6xl" aria-hidden="true">
-          {meta.flag}
-        </span>
-        <div className="min-w-0 flex-1">
-          <span className="text-xs font-black uppercase tracking-wider text-emerald-700">{copy.welcome} {profiles.map(profile => profile.displayName).join(copy.joiner)}</span>
-          <h1 className="mt-1 text-2xl font-black text-slate-900 sm:text-4xl">
-            {copy.chooseGame}
-          </h1>
-          <p className="mt-1 text-sm font-semibold text-slate-600">{copy.place} · {meta.nativeName}</p>
+        <div className="flex items-center gap-1 shrink-0">
+          {(['learning', 'free'] as const).map(section => (
+            <button
+              key={section}
+              type="button"
+              aria-pressed={activeSection === section}
+              onClick={() => {
+                setActiveSection(section);
+                setLearningPage(0);
+              }}
+              className={`min-h-8 rounded-xl px-2.5 text-xs font-black transition ${
+                activeSection === section
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'bg-white/80 text-slate-700 hover:bg-white'
+              }`}
+            >
+              {section === 'learning' ? '📚' : '🎮'} {SECTION_LABELS[language][section]}
+            </button>
+          ))}
         </div>
-        <span className="hidden text-4xl sm:block" aria-hidden="true">🎈</span>
       </header>
 
-      <div className="mb-5 grid grid-cols-2 gap-2 rounded-2xl border-2 border-white bg-white/60 p-1.5 shadow-sm" role="group" aria-label={language === 'es' ? 'Tipo de juegos' : language === 'fr' ? 'Type de jeux' : language === 'ar' ? 'نوع الألعاب' : 'Soort spelletjes'}>
-        {(['learning', 'free'] as const).map(section => (
-          <button
-            key={section}
-            type="button"
-            aria-pressed={activeSection === section}
-            onClick={() => setActiveSection(section)}
-            className={`min-h-12 rounded-xl px-3 text-sm font-black transition sm:text-base ${
-              activeSection === section
-                ? 'bg-emerald-600 text-white shadow-[0_3px_0_#328248]'
-                : 'text-slate-700 hover:bg-white'
-            }`}
-          >
-            {section === 'learning' ? '📚' : '🎮'} {SECTION_LABELS[language][section]}
-          </button>
-        ))}
-      </div>
-
       {activeSection === 'free' ? (
-        <OriginalGames language={language} />
+        <div className="flex-1 flex flex-col justify-center w-full">
+          <OriginalGames language={language} />
+        </div>
       ) : (
-        <>
-          <nav className="mb-5 flex gap-2 overflow-x-auto pb-2" aria-label={language === 'es' ? 'Filtrar juegos por asignatura' : language === 'fr' ? 'Filtrer les jeux par matière' : language === 'ar' ? 'تصفية الألعاب حسب المادة' : 'Spellen filteren op vak'}>
-            {(['all', 'words', 'math', 'body', 'animals', 'space', 'environment'] as const).map(subject => (
+        <div className="flex-1 flex flex-col justify-between w-full my-1.5">
+          <div className="flex items-center justify-between gap-1.5 shrink-0">
+            <nav className="flex gap-1 overflow-x-auto pb-0.5 no-scrollbar min-w-0 flex-1" aria-label="Filtro de asignaturas">
+              {(['all', 'words', 'math', 'body', 'animals', 'space', 'environment'] as const).map(subject => (
+                <button
+                  key={subject}
+                  type="button"
+                  aria-pressed={activeSubject === subject}
+                  onClick={() => {
+                    setActiveSubject(subject);
+                    setLearningPage(0);
+                  }}
+                  className={`min-h-7 shrink-0 rounded-lg border-2 px-2 text-[11px] font-black transition ${
+                    activeSubject === subject
+                      ? 'border-emerald-600 bg-emerald-600 text-white shadow-2xs'
+                      : 'border-white bg-white/90 text-slate-700 hover:bg-emerald-50'
+                  }`}
+                >
+                  {subject === 'all' ? '🎮' : subject === 'words' ? '📚' : subject === 'math' ? '🔢' : subject === 'body' ? '🫀' : subject === 'animals' ? '🐾' : subject === 'space' ? '🚀' : '🌱'} {SUBJECT_LABELS[language][subject]}
+                </button>
+              ))}
+            </nav>
+
+            {/* Up / Down Slide Buttons */}
+            <div className="flex items-center gap-1 shrink-0">
               <button
-                key={subject}
                 type="button"
-                aria-pressed={activeSubject === subject}
-                onClick={() => setActiveSubject(subject)}
-                className={`min-h-11 shrink-0 rounded-full border-2 px-4 text-sm font-black transition ${
-                  activeSubject === subject
-                    ? 'border-emerald-600 bg-emerald-600 text-white shadow-[0_3px_0_#328248]'
-                    : 'border-white bg-white/90 text-slate-700 shadow-sm hover:-translate-y-0.5 hover:bg-emerald-50'
+                onClick={prevLearningSlide}
+                disabled={learningPage === 0}
+                aria-label="Anterior"
+                className={`flex h-8 w-8 items-center justify-center rounded-xl border-2 transition ${
+                  learningPage === 0 ? 'border-slate-100 bg-slate-50 text-slate-300 cursor-not-allowed' : 'border-white bg-white text-slate-700 shadow-2xs hover:bg-slate-50'
                 }`}
               >
-                {subject === 'all' ? '🎮' : subject === 'words' ? '📚' : subject === 'math' ? '🔢' : subject === 'body' ? '🫀' : subject === 'animals' ? '🐾' : subject === 'space' ? '🚀' : '🌱'} {SUBJECT_LABELS[language][subject]}
+                <ChevronUp className="h-4 w-4" />
               </button>
-            ))}
-          </nav>
+              <button
+                type="button"
+                onClick={nextLearningSlide}
+                disabled={learningPage >= totalLearningPages - 1}
+                aria-label="Siguiente"
+                className={`flex h-8 w-8 items-center justify-center rounded-xl border-2 transition ${
+                  learningPage >= totalLearningPages - 1 ? 'border-slate-100 bg-slate-50 text-slate-300 cursor-not-allowed' : 'border-white bg-white text-slate-700 shadow-2xs hover:bg-slate-50'
+                }`}
+              >
+                <ChevronDown className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
 
-          <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label={`${copy.gamesIn} ${meta.nativeName}`}>
-            {visibleGames.map((game, index) => (
+          <div className="grid w-full grid-cols-2 grid-rows-2 gap-2.5 flex-1 my-1">
+            {currentLearningGames.map(game => (
               <motion.button
                 key={game.id}
                 type="button"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.07 }}
-                whileHover={{ y: -4 }}
+                whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => playGame(game.id)}
-                className="group flex items-center gap-3 overflow-hidden rounded-[1.5rem] border-4 border-white bg-white p-2.5 text-left shadow-[0_5px_0_rgba(71,85,105,.1),0_12px_24px_rgba(71,85,105,.08)] transition sm:block sm:rounded-[2rem] sm:p-4"
+                className="group flex flex-col justify-between overflow-hidden rounded-2xl border-3 border-white bg-white p-3 text-left shadow-xs transition h-full w-full"
               >
-                <div className={`relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br ${game.color}`}>
-                  {game.icon
-                    ? <span className="flex h-24 w-24 items-center justify-center text-6xl transition-transform duration-300 group-hover:scale-110 sm:h-36 sm:w-full sm:text-8xl lg:h-44" aria-hidden="true">{game.icon}</span>
-                    : <img src={game.art} alt="" className="h-24 w-24 object-contain transition-transform duration-300 group-hover:scale-105 sm:h-36 sm:w-full lg:h-44" />}
+                <div className="flex items-center gap-2.5">
+                  <div className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${game.color}`}>
+                    {game.icon
+                      ? <span className="text-3xl" aria-hidden="true">{game.icon}</span>
+                      : <img src={game.art} alt="" className="h-11 w-11 object-contain" />}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h2 className="text-sm font-black leading-tight text-slate-900 line-clamp-2">{game.name}</h2>
+                  </div>
                 </div>
-                <div className="min-w-0 flex-1 sm:block">
-                  <h2 className="text-base font-black leading-tight text-slate-900 sm:mt-4 sm:text-xl">{game.name}</h2>
-                  <p className="mt-1 hidden min-h-12 text-sm leading-6 text-slate-600 sm:block">{game.description}</p>
-                  <span className="mt-2 flex min-h-10 items-center justify-center gap-2 rounded-xl bg-emerald-600 text-sm font-black text-white shadow-[0_3px_0_#287b42] transition group-hover:bg-emerald-700 group-active:translate-y-1 group-active:shadow-none sm:mt-3 sm:min-h-12 sm:rounded-2xl sm:text-base">
-                    <Play className="h-5 w-5 fill-current" /> {copy.play}
-                  </span>
-                </div>
+                <span className="mt-1 flex min-h-8 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 text-xs font-black text-white shadow-[0_2px_0_#287b42] transition group-hover:bg-emerald-700 w-full">
+                  <Play className="h-3.5 w-3.5 fill-current" /> {copy.play}
+                </span>
               </motion.button>
             ))}
-          </section>
-
-          {language === 'nl-BE' && (
-            <motion.button
-              type="button"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              onClick={() => setScreen('LEARN_FLEMISH')}
-              className="mt-5 flex min-h-20 items-center gap-4 rounded-[1.75rem] border-4 border-white bg-gradient-to-r from-yellow-100 via-lime-50 to-emerald-100 p-4 text-left shadow-sm transition hover:-translate-y-1 sm:p-5"
-            >
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-3xl shadow-sm" aria-hidden="true">🦁</span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-lg font-black text-slate-900">{copy.learn}</span>
-                <span className="mt-0.5 block text-sm font-semibold text-slate-600">{copy.learnDescription}</span>
-              </span>
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-emerald-700 shadow-sm" aria-hidden="true">
-                <BookOpen className="h-5 w-5" />
-              </span>
-            </motion.button>
-          )}
-
-          <div className="mt-6 flex items-center justify-center gap-2 text-center text-xs font-bold text-slate-500">
-            <Sparkles className="h-4 w-4 text-amber-500" /> {profiles.length} {profiles.length === 1 ? copy.player : copy.players} · {copy.turnsNote}
           </div>
-        </>
+
+          <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 px-1 shrink-0">
+            <span>Página {learningPage + 1} de {totalLearningPages}</span>
+            <span className="flex items-center gap-1"><Sparkles className="h-3 w-3 text-amber-500" /> {profiles.length} {copy.player}</span>
+          </div>
+        </div>
       )}
     </main>
   );

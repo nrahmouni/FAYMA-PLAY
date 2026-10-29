@@ -23,6 +23,7 @@ const COPY: Record<Language, {
   'nl-BE': { title: 'Sterren vangen', hint: 'Vang sterren, ontwijk bommen en maak combo’s. Je hebt 30 seconden!', start: 'Start!', time: 'Tijd', score: 'Punten', streak: 'Reeks', bestStreak: 'Beste reeks', result: 'Goed gedaan! Je behaalde', again: 'Opnieuw spelen', starTarget: 'Ster vangen', bombTarget: 'Bom: punten aftrek', emptyTarget: 'Leeg vakje' },
   fr: { title: 'Attrape-étoiles', hint: 'Attrape les étoiles, évite les bombes et enchaîne les combos. Tu as 30 secondes !', start: 'Commencer !', time: 'Temps', score: 'Points', streak: 'Série', bestStreak: 'Meilleure série', result: 'Bravo ! Tu as obtenu', again: 'Rejouer', starTarget: 'Attraper une étoile', bombTarget: 'Bombe : points en moins', emptyTarget: 'Case vide' },
   ar: { title: 'التقط النجوم', hint: 'التقط النجوم وتجنب القنابل واجمع النقاط المتتالية. لديك 30 ثانية!', start: 'ابدأ!', time: 'الوقت', score: 'النقاط', streak: 'التتابع', bestStreak: 'أفضل تتابع', result: 'أحسنت! حصلت على', again: 'العب مرة أخرى', starTarget: 'التقط نجمة', bombTarget: 'قنبلة: تخصم نقاطًا', emptyTarget: 'خانة فارغة' },
+  en: { title: 'Star Catcher', hint: 'Catch stars, avoid bombs and build combos. You have 30 seconds!', start: 'Start!', time: 'Time', score: 'Score', streak: 'Streak', bestStreak: 'Best streak', result: 'Great job! You scored', again: 'Play again', starTarget: 'Catch star', bombTarget: 'Bomb: minus points', emptyTarget: 'Empty slot' },
 };
 
 function randomTargets() {

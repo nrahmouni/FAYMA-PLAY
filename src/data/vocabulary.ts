@@ -1,5 +1,6 @@
 import { Word } from '../types';
 import { EVERYDAY_VOCABULARY } from './everydayVocabulary';
+import { WORDS_1000_BANK, RAW_1000_WORDS, VOCABULARY_1000_CATEGORIES } from './words1000';
 
 const BASE_VOCABULARY: Word[] = [
   // --- ÁRABE (ar) ---
@@ -779,4 +780,6 @@ const BASE_VOCABULARY: Word[] = [
   },
 ];
 
-export const VOCABULARY_BANK: Word[] = [...BASE_VOCABULARY, ...EVERYDAY_VOCABULARY];
+export const VOCABULARY_BANK: Word[] = [...WORDS_1000_BANK, ...BASE_VOCABULARY, ...EVERYDAY_VOCABULARY];
+
+export { RAW_1000_WORDS, WORDS_1000_BANK, VOCABULARY_1000_CATEGORIES };

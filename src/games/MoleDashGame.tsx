@@ -23,6 +23,7 @@ const COPY: Record<Language, {
   'nl-BE': { title: 'Molletje-mep!', hint: 'Tik de molletjes en ontwijk de bommen. Je hebt 30 seconden!', start: 'Spelen!', again: 'Opnieuw spelen', time: 'Tijd', score: 'Punten', streak: 'Reeks', bestStreak: 'Beste reeks', result: 'Jouw score!', mole: 'Mol: punten erbij', bomb: 'Bom: punten eraf', emptyHole: 'Leeg holletje' },
   fr: { title: 'Tape-taupe !', hint: 'Attrape les taupes et évite les bombes. Tu as 30 secondes !', start: 'Jouer !', again: 'Rejouer', time: 'Temps', score: 'Points', streak: 'Série', bestStreak: 'Meilleure série', result: 'Ton score !', mole: 'Taupe : des points en plus', bomb: 'Bombe : des points en moins', emptyHole: 'Trou vide' },
   ar: { title: 'اضرب الخلد!', hint: 'أمسك حيوانات الخلد وتجنب القنابل. لديك 30 ثانية!', start: 'هيا نلعب!', again: 'العب مرة أخرى', time: 'الوقت', score: 'النقاط', streak: 'التتابع', bestStreak: 'أفضل تتابع', result: 'نتيجتك!', mole: 'الخلد: نقاط إضافية', bomb: 'القنبلة: تخصم نقاطًا', emptyHole: 'حفرة فارغة' },
+  en: { title: 'Whack-a-Mole!', hint: 'Catch moles and avoid bombs. You have 30 seconds!', start: 'Start!', again: 'Play again', time: 'Time', score: 'Score', streak: 'Streak', bestStreak: 'Best streak', result: 'Your score!', mole: 'Mole: plus points', bomb: 'Bomb: minus points', emptyHole: 'Empty hole' },
 };
 
 type Target = { hole: number; type: 'mole' | 'bomb' };

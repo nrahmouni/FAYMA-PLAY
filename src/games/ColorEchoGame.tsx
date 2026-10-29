@@ -21,6 +21,7 @@ const COPY: Record<Language, {
   'nl-BE': { title: 'Kleuren-echo', hint: 'Kijk goed naar de reeks en herhaal ze zonder fouten.', start: 'Start!', watch: 'Kijk goed!', repeat: 'Jouw beurt!', level: 'Niveau', best: 'Beste niveau', gameOver: 'De reeks is voorbij!', again: 'Opnieuw spelen', colors: ['Rood', 'Blauw', 'Groen', 'Geel'] },
   fr: { title: 'Écho des couleurs', hint: 'Observe la séquence et répète-la sans te tromper.', start: 'Commencer !', watch: 'Regarde bien !', repeat: 'À toi !', level: 'Niveau', best: 'Meilleur niveau', gameOver: 'La séquence est terminée !', again: 'Rejouer', colors: ['Rouge', 'Bleu', 'Vert', 'Jaune'] },
   ar: { title: 'صدى الألوان', hint: 'شاهد التسلسل وكرره دون أخطاء.', start: 'ابدأ!', watch: 'راقب جيدًا!', repeat: 'دورك!', level: 'المستوى', best: 'أفضل مستوى', gameOver: 'انتهى التسلسل!', again: 'العب مرة أخرى', colors: ['أحمر', 'أزرق', 'أخضر', 'أصفر'] },
+  en: { title: 'Color Echo', hint: 'Watch the sequence and repeat it.', start: 'Start!', watch: 'Watch closely!', repeat: 'Your turn!', level: 'Level', best: 'Best level', gameOver: 'Sequence over!', again: 'Play again', colors: ['Red', 'Blue', 'Green', 'Yellow'] },
 };
 
 const COLORS = [

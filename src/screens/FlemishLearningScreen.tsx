@@ -1,43 +1,94 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft, BookOpen, Check, Search, Sparkles, Volume2 } from 'lucide-react';
-import { FLEMISH_PHRASES, FLEMISH_WORDS, FLEMISH_WORD_COUNT } from '../data/flemish';
+import { FLEMISH_PHRASES } from '../data/flemish';
+import { RAW_1000_WORDS, VOCABULARY_1000_CATEGORIES } from '../data/words1000';
+import { LANGUAGES } from '../data/languages';
 import { useSpeech } from '../hooks/useSpeech';
 import { useGameStore } from '../store/gameStore';
 import { useProfileStore } from '../store/profileStore';
 import { shuffleArray } from '../lib/utils';
+import { Language } from '../types';
+import { WordIcon } from '../components/WordIcon';
 
 type LearningMode = 'words' | 'phrases' | 'quiz';
 const PAGE_SIZE = 24;
 
+interface DisplayWord {
+  id: string;
+  word: string;
+  meaning: string;
+  emoji: string;
+  category: string;
+  language: Language;
+}
+
 export const FlemishLearningScreen: React.FC = () => {
+  const currentStoreLang = useGameStore(state => state.language);
   const setScreen = useGameStore(state => state.setScreen);
   const profiles = useProfileStore(state => state.profiles);
   const recordWordAttempt = useProfileStore(state => state.recordWordAttempt);
   const player = profiles[0];
   const { speak } = useSpeech();
+
+  const [activeLang, setActiveLang] = useState<Language>(currentStoreLang);
   const [mode, setMode] = useState<LearningMode>('words');
   const [category, setCategory] = useState('Todos');
   const [search, setSearch] = useState('');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [quizIndex, setQuizIndex] = useState(0);
   const [quizChoice, setQuizChoice] = useState<string | null>(null);
-  const quizDeck = useMemo(() => shuffleArray(FLEMISH_WORDS), []);
-  const categories = useMemo(() => ['Todos', ...new Set(FLEMISH_WORDS.map(item => item.category))], []);
-  const knownCount = FLEMISH_WORDS.filter(word => player?.mastery[word.id]).length;
+
+  // Map 1000 words to the active language display
+  const wordsForLang = useMemo<DisplayWord[]>(() => {
+    return RAW_1000_WORDS.map(w => {
+      let wordText = w.nl;
+      let meaningText = w.es;
+      if (activeLang === 'fr') {
+        wordText = w.fr;
+        meaningText = w.es;
+      } else if (activeLang === 'ar') {
+        wordText = w.ar;
+        meaningText = w.es;
+      } else if (activeLang === 'es') {
+        wordText = w.es;
+        meaningText = w.en ? `${w.es} · ${w.en}` : w.es;
+      } else {
+        wordText = w.nl;
+        meaningText = w.es;
+      }
+      return {
+        id: `vocab_${activeLang}_${w.id}`,
+        word: wordText,
+        meaning: meaningText,
+        emoji: w.emoji,
+        category: w.cat,
+        language: activeLang,
+      };
+    });
+  }, [activeLang]);
+
+  const quizDeck = useMemo(() => shuffleArray(wordsForLang), [wordsForLang]);
+  const categories = useMemo(() => ['Todos', ...VOCABULARY_1000_CATEGORIES], []);
+  const knownCount = wordsForLang.filter(word => player?.mastery[word.id]).length;
+  const totalCount = wordsForLang.length;
+
   const normalizedSearch = search.trim().toLocaleLowerCase();
-  const filteredWords = FLEMISH_WORDS.filter(word =>
-    (category === 'Todos' || word.category === category) &&
-    (!normalizedSearch || `${word.word} ${word.meaning}`.toLocaleLowerCase().includes(normalizedSearch)),
-  );
+  const filteredWords = useMemo(() => {
+    return wordsForLang.filter(word =>
+      (category === 'Todos' || word.category === category) &&
+      (!normalizedSearch || `${word.word} ${word.meaning} ${word.category}`.toLocaleLowerCase().includes(normalizedSearch)),
+    );
+  }, [category, normalizedSearch, wordsForLang]);
+
   const currentQuizWord = quizDeck[quizIndex % quizDeck.length];
   const quizOptions = useMemo(() => {
     if (!currentQuizWord) return [];
     return shuffleArray([
       currentQuizWord,
-      ...shuffleArray(FLEMISH_WORDS.filter(word => word.id !== currentQuizWord.id)).slice(0, 3),
+      ...shuffleArray(wordsForLang.filter(word => word.id !== currentQuizWord.id)).slice(0, 3),
     ]);
-  }, [currentQuizWord]);
+  }, [currentQuizWord, wordsForLang]);
 
   const chooseQuizAnswer = (wordId: string) => {
     if (!player || quizChoice) return;
@@ -54,31 +105,74 @@ export const FlemishLearningScreen: React.FC = () => {
     if (!player?.mastery[wordId]) recordWordAttempt(player.uid, wordId, true);
   };
 
+  const activeMeta = LANGUAGES[activeLang];
+
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 py-5 sm:gap-7 sm:px-8 sm:py-8">
-      <button
-        type="button"
-        onClick={() => setScreen('HOME')}
-        className="inline-flex min-h-11 w-fit items-center gap-2 rounded-xl px-3 text-sm font-bold text-emerald-800 transition hover:bg-white/70"
-      >
-        <ArrowLeft className="h-4 w-4" /> Volver a Inicio
-      </button>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <button
+          type="button"
+          onClick={() => setScreen('WORLD_HUB')}
+          className="inline-flex min-h-11 w-fit items-center gap-2 rounded-xl px-3 text-sm font-bold text-emerald-800 transition hover:bg-white/70"
+        >
+          <ArrowLeft className="h-4 w-4" /> Volver al juego
+        </button>
+
+        {/* Language selector tabs */}
+        <div className="flex items-center gap-1.5 rounded-2xl bg-white p-1.5 shadow-sm ring-1 ring-slate-100">
+          {(['nl-BE', 'fr', 'ar', 'es'] as Language[]).map(langCode => {
+            const m = LANGUAGES[langCode];
+            const isSelected = activeLang === langCode;
+            return (
+              <button
+                key={langCode}
+                type="button"
+                onClick={() => {
+                  setActiveLang(langCode);
+                  setCategory('Todos');
+                  setSearch('');
+                  setVisibleCount(PAGE_SIZE);
+                  setQuizIndex(0);
+                  setQuizChoice(null);
+                }}
+                className={`flex min-h-10 items-center gap-1.5 rounded-xl px-3 text-xs font-black transition ${
+                  isSelected
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : 'text-slate-600 hover:bg-emerald-50'
+                }`}
+              >
+                <span>{m.flag}</span>
+                <span className="hidden sm:inline">{m.name}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       <header className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-600 via-green-600 to-lime-500 p-5 text-white shadow-[0_20px_45px_rgba(27,110,62,.2)] sm:p-8">
-        <span className="absolute -right-8 -top-10 text-[9rem] opacity-20 sm:right-8 sm:top-0 sm:text-[12rem]" aria-hidden="true">🦁</span>
+        <span className="absolute -right-8 -top-10 text-[9rem] opacity-20 sm:right-8 sm:top-0 sm:text-[12rem]" aria-hidden="true">
+          {activeLang === 'nl-BE' ? '🦁' : activeLang === 'fr' ? '🥐' : activeLang === 'ar' ? '🌴' : '☀️'}
+        </span>
         <div className="relative z-10 max-w-3xl">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-1.5 text-xs font-black uppercase tracking-wider">
-            <Sparkles className="h-4 w-4" /> Aventura de idiomas · Flandes, Bélgica
+            <Sparkles className="h-4 w-4" /> Gran Banco de Vocabulario Oficial · {activeMeta.country}
           </div>
-          <h1 className="mt-4 text-3xl font-black leading-tight sm:text-5xl">¡Aprende flamenco!</h1>
+          <h1 className="mt-4 text-3xl font-black leading-tight sm:text-5xl">
+            {activeLang === 'nl-BE'
+              ? '¡Diccionario de Flamenco!'
+              : activeLang === 'fr'
+                ? '¡Dictionnaire de Français!'
+                : activeLang === 'ar'
+                  ? '¡قاموس الكلمات العربية!'
+                  : '¡Diccionario de Español!'}
+          </h1>
           <p className="mt-3 max-w-2xl text-sm font-medium leading-6 text-white/95 sm:text-base">
-            Descubre palabras del neerlandés que se habla en Flandes. Escucha cómo suenan, aprende frases útiles y juega para recordarlas.
-          </p>
-          <p className="mt-2 text-xs font-semibold text-white/80">
-            El flamenco de Flandes es una variedad del neerlandés, con expresiones y acentos propios.
+            {activeLang === 'nl-BE'
+              ? 'Las 1.000 palabras oficiales organizadas en 49 temas cotidianos (familia, animales, comida, naturaleza, colegio, deportes y más). ¡Escucha el audio nativo y practica!'
+              : `Explora el vocabulario de 1.000 palabras en ${activeMeta.name} con audio nativo y mini quiz interactivo.`}
           </p>
           <div className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-2.5 text-sm font-black text-emerald-800 shadow-sm">
-            <BookOpen className="h-4 w-4" /> {FLEMISH_WORD_COUNT} palabras · {categories.length - 1} temas
+            <BookOpen className="h-4 w-4" /> {totalCount} palabras cargadas · {categories.length - 1} temas
           </div>
         </div>
       </header>
@@ -86,32 +180,32 @@ export const FlemishLearningScreen: React.FC = () => {
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
           <div className="text-xs font-bold text-slate-500">Palabras aprendidas</div>
-          <div className="mt-1 text-2xl font-black text-emerald-800">{knownCount}<span className="text-sm font-bold text-slate-400"> / {FLEMISH_WORD_COUNT}</span></div>
+          <div className="mt-1 text-2xl font-black text-emerald-800">{knownCount}<span className="text-sm font-bold text-slate-400"> / {totalCount}</span></div>
         </div>
         <div className="rounded-2xl border border-amber-100 bg-white p-4 shadow-sm">
           <div className="text-xs font-bold text-slate-500">Tu progreso</div>
-          <div className="mt-1 text-2xl font-black text-amber-700">{Math.round(knownCount / FLEMISH_WORD_COUNT * 100)}%</div>
+          <div className="mt-1 text-2xl font-black text-amber-700">{Math.round((knownCount / Math.max(1, totalCount)) * 100)}%</div>
         </div>
         <div className="col-span-2 rounded-2xl border border-sky-100 bg-white p-4 shadow-sm sm:col-span-1">
-          <div className="text-xs font-bold text-slate-500">¡Consejo de Lila!</div>
-          <div className="mt-1 text-sm font-extrabold text-sky-800">Escucha la palabra y repítela en voz alta.</div>
+          <div className="text-xs font-bold text-slate-500">¡Consejo de aprendizaje!</div>
+          <div className="mt-1 text-sm font-extrabold text-sky-800">Toca el altavoz para escuchar la pronunciación auténtica.</div>
         </div>
       </section>
 
       <div
         className="h-3 overflow-hidden rounded-full bg-white shadow-inner"
         role="progressbar"
-        aria-label="Progreso de palabras flamencas"
+        aria-label="Progreso de palabras"
         aria-valuemin={0}
-        aria-valuemax={FLEMISH_WORD_COUNT}
+        aria-valuemax={totalCount}
         aria-valuenow={knownCount}
       >
-        <div className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 transition-[width]" style={{ width: `${knownCount / FLEMISH_WORD_COUNT * 100}%` }} />
+        <div className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 transition-[width]" style={{ width: `${(knownCount / Math.max(1, totalCount)) * 100}%` }} />
       </div>
 
       <nav className="grid grid-cols-3 gap-2 rounded-2xl bg-white/80 p-2 shadow-sm" aria-label="Secciones de aprendizaje">
         {([
-          ['words', `Palabras (${FLEMISH_WORD_COUNT})`, '📚'],
+          ['words', `Palabras (${totalCount})`, '📚'],
           ['phrases', 'Frases útiles', '💬'],
           ['quiz', 'Mini quiz', '⭐'],
         ] as const).map(([value, label, emoji]) => (
@@ -141,7 +235,7 @@ export const FlemishLearningScreen: React.FC = () => {
                   setSearch(event.target.value);
                   setVisibleCount(PAGE_SIZE);
                 }}
-                placeholder="Busca en neerlandés o español…"
+                placeholder={`Busca en ${activeMeta.name} o español…`}
                 className="w-full bg-transparent text-sm font-semibold text-slate-800 outline-none placeholder:text-slate-400"
               />
             </label>
@@ -185,15 +279,23 @@ export const FlemishLearningScreen: React.FC = () => {
                       className="rounded-2xl border border-white bg-white p-4 shadow-sm ring-1 ring-emerald-50"
                     >
                       <div className="flex items-start gap-3">
-                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-lime-100 to-emerald-100 text-3xl" aria-hidden="true">{word.emoji}</span>
+                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-lime-100 to-emerald-100 p-1" aria-hidden="true">
+                          <WordIcon icon={word.emoji} esWord={word.meaning} size="md" className="text-3xl" />
+                        </span>
                         <div className="min-w-0 flex-1">
                           <span className="text-[10px] font-black uppercase tracking-wide text-emerald-700">{word.category}</span>
-                          <h2 className="break-words text-xl font-black text-slate-900" lang="nl-BE">{word.word}</h2>
+                          <h2
+                            className="break-words text-xl font-black text-slate-900"
+                            lang={word.language}
+                            dir={word.language === 'ar' ? 'rtl' : 'ltr'}
+                          >
+                            {word.word}
+                          </h2>
                           <p className="text-sm font-semibold text-slate-600">{word.meaning}</p>
                         </div>
                         <button
                           type="button"
-                          onClick={() => speak(word.word, 'nl-BE')}
+                          onClick={() => speak(word.word, word.language)}
                           aria-label={`Escuchar ${word.word}`}
                           className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sky-50 text-sky-800 transition hover:bg-sky-100"
                         >
@@ -220,7 +322,7 @@ export const FlemishLearningScreen: React.FC = () => {
                   onClick={() => setVisibleCount(count => count + PAGE_SIZE)}
                   className="mx-auto mt-5 flex min-h-12 items-center justify-center rounded-2xl bg-emerald-600 px-6 text-sm font-black text-white shadow-sm transition hover:bg-emerald-700"
                 >
-                  Cargar más palabras
+                  Cargar más palabras ({filteredWords.length - visibleCount} restantes)
                 </button>
               )}
             </>
@@ -232,7 +334,7 @@ export const FlemishLearningScreen: React.FC = () => {
         <section>
           <div className="mb-4 rounded-3xl bg-gradient-to-r from-sky-100 to-indigo-100 p-5">
             <h2 className="text-xl font-black text-slate-900">Frases para usar cada día</h2>
-            <p className="mt-1 text-sm text-slate-700">Escucha, practica y úsalas en tus aventuras por Flandes.</p>
+            <p className="mt-1 text-sm text-slate-700">Escucha, practica y úsalas en tus aventuras de conversación.</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             {FLEMISH_PHRASES.map(item => (
@@ -258,16 +360,26 @@ export const FlemishLearningScreen: React.FC = () => {
 
       {mode === 'quiz' && currentQuizWord && (
         <section className="mx-auto w-full max-w-3xl rounded-[2rem] bg-gradient-to-br from-amber-50 via-white to-lime-50 p-5 shadow-sm ring-1 ring-amber-100 sm:p-8">
-          <div className="text-xs font-black uppercase tracking-wider text-amber-800">Mini quiz · palabra {quizIndex + 1}</div>
+          <div className="text-xs font-black uppercase tracking-wider text-amber-800">
+            Mini quiz · {activeMeta.name} · palabra {quizIndex + 1}
+          </div>
           <div className="mt-5 flex flex-col items-center text-center">
-            <span className="text-6xl" aria-hidden="true">{currentQuizWord.emoji}</span>
-            <h2 className="mt-3 text-3xl font-black text-slate-900" lang="nl-BE">{currentQuizWord.word}</h2>
+            <span className="flex h-20 w-20 items-center justify-center p-1" aria-hidden="true">
+              <WordIcon icon={currentQuizWord.emoji} esWord={currentQuizWord.meaning} size="3xl" className="text-6xl" />
+            </span>
+            <h2
+              className="mt-3 text-3xl font-black text-slate-900"
+              lang={currentQuizWord.language}
+              dir={currentQuizWord.language === 'ar' ? 'rtl' : 'ltr'}
+            >
+              {currentQuizWord.word}
+            </h2>
             <button
               type="button"
-              onClick={() => speak(currentQuizWord.word, 'nl-BE')}
+              onClick={() => speak(currentQuizWord.word, currentQuizWord.language)}
               className="mt-2 inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-4 text-sm font-bold text-sky-800 shadow-sm"
             >
-              <Volume2 className="h-4 w-4" /> Escuchar
+              <Volume2 className="h-4 w-4" /> Escuchar pronunciación
             </button>
             <p className="mt-5 text-sm font-bold text-slate-600">¿Qué significa esta palabra?</p>
           </div>

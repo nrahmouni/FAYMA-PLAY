@@ -1,5 +1,6 @@
 import React from 'react';
 import { Volume2, VolumeX, Sparkles } from 'lucide-react';
+import { WordIcon } from './WordIcon';
 import { Word } from '../types';
 import { useSpeech } from '../hooks/useSpeech';
 
@@ -43,7 +44,7 @@ export const ThemeVocabularyBanner: React.FC<ThemeVocabularyBannerProps> = ({
               className="flex items-center justify-between p-2.5 rounded-xl glass-card hover:bg-slate-800/80 transition group border border-white/5"
             >
               <div className="flex items-center gap-2.5 min-w-0">
-                <span className="text-2xl flex-shrink-0 select-none">{word.imageUrl || '✨'}</span>
+                <WordIcon icon={word.imageUrl} esWord={word.translation} size="md" className="text-2xl shrink-0" />
                 <div className="min-w-0">
                   <div className={`font-bold text-slate-100 truncate ${isArabic ? 'text-lg font-arabic' : 'text-base'}`} dir={isArabic ? 'rtl' : 'ltr'}>
                     {word.text}

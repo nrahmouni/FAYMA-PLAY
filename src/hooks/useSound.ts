@@ -5,7 +5,7 @@ class SoundSynthesizer {
   private musicTimer: number | null = null;
   private musicGain: GainNode | null = null;
   public isMuted: boolean = false;
-  public musicEnabled: boolean = true;
+  public musicEnabled: boolean = false;
 
   constructor() {
     // Lazy AudioContext to satisfy autoplay policies

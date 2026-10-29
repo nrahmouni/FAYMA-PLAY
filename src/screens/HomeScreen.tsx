@@ -1,181 +1,131 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Gift, LockKeyhole, Users, X } from 'lucide-react';
-import { FormEvent, useState } from 'react';
+import { ArrowLeft, ArrowRight, Check, Sparkles, Users } from 'lucide-react';
 import { LANGUAGES } from '../data/languages';
 import { Language } from '../types';
 import { useGameStore } from '../store/gameStore';
 import { useProfileStore } from '../store/profileStore';
+import { GAME_COPY } from '../data/gameCopy';
 
-const LANGUAGE_ORDER: Language[] = ['es', 'fr', 'ar', 'nl-BE'];
-
-const FLAG_ART: Record<Language, string> = {
-  es: 'from-rose-200 to-orange-200',
-  fr: 'from-sky-200 to-blue-200',
-  ar: 'from-amber-200 to-orange-200',
-  'nl-BE': 'from-yellow-200 to-lime-200',
-};
+const TARGET_OPTIONS: Language[] = ['nl-BE', 'en', 'fr', 'ar', 'es'];
 
 export const HomeScreen: React.FC = () => {
+  const language = useGameStore(state => state.language);
+  const copy = GAME_COPY[language];
   const setScreen = useGameStore(state => state.setScreen);
   const setLanguage = useGameStore(state => state.setLanguage);
-  const totalRounds = useGameStore(state => state.totalRounds);
+  const targetLanguages = useGameStore(state => state.targetLanguages);
+  const setTargetLanguages = useGameStore(state => state.setTargetLanguages);
+  const nativeLanguages = useGameStore(state => state.nativeLanguages);
   const profiles = useProfileStore(state => state.profiles);
-  const [lockedLanguage, setLockedLanguage] = useState<Language | null>(null);
-  const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState(false);
 
-  const chooseLanguage = (language: Language) => {
-    if (language !== 'nl-BE') {
-      setLockedLanguage(language);
-      setPassword('');
-      setPasswordError(false);
-      return;
+  const toggleTargetLanguage = (lang: Language) => {
+    if (targetLanguages.includes(lang)) {
+      if (targetLanguages.length === 1) return;
+      const updated = targetLanguages.filter(l => l !== lang);
+      setTargetLanguages(updated);
+      setLanguage(updated[0] || 'nl-BE');
+    } else {
+      const updated = targetLanguages.length >= 2 ? [targetLanguages[0], lang] : [...targetLanguages, lang];
+      setTargetLanguages(updated);
+      setLanguage(updated[0]);
     }
-    setLanguage(language);
-    setScreen('WORLD_HUB');
   };
 
-  const unlockLanguage = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (password !== '332233' || !lockedLanguage) {
-      setPasswordError(true);
-      return;
-    }
-    setLanguage(lockedLanguage);
-    setLockedLanguage(null);
-    setPassword('');
+  const startAdventure = () => {
     setScreen('WORLD_HUB');
-  };
-
-  const closePasswordPrompt = () => {
-    setLockedLanguage(null);
-    setPassword('');
-    setPasswordError(false);
   };
 
   return (
-    <main className="mx-auto flex min-h-[calc(100vh-76px)] w-full max-w-5xl flex-col justify-center px-4 py-6 sm:px-8 sm:py-10">
-      <header className="mb-6 text-center sm:mb-9">
-        <div className="mb-3 text-5xl sm:text-6xl" aria-hidden="true">🌈</div>
-        <h1 className="text-3xl font-black text-slate-900 sm:text-5xl">¿Qué idioma aprendemos?</h1>
-        <p className="mt-2 text-sm font-semibold text-slate-600 sm:text-lg">¡Hoy aprendemos flamenco! Los otros idiomas necesitan la clave de un adulto.</p>
-        <button
-          type="button"
-          onClick={() => setScreen('PLAYER_SETUP')}
-          className="mx-auto mt-4 inline-flex min-h-10 items-center gap-2 rounded-full bg-white/90 px-4 text-xs font-extrabold text-slate-700 shadow-sm ring-1 ring-slate-100 transition hover:bg-white"
-        >
-          <Users className="h-4 w-4 text-violet-600" />
-          Juegan: {profiles.map(profile => profile.displayName).join(' y ')}
-          <span className="text-emerald-700">· Cambiar</span>
-        </button>
-      </header>
+    <main className="mx-auto flex h-[calc(100vh-72px)] w-full max-w-2xl flex-col items-center justify-center px-3 py-2 sm:px-4 sm:py-4 overflow-hidden">
+      <section className="w-full rounded-[1.75rem] border-4 border-white bg-gradient-to-br from-amber-100 via-emerald-50 to-sky-100 p-4 shadow-[0_20px_50px_rgba(36,107,253,.16)] sm:p-6 flex flex-col justify-between">
+        <header className="text-center">
+          <span className="text-3xl sm:text-4xl" aria-hidden="true">🎯</span>
+          <div className="mt-1 inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-[11px] font-black text-emerald-800 shadow-xs">
+            <Sparkles className="h-3.5 w-3.5" /> {copy.stepLabel}
+          </div>
+          <h1 className="mt-1.5 text-2xl font-black text-slate-900 sm:text-3xl">{copy.title}</h1>
+          <p className="mt-1 text-xs font-semibold text-slate-600 sm:text-sm">
+            {copy.description}
+          </p>
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5" aria-label="Elige un idioma">
-        {LANGUAGE_ORDER.map((language, index) => {
-          const meta = LANGUAGES[language];
-          return (
-            <motion.button
-              key={language}
+          <div className="mt-2 flex flex-wrap items-center justify-center gap-2 text-[11px] font-bold text-slate-600">
+            <button
               type="button"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.07 }}
-              whileHover={{ y: -4, scale: 1.015 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => chooseLanguage(language)}
-              className={`group relative flex min-h-32 items-center gap-5 overflow-hidden rounded-[2rem] border-4 border-white bg-gradient-to-br ${FLAG_ART[language]} p-5 text-left shadow-[0_8px_0_rgba(71,85,105,.12),0_16px_32px_rgba(71,85,105,.08)] transition sm:min-h-40 sm:p-7`}
+              onClick={() => setScreen('PLAYER_SETUP')}
+              className="inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-0.5 text-slate-700 shadow-2xs hover:bg-white"
             >
-              <span className="flex h-20 w-24 shrink-0 items-center justify-center rounded-2xl bg-white text-6xl shadow-sm sm:h-24 sm:w-28 sm:text-7xl" aria-hidden="true">
-                {meta.flag}
-              </span>
-              <span className="min-w-0">
-                <span className="block text-2xl font-black text-slate-900 sm:text-3xl">{meta.country === 'Bélgica / Flandes' ? 'Flandes' : meta.country}</span>
-                <span className="mt-1 block text-sm font-bold text-slate-600 sm:text-base">
-                  {language === 'nl-BE' ? 'Flamenco · Nederlands' : meta.name}
-                </span>
-                <span className={`mt-3 inline-flex min-h-9 items-center gap-1.5 rounded-full px-4 text-xs font-black shadow-sm ${language === 'nl-BE' ? 'bg-white/85 text-slate-700' : 'bg-slate-800/85 text-white'}`}>
-                  {language === 'nl-BE'
-                    ? <>¡Vamos! <span className="transition-transform group-hover:translate-x-1">→</span></>
-                    : <><LockKeyhole className="h-3.5 w-3.5" aria-hidden="true" /> Clave de adulto</>}
-                </span>
-              </span>
-            </motion.button>
-          );
-        })}
-      </section>
+              <Users className="h-3 w-3 text-violet-600" /> {profiles.map(p => p.displayName).join(', ')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setScreen('NATIVE_LANG_SETUP')}
+              className="inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-0.5 text-slate-700 shadow-2xs hover:bg-white"
+            >
+              🏠 {copy.house}: {nativeLanguages.map(l => LANGUAGES[l].flag).join(' ')}
+            </button>
+          </div>
+        </header>
 
-      <footer className="mt-7 text-center text-xs font-semibold text-slate-500">
-        {profiles.length > 1 ? `${profiles.length} jugadores · ${totalRounds} rondas` : `${totalRounds} rondas · ¡Juega a tu ritmo!`}
-      </footer>
-      <button
-        type="button"
-        onClick={() => setScreen('REWARDS')}
-        className="mx-auto mt-3 inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-xs font-bold text-slate-500 transition hover:bg-white/70 hover:text-amber-800"
-      >
-        <Gift className="h-4 w-4" /> Premios y rangos
-      </button>
-      {lockedLanguage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4" role="presentation">
-          <form
-            onSubmit={unlockLanguage}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="language-lock-title"
-            className="w-full max-w-sm rounded-[2rem] border-4 border-white bg-[#fffdf4] p-6 text-center shadow-2xl sm:p-8"
-          >
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
-              <LockKeyhole className="h-8 w-8" aria-hidden="true" />
-            </div>
-            <h2 id="language-lock-title" className="mt-4 text-2xl font-black text-slate-900">
-              Idioma bloqueado 🔒
-            </h2>
-            <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
-              Por ahora toca aprender flamenco. Un adulto puede abrir {LANGUAGES[lockedLanguage].name} con la contraseña.
-            </p>
-            <label htmlFor="language-password" className="mt-5 block text-left text-sm font-extrabold text-slate-700">
-              Contraseña de adulto
-            </label>
-            <input
-              id="language-password"
-              type="password"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              maxLength={6}
-              autoComplete="off"
-              value={password}
-              onChange={event => {
-                setPassword(event.target.value.replace(/\D/g, '').slice(0, 6));
-                setPasswordError(false);
-              }}
-              aria-invalid={passwordError}
-              aria-describedby={passwordError ? 'language-password-error' : undefined}
-              className="mt-2 min-h-14 w-full rounded-2xl border-2 border-amber-200 bg-white px-4 text-center text-2xl font-black tracking-[0.5em] text-slate-900 outline-none focus:border-emerald-400"
-            />
-            {passwordError && (
-              <p id="language-password-error" role="alert" className="mt-2 text-sm font-bold text-rose-700">
-                Esa contraseña no es correcta. ¡Prueba otra vez!
-              </p>
-            )}
-            <div className="mt-5 grid grid-cols-2 gap-3">
-              <button
+        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[38vh] overflow-y-auto pr-1">
+          {TARGET_OPTIONS.map((lang, index) => {
+            const meta = LANGUAGES[lang];
+            const isSelected = targetLanguages.includes(lang);
+
+            return (
+              <motion.button
+                key={lang}
                 type="button"
-                onClick={closePasswordPrompt}
-                className="flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-slate-100 px-3 font-extrabold text-slate-700"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.04 }}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                onClick={() => toggleTargetLanguage(lang)}
+                className={`relative flex items-center gap-3 rounded-xl border-2 p-3 text-left transition ${
+                  isSelected
+                    ? 'border-emerald-500 bg-white shadow-sm ring-2 ring-emerald-300/50'
+                    : 'border-white/80 bg-white/70 hover:bg-white/90'
+                }`}
               >
-                <X className="h-4 w-4" aria-hidden="true" /> Volver
-              </button>
-              <button
-                type="submit"
-                disabled={password.length !== 6}
-                className="min-h-12 rounded-2xl bg-emerald-500 px-3 font-black text-white shadow-[0_4px_0_#16834f] disabled:bg-slate-300 disabled:shadow-none"
-              >
-                Abrir idioma
-              </button>
-            </div>
-          </form>
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-2xl shadow-2xs">
+                  {meta.flag}
+                </span>
+
+                <div className="min-w-0 flex-1">
+                  <span className="block text-base font-black text-slate-900">{meta.name}</span>
+                  <span className="block text-xs font-bold text-slate-500">{meta.nativeName}</span>
+                </div>
+
+                <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 transition ${
+                  isSelected
+                    ? 'border-emerald-600 bg-emerald-600 text-white'
+                    : 'border-slate-300 bg-white text-transparent'
+                }`}>
+                  <Check className="h-4 w-4 stroke-[3]" />
+                </div>
+              </motion.button>
+            );
+          })}
         </div>
-      )}
+
+        <div className="mt-3 flex flex-row gap-2.5">
+          <button
+            type="button"
+            onClick={() => setScreen('NATIVE_LANG_SETUP')}
+            className="flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-white px-4 text-sm font-black text-slate-700 shadow-sm ring-1 ring-slate-200 transition hover:bg-slate-50 shrink-0"
+          >
+            <ArrowLeft className="h-4 w-4" /> {copy.back}
+          </button>
+          <button
+            type="button"
+            onClick={startAdventure}
+            className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-lime-500 px-4 text-base font-black text-white shadow-[0_4px_0_#1e6b37] transition hover:brightness-105 active:translate-y-1 active:shadow-none"
+          >
+            {copy.start} 🚀 <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+      </section>
     </main>
   );
 };

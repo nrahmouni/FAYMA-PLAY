@@ -1,6 +1,6 @@
-import { Language, LanguageMeta } from '../types';
+import { LanguageMeta, NativeLanguage } from '../types';
 
-export const LANGUAGES: Record<Language, LanguageMeta> = {
+export const LANGUAGES: Record<NativeLanguage, LanguageMeta> = {
   es: {
     code: 'es',
     country: 'España',
@@ -56,5 +56,19 @@ export const LANGUAGES: Record<Language, LanguageMeta> = {
     voiceFallbacks: ['fr-BE', 'fr-CA', 'fr', 'fr_FR'],
     dir: 'ltr',
     description: 'La lengua de la elegancia, gastronomía y cultura de Francia y la francofonía belga.',
+  },
+  en: {
+    code: 'en',
+    country: 'Reino Unido / EE.UU.',
+    name: 'Inglés',
+    nativeName: 'English',
+    flag: '🇬🇧',
+    themeColor: '#6366f1',
+    accentColor: '#3b82f6',
+    bgGradient: 'from-indigo-950/40 via-slate-950 to-blue-950/30',
+    voiceLang: 'en-US',
+    voiceFallbacks: ['en-GB', 'en', 'en-CA'],
+    dir: 'ltr',
+    description: 'El idioma internacional para comunicarte y jugar en cualquier parte del mundo.',
   },
 };

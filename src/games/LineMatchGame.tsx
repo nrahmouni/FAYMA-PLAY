@@ -5,6 +5,7 @@ import { GAME_COPY } from '../data/gameCopy';
 import { GameProgress, EmptyGame } from './GameProgress';
 import { useGameProgress } from './useGameProgress';
 import { useSpeech } from '../hooks/useSpeech';
+import { WordIcon } from '../components/WordIcon';
 
 interface MatchLine {
   from: string;
@@ -153,7 +154,12 @@ export const LineMatchGame: React.FC<GameProps> = ({
                       : 'border-slate-200 bg-white text-slate-800 hover:border-sky-300'
                 }`}
               >
-                {word.translation}
+                <span className="flex items-center gap-2">
+                  {word.imageUrl && <WordIcon icon={word.imageUrl} esWord={word.translation} size="sm" className="text-xl sm:text-2xl" />}
+                  <span className="truncate">
+                    {word.language === 'es' && word.english ? `${word.translation} · ${word.english}` : word.translation}
+                  </span>
+                </span>
               </button>
             );
           })}

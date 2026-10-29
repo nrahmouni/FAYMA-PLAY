@@ -8,6 +8,7 @@ import { VOCABULARY_BANK } from '../data/vocabulary';
 import { JuiceBurst } from '../components/JuiceBurst';
 import { FitGame } from '../components/FitGame';
 import { GAME_COPY } from '../data/gameCopy';
+import { WordIcon } from '../components/WordIcon';
 
 interface TurnResultModalProps {
   result: GameResult;
@@ -129,7 +130,7 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
                   className="flex items-center justify-between rounded-xl border border-sky-100 bg-white p-2.5"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-xl">{w.imageUrl}</span>
+                    <WordIcon icon={w.imageUrl} esWord={w.translation} size="sm" className="text-xl" />
                     <div>
                       <div
                         className={`font-black text-slate-900 ${

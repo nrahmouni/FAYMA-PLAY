@@ -6,6 +6,7 @@ import { GAME_COPY } from '../data/gameCopy';
 import { useSpeech } from '../hooks/useSpeech';
 import { GameProgress, EmptyGame } from './GameProgress';
 import { useGameProgress } from './useGameProgress';
+import { WordIcon } from '../components/WordIcon';
 
 interface FlowerCard {
   id: string;
@@ -15,7 +16,9 @@ interface FlowerCard {
   language?: string;
 }
 
-export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, language, onCorrect, onWrong, onComplete }) => {
+import { LANGUAGES } from '../data/languages';
+
+export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, language, nativeLanguage, onCorrect, onWrong, onComplete }) => {
   const roundWords = useMemo(
     () => words.slice(0, Math.min(6, 2 + Math.floor((difficulty - 1) / 3), words.length)),
     [difficulty, words],
@@ -69,7 +72,21 @@ export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, langua
           <h2 className="text-xl font-black text-slate-900 sm:text-2xl">{copy.gardenTitle}</h2>
           <p className="mt-1 text-sm font-semibold text-slate-600">{copy.gardenHint}</p>
         </div>
-        <div className="rounded-2xl bg-white/80 px-3 py-2 text-sm font-extrabold text-amber-800">{copy.attempts}: {attempts}</div>
+        <div className="flex gap-2">
+          {nativeLanguage && (
+            <button
+              type="button"
+              onClick={() => {
+                // Simplified help: speak instructions
+                speak(copy.gardenHint, nativeLanguage);
+              }}
+              className="rounded-2xl bg-sky-500 px-4 py-2 text-sm font-black text-white shadow-sm"
+            >
+              ? {LANGUAGES[nativeLanguage].name}
+            </button>
+          )}
+          <div className="rounded-2xl bg-white/80 px-3 py-2 text-sm font-extrabold text-amber-800">{copy.attempts}: {attempts}</div>
+        </div>
       </div>
       <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-5 sm:gap-3">
         {cards.map((card, index) => {
@@ -94,7 +111,9 @@ export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, langua
               }`}
             >
               {open
-                ? <span className={card.kind === 'picture' ? 'text-4xl sm:text-5xl' : 'text-base font-black sm:text-lg'} lang={card.language}>{card.kind === 'picture' ? card.content : card.content}</span>
+                ? card.kind === 'picture'
+                  ? <WordIcon icon={card.content} esWord={roundWords.find(w => w.id === card.wordId)?.translation} size="xl" className="text-4xl sm:text-5xl" />
+                  : <span className="text-base font-black sm:text-lg" lang={card.language}>{card.content}</span>
                 : <span aria-hidden="true">🌷</span>}
             </motion.button>
           );

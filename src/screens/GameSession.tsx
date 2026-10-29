@@ -26,6 +26,7 @@ function isNonVocabularyGame(value: string) {
 
 export const GameSession: React.FC = () => {
   const language = useGameStore(s => s.language);
+  const nativeLanguages = useGameStore(s => s.nativeLanguages);
   const activeGameId = useGameStore(s => s.activeGameId);
   const currentRound = useGameStore(s => s.currentRound);
   const totalRounds = useGameStore(s => s.totalRounds);
@@ -159,8 +160,9 @@ export const GameSession: React.FC = () => {
     onWrong: handleGameWrong,
     onComplete: handleGameComplete,
     language,
+    nativeLanguage: nativeLanguages[0],
     introSpoken: introSpokenForTurn === turnKey,
-  }), [roundWords, difficulty, handleGameCorrect, handleGameWrong, handleGameComplete, language, introSpokenForTurn, turnKey]);
+  }), [roundWords, difficulty, handleGameCorrect, handleGameWrong, handleGameComplete, language, nativeLanguages, introSpokenForTurn, turnKey]);
 
   return (
     <div className="relative mx-auto flex h-full min-h-0 w-full max-w-5xl flex-col items-center overflow-hidden px-2 py-1 sm:px-4 sm:py-2">

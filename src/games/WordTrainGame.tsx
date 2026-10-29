@@ -88,6 +88,23 @@ const CHALLENGES: Record<Language, [TrainChallenge[], TrainChallenge[], TrainCha
       { id: 'outside', clue: 'El perro corre muy rápido', words: ['الكلب', 'يجري', 'بسرعة', 'كبيرة', 'جداً'] },
     ],
   ],
+  en: [
+    [
+      { id: 'sun', clue: 'The yellow sun', words: ['the', 'yellow', 'sun'] },
+      { id: 'house', clue: 'The big house', words: ['the', 'big', 'house'] },
+      { id: 'cat', clue: 'The cat sleeps', words: ['the', 'cat', 'sleeps'] },
+    ],
+    [
+      { id: 'dog', clue: 'My dog drinks water', words: ['my', 'dog', 'drinks', 'water'] },
+      { id: 'girl', clue: 'The girl eats bread', words: ['the', 'girl', 'eats', 'bread'] },
+      { id: 'ball', clue: 'My brother plays today', words: ['my', 'brother', 'plays', 'today'] },
+    ],
+    [
+      { id: 'brother', clue: 'My brother has a ball', words: ['my', 'brother', 'has', 'a', 'ball'] },
+      { id: 'book', clue: 'The girl reads a book', words: ['the', 'girl', 'reads', 'a', 'book'] },
+      { id: 'outside', clue: 'The dog runs very fast', words: ['the', 'dog', 'runs', 'very', 'fast'] },
+    ],
+  ],
 };
 
 function getDifficultyGroup(difficulty: number): number {

@@ -138,15 +138,17 @@ const WORD_ROWS: Array<[string, string, string, string]> = [
   ['Zwart', 'Negro', '⚫', 'Números y colores'],
 ];
 
-export const FLEMISH_WORDS: FlemishWord[] = WORD_ROWS
-  .filter(([word]) => word.trim() !== '')
-  .map(([word, meaning, emoji, category], index) => ({
-    id: `vlaams_${index + 1}`,
-    word: word.trim(),
-    meaning,
-    emoji,
-    category,
-  }));
+import { RAW_1000_WORDS } from './words1000';
+
+const WORDS_1000_FLEMISH: FlemishWord[] = RAW_1000_WORDS.map(w => ({
+  id: `vlaams_${w.id}`,
+  word: w.nl,
+  meaning: w.es,
+  emoji: w.emoji,
+  category: w.cat,
+}));
+
+export const FLEMISH_WORDS: FlemishWord[] = WORDS_1000_FLEMISH;
 
 export const FLEMISH_PHRASES: Array<{ phrase: string; meaning: string; emoji: string }> = [
   { phrase: 'Hoe gaat het?', meaning: '¿Cómo estás?', emoji: '🙂' },

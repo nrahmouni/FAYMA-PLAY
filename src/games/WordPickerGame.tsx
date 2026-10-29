@@ -7,6 +7,7 @@ import { GAME_COPY } from '../data/gameCopy';
 import { GameProgress, EmptyGame } from './GameProgress';
 import { useGameProgress } from './useGameProgress';
 import { useSpeech } from '../hooks/useSpeech';
+import { WordIcon } from '../components/WordIcon';
 
 export const WordPickerGame: React.FC<GameProps> = ({
   words,
@@ -74,7 +75,10 @@ export const WordPickerGame: React.FC<GameProps> = ({
       <div className="mb-5 rounded-3xl bg-gradient-to-br from-sky-100 via-violet-50 to-pink-100 p-4 sm:p-6">
         <p className="text-xs font-black uppercase tracking-wider text-violet-800">{copy.wordPickerTitle}</p>
         <div className="mt-2 flex items-center justify-between gap-3">
-          <h2 className="text-2xl font-black text-slate-900 sm:text-4xl">{question.translation} 💭</h2>
+          <div className="flex items-center gap-3">
+            {question.imageUrl && <WordIcon icon={question.imageUrl} esWord={question.translation} size="lg" className="text-3xl sm:text-4xl" />}
+            <h2 className="text-2xl font-black text-slate-900 sm:text-4xl">{question.translation}</h2>
+          </div>
           <button
             type="button"
             onClick={() => speak(question.audioText || question.text, language)}

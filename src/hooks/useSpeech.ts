@@ -71,12 +71,16 @@ export function useSpeech() {
       window.speechSynthesis.cancel();
 
       const voice = findBestVoice(lang);
-      const meta = LANGUAGES[lang];
       const utterance = new SpeechSynthesisUtterance(text);
 
-      utterance.lang = voice ? voice.lang : (meta?.voiceLang || 'en-US');
-      if (voice) {
+      // Only force the voice if it matches the requested language primary code prefix
+      const primaryCode = lang.split('-')[0].toLowerCase();
+      if (voice && voice.lang.toLowerCase().startsWith(primaryCode)) {
         utterance.voice = voice;
+        utterance.lang = voice.lang;
+      } else {
+        // Otherwise, rely on the language code alone and let the browser pick the best available
+        utterance.lang = lang;
       }
       utterance.rate = 0.88; // Slightly slower for language learners
       utterance.pitch = 1.05;

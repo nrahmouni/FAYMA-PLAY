@@ -8,6 +8,7 @@ import { GAME_COPY } from '../data/gameCopy';
 import { GameProgress, EmptyGame } from './GameProgress';
 import { useGameProgress } from './useGameProgress';
 import { useSpeech } from '../hooks/useSpeech';
+import { WordIcon } from '../components/WordIcon';
 
 export const SoundEchoGame: React.FC<GameProps> = ({
   words,
@@ -117,7 +118,7 @@ export const SoundEchoGame: React.FC<GameProps> = ({
                 }`}
                 aria-label={echoed ? word.translation : copy.echoHidden}
               >
-                {echoed ? word.imageUrl || '✨' : '❔'}
+                {echoed ? <WordIcon icon={word.imageUrl} esWord={word.translation} size="sm" className="text-2xl" /> : '❔'}
               </span>
             );
           })}
@@ -153,7 +154,7 @@ export const SoundEchoGame: React.FC<GameProps> = ({
                     : 'border-white bg-white text-slate-900 shadow-[0_5px_0_#d9e9c9] hover:-translate-y-1 hover:bg-violet-50'
               }`}
             >
-              <span className="text-4xl sm:text-5xl" aria-hidden="true">{option.imageUrl || '✨'}</span>
+              <WordIcon icon={option.imageUrl} esWord={option.translation} size="xl" className="text-4xl sm:text-5xl" />
               <span className="text-sm font-black">{option.translation}</span>
               <span className="sr-only">{copy.optionLabel} {index + 1}</span>
             </motion.button>

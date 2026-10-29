@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Volume2, Sparkles, ArrowRight, BookOpen } from 'lucide-react';
 import { Word, Language, PlayerProfile } from '../types';
+import { WordIcon } from '../components/WordIcon';
 import { useSpeech } from '../hooks/useSpeech';
 import { useSound } from '../hooks/useSound';
 
@@ -71,7 +72,7 @@ export const SmartLearningModal: React.FC<SmartLearningModalProps> = ({
                   : 'glass-card text-slate-300 hover:text-white border-white/10'
               }`}
             >
-              <span className="text-2xl select-none">{w.imageUrl || '✨'}</span>
+              <WordIcon icon={w.imageUrl} esWord={w.translation} size="md" className="text-2xl select-none" />
               <span className="truncate max-w-[90px]">{w.text}</span>
             </button>
           ))}
@@ -80,9 +81,7 @@ export const SmartLearningModal: React.FC<SmartLearningModalProps> = ({
         {/* Big Presentation Card */}
         {currentWord && (
           <div className="w-full rounded-3xl glass-card p-6 flex flex-col items-center justify-center text-center border-2 border-white/15 relative my-2 shadow-inner">
-            <span className="text-6xl sm:text-7xl mb-2 select-none filter drop-shadow animate-float">
-              {currentWord.imageUrl || '🌟'}
-            </span>
+            <WordIcon icon={currentWord.imageUrl} esWord={currentWord.translation} size="3xl" className="text-6xl sm:text-7xl mb-2 select-none filter drop-shadow animate-float" />
 
             {/* Word in Target Language */}
             <h2

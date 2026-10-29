@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Screen, Language, DifficultyLevel, GameResult, PlayerProfile } from '../types';
+import { Screen, Language, NativeLanguage, DifficultyLevel, GameResult, PlayerProfile } from '../types';
 
 export type GameSessionPhase = 'CHALLENGE_PHASE' | 'RESULT_PHASE';
 
@@ -21,6 +21,8 @@ export interface WorldNode {
 interface GameState {
   currentScreen: Screen;
   language: Language;
+  nativeLanguages: NativeLanguage[]; // Idioma(s) hablado(s) en casa
+  targetLanguages: Language[]; // Idioma(s) que desean aprender
   totalRounds: number;
   currentRound: number;
   currentPlayerIndex: number;
@@ -37,6 +39,8 @@ interface GameState {
 
   setScreen: (screen: Screen) => void;
   setLanguage: (lang: Language) => void;
+  setNativeLanguages: (langs: NativeLanguage[]) => void;
+  setTargetLanguages: (langs: Language[]) => void;
   setTotalRounds: (rounds: number) => void;
   setActiveWorld: (worldId: string, gameId: string, worldNodeId?: string | null, minDifficulty?: DifficultyLevel) => void;
   setSessionPhase: (phase: GameSessionPhase) => void;
@@ -71,6 +75,12 @@ const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
     { id: 'fr_w2', theme: 'frases', name: 'Café de las palabras', icon: '☕', gameId: 'word_train', gameName: 'Tren de palabras', minDifficulty: 2, unlocked: false, completed: false },
     { id: 'fr_w3', theme: 'mapa', name: 'Ruta del arte', icon: '🗺️', gameId: 'garden_match', gameName: 'Jardín de parejas', minDifficulty: 2, unlocked: false, completed: false },
     { id: 'fr_w4', theme: 'recuerdo', name: 'Galería feliz', icon: '🧠', gameId: 'safari', gameName: 'Safari de palabras', minDifficulty: 3, unlocked: false, completed: false },
+  ],
+  en: [
+    { id: 'en_w1', theme: 'saludos', name: 'London Bridge', icon: '🎡', gameId: 'safari', gameName: 'Safari de palabras', minDifficulty: 1, unlocked: true, completed: false },
+    { id: 'en_w2', theme: 'frases', name: 'Big Ben Express', icon: '🚌', gameId: 'word_train', gameName: 'Tren de palabras', minDifficulty: 2, unlocked: false, completed: false },
+    { id: 'en_w3', theme: 'mapa', name: 'Crown Trail', icon: '👑', gameId: 'garden_match', gameName: 'Jardín de parejas', minDifficulty: 2, unlocked: false, completed: false },
+    { id: 'en_w4', theme: 'recuerdo', name: 'Oxford Library', icon: '🎓', gameId: 'safari', gameName: 'Safari de palabras', minDifficulty: 3, unlocked: false, completed: false },
   ],
 };
 
@@ -122,6 +132,8 @@ function loadSavedDifficulties(): Record<string, DifficultyLevel> {
 export const useGameStore = create<GameState>((set, get) => ({
   currentScreen: 'BOOT',
   language: 'nl-BE',
+  nativeLanguages: ['es'],
+  targetLanguages: ['nl-BE'],
   totalRounds: 3,
   currentRound: 1,
   currentPlayerIndex: 0,
@@ -138,6 +150,8 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   setScreen: (screen) => set({ currentScreen: screen }),
   setLanguage: (lang) => set({ language: lang }),
+  setNativeLanguages: (langs) => set({ nativeLanguages: langs }),
+  setTargetLanguages: (langs) => set({ targetLanguages: langs, language: langs[0] || 'nl-BE' }),
   setTotalRounds: (rounds) => set({ totalRounds: rounds }),
 
   setActiveWorld: (worldId, gameId, worldNodeId = null, minDifficulty: DifficultyLevel | null = null) => set({
@@ -155,7 +169,9 @@ export const useGameStore = create<GameState>((set, get) => ({
     const initialDiffs: Record<string, DifficultyLevel> = {};
     players.forEach(p => {
       initialScores[p.uid] = 0;
-      initialDiffs[p.uid] = difficulties[p.uid] || activeWorldDifficulty || 1;
+      // Adapt initial difficulty based on age (1-13 years) if not explicitly set
+      const ageBasedLevel = Math.min(5, Math.max(1, Math.floor(((p.age ?? 6) + 1) / 2.5))) as DifficultyLevel;
+      initialDiffs[p.uid] = difficulties[p.uid] || activeWorldDifficulty || ageBasedLevel;
     });
 
     set({

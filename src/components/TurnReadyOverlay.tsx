@@ -24,13 +24,7 @@ const GAME_ART: Record<string, string> = {
   eco_mission: '/games/eco.png',
 };
 
-const READY_COPY: Record<Language, { ready: string; yes: string; turn: string }> = {
-  es: { ready: '¿Estás preparado?', yes: '¡Sí, estoy listo!', turn: 'Tu turno, {name}' },
-  'nl-BE': { ready: 'Ben je er klaar voor?', yes: 'Ja, ik ben klaar!', turn: 'Jouw beurt, {name}' },
-  fr: { ready: 'Es-tu prêt ?', yes: 'Oui, je suis prêt !', turn: 'À toi de jouer, {name}' },
-  ar: { ready: 'هل أنت مستعد؟', yes: 'نعم، أنا مستعد!', turn: 'دورك يا {name}' },
-};
-
+import { GAME_COPY } from '../data/gameCopy';
 interface TurnReadyOverlayProps {
   player: PlayerProfile;
   gameId: string;
@@ -39,7 +33,7 @@ interface TurnReadyOverlayProps {
 }
 
 export const TurnReadyOverlay: React.FC<TurnReadyOverlayProps> = ({ player, gameId, language, onReady }) => {
-  const copy = READY_COPY[language];
+  const copy = GAME_COPY[language];
   const isImageAvatar = player.avatarUrl?.startsWith('data:') || player.avatarUrl?.startsWith('/');
 
   return (

@@ -7,6 +7,7 @@ import { GAME_COPY } from '../data/gameCopy';
 import { GameProgress, EmptyGame } from './GameProgress';
 import { useGameProgress } from './useGameProgress';
 import { useSpeech } from '../hooks/useSpeech';
+import { WordIcon } from '../components/WordIcon';
 
 type SortTheme = 'comida' | 'animales';
 type SortCategory = 'food' | 'animals';
@@ -21,6 +22,7 @@ const CATEGORY_LABELS: Record<Language, Record<SortCategory, string>> = {
   fr: { food: 'À manger', animals: 'Animaux' },
   'nl-BE': { food: 'Eten', animals: 'Dieren' },
   ar: { food: 'طعام', animals: 'حيوانات' },
+  en: { food: 'Food', animals: 'Animals' },
 };
 
 function selectSortWords(language: Language, difficulty: DifficultyLevel): Word[] {
@@ -126,9 +128,10 @@ export const WordSortGame: React.FC<GameProps> = ({
                 <span
                   key={word.id}
                   lang={word.language}
-                  className="rounded-lg bg-white/90 px-2 py-1 text-xs font-extrabold text-slate-800"
+                  className="inline-flex items-center gap-1 rounded-lg bg-white/90 px-2 py-1 text-xs font-extrabold text-slate-800 shadow-xs"
                 >
-                  {word.text}
+                  <WordIcon icon={word.imageUrl} esWord={word.translation} size="xs" />
+                  <span>{word.text}</span>
                 </span>
               ))}
             </div>
@@ -136,7 +139,7 @@ export const WordSortGame: React.FC<GameProps> = ({
         ))}
       </div>
 
-      <div className={`relative mx-auto flex min-h-32 max-w-md flex-col items-center justify-center rounded-3xl border-2 px-4 py-5 text-center transition ${
+      <div className={`relative mx-auto flex min-h-36 max-w-md flex-col items-center justify-center rounded-3xl border-2 px-4 py-5 text-center transition ${
         feedback
           ? feedback.correct ? 'border-emerald-500 bg-emerald-100' : 'border-rose-500 bg-rose-100'
           : 'border-slate-200 bg-white shadow-sm'
@@ -152,6 +155,7 @@ export const WordSortGame: React.FC<GameProps> = ({
           </button>
         )}
         {feedback?.correct && <ArrowDownToLine className="mb-1 h-5 w-5 text-emerald-700" aria-hidden="true" />}
+        <WordIcon icon={currentWord.imageUrl} esWord={currentWord.translation} size="xl" className="mb-1.5 text-4xl sm:text-5xl" />
         <span className={`text-2xl font-black sm:text-3xl ${feedback && !feedback.correct ? 'text-rose-900 line-through' : 'text-slate-900'}`} lang={currentWord.language}>
           {currentWord.text}
         </span>

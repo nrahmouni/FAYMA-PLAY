@@ -1,0 +1,7002 @@
+[
+  {
+    "id": 1,
+    "lvl": 1,
+    "cat": "Familia",
+    "es": "Madre",
+    "en": "Mother"
+  },
+  {
+    "id": 2,
+    "lvl": 1,
+    "cat": "Familia",
+    "es": "Padre",
+    "en": "Father"
+  },
+  {
+    "id": 3,
+    "lvl": 1,
+    "cat": "Familia",
+    "es": "Hermano",
+    "en": "Brother"
+  },
+  {
+    "id": 4,
+    "lvl": 1,
+    "cat": "Familia",
+    "es": "Hermana",
+    "en": "Sister"
+  },
+  {
+    "id": 5,
+    "lvl": 1,
+    "cat": "Familia",
+    "es": "Bebé",
+    "en": "Baby"
+  },
+  {
+    "id": 6,
+    "lvl": 1,
+    "cat": "Familia",
+    "es": "Abuelo",
+    "en": "Grandfather"
+  },
+  {
+    "id": 7,
+    "lvl": 1,
+    "cat": "Familia",
+    "es": "Abuela",
+    "en": "Grandmother"
+  },
+  {
+    "id": 8,
+    "lvl": 1,
+    "cat": "Familia",
+    "es": "Tío",
+    "en": "Uncle"
+  },
+  {
+    "id": 9,
+    "lvl": 1,
+    "cat": "Familia",
+    "es": "Tía",
+    "en": "Aunt"
+  },
+  {
+    "id": 10,
+    "lvl": 1,
+    "cat": "Familia",
+    "es": "Primo",
+    "en": "Cousin"
+  },
+  {
+    "id": 11,
+    "lvl": 1,
+    "cat": "Colores",
+    "es": "Rojo",
+    "en": "Red"
+  },
+  {
+    "id": 12,
+    "lvl": 1,
+    "cat": "Colores",
+    "es": "Azul",
+    "en": "Blue"
+  },
+  {
+    "id": 13,
+    "lvl": 1,
+    "cat": "Colores",
+    "es": "Verde",
+    "en": "Green"
+  },
+  {
+    "id": 14,
+    "lvl": 1,
+    "cat": "Colores",
+    "es": "Amarillo",
+    "en": "Yellow"
+  },
+  {
+    "id": 15,
+    "lvl": 1,
+    "cat": "Colores",
+    "es": "Naranja",
+    "en": "Orange"
+  },
+  {
+    "id": 16,
+    "lvl": 1,
+    "cat": "Colores",
+    "es": "Morado",
+    "en": "Purple"
+  },
+  {
+    "id": 17,
+    "lvl": 1,
+    "cat": "Colores",
+    "es": "Rosa",
+    "en": "Pink"
+  },
+  {
+    "id": 18,
+    "lvl": 1,
+    "cat": "Colores",
+    "es": "Negro",
+    "en": "Black"
+  },
+  {
+    "id": 19,
+    "lvl": 1,
+    "cat": "Colores",
+    "es": "Blanco",
+    "en": "White"
+  },
+  {
+    "id": 20,
+    "lvl": 1,
+    "cat": "Colores",
+    "es": "Marrón",
+    "en": "Brown"
+  },
+  {
+    "id": 21,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Uno",
+    "en": "One"
+  },
+  {
+    "id": 22,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Dos",
+    "en": "Two"
+  },
+  {
+    "id": 23,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Tres",
+    "en": "Three"
+  },
+  {
+    "id": 24,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Cuatro",
+    "en": "Four"
+  },
+  {
+    "id": 25,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Cinco",
+    "en": "Five"
+  },
+  {
+    "id": 26,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Seis",
+    "en": "Six"
+  },
+  {
+    "id": 27,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Siete",
+    "en": "Seven"
+  },
+  {
+    "id": 28,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Ocho",
+    "en": "Eight"
+  },
+  {
+    "id": 29,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Nueve",
+    "en": "Nine"
+  },
+  {
+    "id": 30,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Diez",
+    "en": "Ten"
+  },
+  {
+    "id": 31,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Once",
+    "en": "Eleven"
+  },
+  {
+    "id": 32,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Doce",
+    "en": "Twelve"
+  },
+  {
+    "id": 33,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Trece",
+    "en": "Thirteen"
+  },
+  {
+    "id": 34,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Catorce",
+    "en": "Fourteen"
+  },
+  {
+    "id": 35,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Quince",
+    "en": "Fifteen"
+  },
+  {
+    "id": 36,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Dieciséis",
+    "en": "Sixteen"
+  },
+  {
+    "id": 37,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Diecisiete",
+    "en": "Seventeen"
+  },
+  {
+    "id": 38,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Dieciocho",
+    "en": "Eighteen"
+  },
+  {
+    "id": 39,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Diecinueve",
+    "en": "Nineteen"
+  },
+  {
+    "id": 40,
+    "lvl": 1,
+    "cat": "Numeros",
+    "es": "Veinte",
+    "en": "Twenty"
+  },
+  {
+    "id": 41,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Cabeza",
+    "en": "Head"
+  },
+  {
+    "id": 42,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Pelo",
+    "en": "Hair"
+  },
+  {
+    "id": 43,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Ojo",
+    "en": "Eye"
+  },
+  {
+    "id": 44,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Oreja",
+    "en": "Ear"
+  },
+  {
+    "id": 45,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Nariz",
+    "en": "Nose"
+  },
+  {
+    "id": 46,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Boca",
+    "en": "Mouth"
+  },
+  {
+    "id": 47,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Diente",
+    "en": "Tooth"
+  },
+  {
+    "id": 48,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Lengua",
+    "en": "Tongue"
+  },
+  {
+    "id": 49,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Cuello",
+    "en": "Neck"
+  },
+  {
+    "id": 50,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Hombro",
+    "en": "Shoulder"
+  },
+  {
+    "id": 51,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Brazo",
+    "en": "Arm"
+  },
+  {
+    "id": 52,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Codo",
+    "en": "Elbow"
+  },
+  {
+    "id": 53,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Mano",
+    "en": "Hand"
+  },
+  {
+    "id": 54,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Dedo",
+    "en": "Finger"
+  },
+  {
+    "id": 55,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Barriga",
+    "en": "Belly"
+  },
+  {
+    "id": 56,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Espalda",
+    "en": "Back"
+  },
+  {
+    "id": 57,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Pierna",
+    "en": "Leg"
+  },
+  {
+    "id": 58,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Rodilla",
+    "en": "Knee"
+  },
+  {
+    "id": 59,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Pie",
+    "en": "Foot"
+  },
+  {
+    "id": 60,
+    "lvl": 1,
+    "cat": "Cuerpo",
+    "es": "Uña",
+    "en": "Nail"
+  },
+  {
+    "id": 61,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Perro",
+    "en": "Dog"
+  },
+  {
+    "id": 62,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Gato",
+    "en": "Cat"
+  },
+  {
+    "id": 63,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Ratón",
+    "en": "Mouse"
+  },
+  {
+    "id": 64,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Pájaro",
+    "en": "Bird"
+  },
+  {
+    "id": 65,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Pez",
+    "en": "Fish"
+  },
+  {
+    "id": 66,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Vaca",
+    "en": "Cow"
+  },
+  {
+    "id": 67,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Caballo",
+    "en": "Horse"
+  },
+  {
+    "id": 68,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Cerdo",
+    "en": "Pig"
+  },
+  {
+    "id": 69,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Oveja",
+    "en": "Sheep"
+  },
+  {
+    "id": 70,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Gallina",
+    "en": "Hen"
+  },
+  {
+    "id": 71,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Pato",
+    "en": "Duck"
+  },
+  {
+    "id": 72,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Conejo",
+    "en": "Rabbit"
+  },
+  {
+    "id": 73,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "León",
+    "en": "Lion"
+  },
+  {
+    "id": 74,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Tigre",
+    "en": "Tiger"
+  },
+  {
+    "id": 75,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Elefante",
+    "en": "Elephant"
+  },
+  {
+    "id": 76,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Mono",
+    "en": "Monkey"
+  },
+  {
+    "id": 77,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Oso",
+    "en": "Bear"
+  },
+  {
+    "id": 78,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Jirafa",
+    "en": "Giraffe"
+  },
+  {
+    "id": 79,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Serpiente",
+    "en": "Snake"
+  },
+  {
+    "id": 80,
+    "lvl": 1,
+    "cat": "Animales",
+    "es": "Rana",
+    "en": "Frog"
+  },
+  {
+    "id": 81,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Agua",
+    "en": "Water"
+  },
+  {
+    "id": 82,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Leche",
+    "en": "Milk"
+  },
+  {
+    "id": 83,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Zumo",
+    "en": "Juice"
+  },
+  {
+    "id": 84,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Pan",
+    "en": "Bread"
+  },
+  {
+    "id": 85,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Queso",
+    "en": "Cheese"
+  },
+  {
+    "id": 86,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Huevo",
+    "en": "Egg"
+  },
+  {
+    "id": 87,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Mantequilla",
+    "en": "Butter"
+  },
+  {
+    "id": 88,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Carne",
+    "en": "Meat"
+  },
+  {
+    "id": 89,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Pescado",
+    "en": "Fish"
+  },
+  {
+    "id": 90,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Pollo",
+    "en": "Chicken"
+  },
+  {
+    "id": 91,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Arroz",
+    "en": "Rice"
+  },
+  {
+    "id": 92,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Pasta",
+    "en": "Pasta"
+  },
+  {
+    "id": 93,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Sopa",
+    "en": "Soup"
+  },
+  {
+    "id": 94,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Pizza",
+    "en": "Pizza"
+  },
+  {
+    "id": 95,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Hamburguesa",
+    "en": "Hamburger"
+  },
+  {
+    "id": 96,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Ensalada",
+    "en": "Salad"
+  },
+  {
+    "id": 97,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Galleta",
+    "en": "Cookie"
+  },
+  {
+    "id": 98,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Pastel",
+    "en": "Cake"
+  },
+  {
+    "id": 99,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Helado",
+    "en": "Ice cream"
+  },
+  {
+    "id": 100,
+    "lvl": 1,
+    "cat": "Comida",
+    "es": "Chocolate",
+    "en": "Chocolate"
+  },
+  {
+    "id": 101,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Camiseta",
+    "en": "T-shirt"
+  },
+  {
+    "id": 102,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Pantalón",
+    "en": "Pants"
+  },
+  {
+    "id": 103,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Vestido",
+    "en": "Dress"
+  },
+  {
+    "id": 104,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Falda",
+    "en": "Skirt"
+  },
+  {
+    "id": 105,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Chaqueta",
+    "en": "Jacket"
+  },
+  {
+    "id": 106,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Abrigo",
+    "en": "Coat"
+  },
+  {
+    "id": 107,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Jersey",
+    "en": "Sweater"
+  },
+  {
+    "id": 108,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Zapato",
+    "en": "Shoe"
+  },
+  {
+    "id": 109,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Bota",
+    "en": "Boot"
+  },
+  {
+    "id": 110,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Zapatilla",
+    "en": "Sneaker"
+  },
+  {
+    "id": 111,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Calcetín",
+    "en": "Sock"
+  },
+  {
+    "id": 112,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Sombrero",
+    "en": "Hat"
+  },
+  {
+    "id": 113,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Gorro",
+    "en": "Beanie"
+  },
+  {
+    "id": 114,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Guante",
+    "en": "Glove"
+  },
+  {
+    "id": 115,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Bufanda",
+    "en": "Scarf"
+  },
+  {
+    "id": 116,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Cinturón",
+    "en": "Belt"
+  },
+  {
+    "id": 117,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Pijama",
+    "en": "Pajamas"
+  },
+  {
+    "id": 118,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Bañador",
+    "en": "Swimsuit"
+  },
+  {
+    "id": 119,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Gafas",
+    "en": "Glasses"
+  },
+  {
+    "id": 120,
+    "lvl": 1,
+    "cat": "Ropa",
+    "es": "Reloj",
+    "en": "Watch"
+  },
+  {
+    "id": 121,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Puerta",
+    "en": "Door"
+  },
+  {
+    "id": 122,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Ventana",
+    "en": "Window"
+  },
+  {
+    "id": 123,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Pared",
+    "en": "Wall"
+  },
+  {
+    "id": 124,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Suelo",
+    "en": "Floor"
+  },
+  {
+    "id": 125,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Techo",
+    "en": "Roof"
+  },
+  {
+    "id": 126,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Habitación",
+    "en": "Room"
+  },
+  {
+    "id": 127,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Salón",
+    "en": "Living room"
+  },
+  {
+    "id": 128,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Cocina",
+    "en": "Kitchen"
+  },
+  {
+    "id": 129,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Baño",
+    "en": "Bathroom"
+  },
+  {
+    "id": 130,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Cama",
+    "en": "Bed"
+  },
+  {
+    "id": 131,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Armario",
+    "en": "Wardrobe"
+  },
+  {
+    "id": 132,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Mesa",
+    "en": "Table"
+  },
+  {
+    "id": 133,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Silla",
+    "en": "Chair"
+  },
+  {
+    "id": 134,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Sofá",
+    "en": "Sofa"
+  },
+  {
+    "id": 135,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Lámpara",
+    "en": "Lamp"
+  },
+  {
+    "id": 136,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Televisión",
+    "en": "Television"
+  },
+  {
+    "id": 137,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Espejo",
+    "en": "Mirror"
+  },
+  {
+    "id": 138,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Alfombra",
+    "en": "Rug"
+  },
+  {
+    "id": 139,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Escalera",
+    "en": "Stairs"
+  },
+  {
+    "id": 140,
+    "lvl": 1,
+    "cat": "Casa",
+    "es": "Llave",
+    "en": "Key"
+  },
+  {
+    "id": 141,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Clase",
+    "en": "Class"
+  },
+  {
+    "id": 142,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Profesor",
+    "en": "Teacher"
+  },
+  {
+    "id": 143,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Alumno",
+    "en": "Student"
+  },
+  {
+    "id": 144,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Libro",
+    "en": "Book"
+  },
+  {
+    "id": 145,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Cuaderno",
+    "en": "Notebook"
+  },
+  {
+    "id": 146,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Lápiz",
+    "en": "Pencil"
+  },
+  {
+    "id": 147,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Bolígrafo",
+    "en": "Pen"
+  },
+  {
+    "id": 148,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Goma",
+    "en": "Eraser"
+  },
+  {
+    "id": 149,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Regla",
+    "en": "Ruler"
+  },
+  {
+    "id": 150,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Mochila",
+    "en": "Backpack"
+  },
+  {
+    "id": 151,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Pizarra",
+    "en": "Blackboard"
+  },
+  {
+    "id": 152,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Tiza",
+    "en": "Chalk"
+  },
+  {
+    "id": 153,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Pupitre",
+    "en": "Desk"
+  },
+  {
+    "id": 154,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Papel",
+    "en": "Paper"
+  },
+  {
+    "id": 155,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Tijeras",
+    "en": "Scissors"
+  },
+  {
+    "id": 156,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Pegamento",
+    "en": "Glue"
+  },
+  {
+    "id": 157,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Estuche",
+    "en": "Pencil case"
+  },
+  {
+    "id": 158,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Ordenador",
+    "en": "Computer"
+  },
+  {
+    "id": 159,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Recreo",
+    "en": "Recess"
+  },
+  {
+    "id": 160,
+    "lvl": 1,
+    "cat": "Escuela",
+    "es": "Examen",
+    "en": "Exam"
+  },
+  {
+    "id": 161,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Sol",
+    "en": "Sun"
+  },
+  {
+    "id": 162,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Luna",
+    "en": "Moon"
+  },
+  {
+    "id": 163,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Estrella",
+    "en": "Star"
+  },
+  {
+    "id": 164,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Cielo",
+    "en": "Sky"
+  },
+  {
+    "id": 165,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Nube",
+    "en": "Cloud"
+  },
+  {
+    "id": 166,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Lluvia",
+    "en": "Rain"
+  },
+  {
+    "id": 167,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Nieve",
+    "en": "Snow"
+  },
+  {
+    "id": 168,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Viento",
+    "en": "Wind"
+  },
+  {
+    "id": 169,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Tormenta",
+    "en": "Storm"
+  },
+  {
+    "id": 170,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Rayo",
+    "en": "Lightning"
+  },
+  {
+    "id": 171,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Árbol",
+    "en": "Tree"
+  },
+  {
+    "id": 172,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Flor",
+    "en": "Flower"
+  },
+  {
+    "id": 173,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Hoja",
+    "en": "Leaf"
+  },
+  {
+    "id": 174,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Hierba",
+    "en": "Grass"
+  },
+  {
+    "id": 175,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Bosque",
+    "en": "Forest"
+  },
+  {
+    "id": 176,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Montaña",
+    "en": "Mountain"
+  },
+  {
+    "id": 177,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Río",
+    "en": "River"
+  },
+  {
+    "id": 178,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Lago",
+    "en": "Lake"
+  },
+  {
+    "id": 179,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Mar",
+    "en": "Sea"
+  },
+  {
+    "id": 180,
+    "lvl": 1,
+    "cat": "Naturaleza",
+    "es": "Playa",
+    "en": "Beach"
+  },
+  {
+    "id": 181,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Coche",
+    "en": "Car"
+  },
+  {
+    "id": 182,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Autobús",
+    "en": "Bus"
+  },
+  {
+    "id": 183,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Tren",
+    "en": "Train"
+  },
+  {
+    "id": 184,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Bicicleta",
+    "en": "Bicycle"
+  },
+  {
+    "id": 185,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Moto",
+    "en": "Motorcycle"
+  },
+  {
+    "id": 186,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Avión",
+    "en": "Airplane"
+  },
+  {
+    "id": 187,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Barco",
+    "en": "Boat"
+  },
+  {
+    "id": 188,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Helicóptero",
+    "en": "Helicopter"
+  },
+  {
+    "id": 189,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Camión",
+    "en": "Truck"
+  },
+  {
+    "id": 190,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Metro",
+    "en": "Subway"
+  },
+  {
+    "id": 191,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Tranvía",
+    "en": "Tram"
+  },
+  {
+    "id": 192,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Taxi",
+    "en": "Taxi"
+  },
+  {
+    "id": 193,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Furgoneta",
+    "en": "Van"
+  },
+  {
+    "id": 194,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Cohete",
+    "en": "Rocket"
+  },
+  {
+    "id": 195,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Submarino",
+    "en": "Submarine"
+  },
+  {
+    "id": 196,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Ambulancia",
+    "en": "Ambulance"
+  },
+  {
+    "id": 197,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Tractor",
+    "en": "Tractor"
+  },
+  {
+    "id": 198,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Patinete",
+    "en": "Scooter"
+  },
+  {
+    "id": 199,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Velero",
+    "en": "Sailboat"
+  },
+  {
+    "id": 200,
+    "lvl": 1,
+    "cat": "Transporte",
+    "es": "Crucero",
+    "en": "Cruise"
+  },
+  {
+    "id": 201,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Calle",
+    "en": "Street"
+  },
+  {
+    "id": 202,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Parque",
+    "en": "Park"
+  },
+  {
+    "id": 203,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Tienda",
+    "en": "Shop"
+  },
+  {
+    "id": 204,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Supermercado",
+    "en": "Supermarket"
+  },
+  {
+    "id": 205,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Hospital",
+    "en": "Hospital"
+  },
+  {
+    "id": 206,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Policía",
+    "en": "Police"
+  },
+  {
+    "id": 207,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Banco",
+    "en": "Bank"
+  },
+  {
+    "id": 208,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Restaurante",
+    "en": "Restaurant"
+  },
+  {
+    "id": 209,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Cine",
+    "en": "Cinema"
+  },
+  {
+    "id": 210,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Museo",
+    "en": "Museum"
+  },
+  {
+    "id": 211,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Biblioteca",
+    "en": "Library"
+  },
+  {
+    "id": 212,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Zoo",
+    "en": "Zoo"
+  },
+  {
+    "id": 213,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Circo",
+    "en": "Circus"
+  },
+  {
+    "id": 214,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Granja",
+    "en": "Farm"
+  },
+  {
+    "id": 215,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Castillo",
+    "en": "Castle"
+  },
+  {
+    "id": 216,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Pueblo",
+    "en": "Village"
+  },
+  {
+    "id": 217,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Ciudad",
+    "en": "City"
+  },
+  {
+    "id": 218,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "País",
+    "en": "Country"
+  },
+  {
+    "id": 219,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Mundo",
+    "en": "World"
+  },
+  {
+    "id": 220,
+    "lvl": 1,
+    "cat": "Lugares",
+    "es": "Isla",
+    "en": "Island"
+  },
+  {
+    "id": 221,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Ser",
+    "en": "Be"
+  },
+  {
+    "id": 222,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Estar",
+    "en": "Be"
+  },
+  {
+    "id": 223,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Tener",
+    "en": "Have"
+  },
+  {
+    "id": 224,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Hacer",
+    "en": "Do"
+  },
+  {
+    "id": 225,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Ir",
+    "en": "Go"
+  },
+  {
+    "id": 226,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Venir",
+    "en": "Come"
+  },
+  {
+    "id": 227,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Comer",
+    "en": "Eat"
+  },
+  {
+    "id": 228,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Beber",
+    "en": "Drink"
+  },
+  {
+    "id": 229,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Dormir",
+    "en": "Sleep"
+  },
+  {
+    "id": 230,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Jugar",
+    "en": "Play"
+  },
+  {
+    "id": 231,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Hablar",
+    "en": "Talk"
+  },
+  {
+    "id": 232,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Escuchar",
+    "en": "Listen"
+  },
+  {
+    "id": 233,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Leer",
+    "en": "Read"
+  },
+  {
+    "id": 234,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Escribir",
+    "en": "Write"
+  },
+  {
+    "id": 235,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Caminar",
+    "en": "Walk"
+  },
+  {
+    "id": 236,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Correr",
+    "en": "Run"
+  },
+  {
+    "id": 237,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Saltar",
+    "en": "Jump"
+  },
+  {
+    "id": 238,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Bailar",
+    "en": "Dance"
+  },
+  {
+    "id": 239,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Cantar",
+    "en": "Sing"
+  },
+  {
+    "id": 240,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Mirar",
+    "en": "Look"
+  },
+  {
+    "id": 241,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Ver",
+    "en": "See"
+  },
+  {
+    "id": 242,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Tocar",
+    "en": "Touch"
+  },
+  {
+    "id": 243,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Oler",
+    "en": "Smell"
+  },
+  {
+    "id": 244,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Sentir",
+    "en": "Feel"
+  },
+  {
+    "id": 245,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Reír",
+    "en": "Laugh"
+  },
+  {
+    "id": 246,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Llorar",
+    "en": "Cry"
+  },
+  {
+    "id": 247,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Amar",
+    "en": "Love"
+  },
+  {
+    "id": 248,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Gustar",
+    "en": "Like"
+  },
+  {
+    "id": 249,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Querer",
+    "en": "Want"
+  },
+  {
+    "id": 250,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Poder",
+    "en": "Can"
+  },
+  {
+    "id": 251,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Saber",
+    "en": "Know"
+  },
+  {
+    "id": 252,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Aprender",
+    "en": "Learn"
+  },
+  {
+    "id": 253,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Enseñar",
+    "en": "Teach"
+  },
+  {
+    "id": 254,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Pensar",
+    "en": "Think"
+  },
+  {
+    "id": 255,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Creer",
+    "en": "Believe"
+  },
+  {
+    "id": 256,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Comprar",
+    "en": "Buy"
+  },
+  {
+    "id": 257,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Vender",
+    "en": "Sell"
+  },
+  {
+    "id": 258,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Pagar",
+    "en": "Pay"
+  },
+  {
+    "id": 259,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Ayudar",
+    "en": "Help"
+  },
+  {
+    "id": 260,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Trabajar",
+    "en": "Work"
+  },
+  {
+    "id": 261,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Abrir",
+    "en": "Open"
+  },
+  {
+    "id": 262,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Cerrar",
+    "en": "Close"
+  },
+  {
+    "id": 263,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Entrar",
+    "en": "Enter"
+  },
+  {
+    "id": 264,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Salir",
+    "en": "Leave"
+  },
+  {
+    "id": 265,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Subir",
+    "en": "Go up"
+  },
+  {
+    "id": 266,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Bajar",
+    "en": "Go down"
+  },
+  {
+    "id": 267,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Dar",
+    "en": "Give"
+  },
+  {
+    "id": 268,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Recibir",
+    "en": "Receive"
+  },
+  {
+    "id": 269,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Llevar",
+    "en": "Carry"
+  },
+  {
+    "id": 270,
+    "lvl": 1,
+    "cat": "Verbos",
+    "es": "Traer",
+    "en": "Bring"
+  },
+  {
+    "id": 271,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Bueno",
+    "en": "Good"
+  },
+  {
+    "id": 272,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Malo",
+    "en": "Bad"
+  },
+  {
+    "id": 273,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Grande",
+    "en": "Big"
+  },
+  {
+    "id": 274,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Pequeño",
+    "en": "Small"
+  },
+  {
+    "id": 275,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Alto",
+    "en": "Tall"
+  },
+  {
+    "id": 276,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Bajo",
+    "en": "Short"
+  },
+  {
+    "id": 277,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Largo",
+    "en": "Long"
+  },
+  {
+    "id": 278,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Corto",
+    "en": "Short"
+  },
+  {
+    "id": 279,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Gordo",
+    "en": "Fat"
+  },
+  {
+    "id": 280,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Delgado",
+    "en": "Thin"
+  },
+  {
+    "id": 281,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Bonito",
+    "en": "Beautiful"
+  },
+  {
+    "id": 282,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Feo",
+    "en": "Ugly"
+  },
+  {
+    "id": 283,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Joven",
+    "en": "Young"
+  },
+  {
+    "id": 284,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Viejo",
+    "en": "Old"
+  },
+  {
+    "id": 285,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Nuevo",
+    "en": "New"
+  },
+  {
+    "id": 286,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Antiguo",
+    "en": "Ancient"
+  },
+  {
+    "id": 287,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Rápido",
+    "en": "Fast"
+  },
+  {
+    "id": 288,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Lento",
+    "en": "Slow"
+  },
+  {
+    "id": 289,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Fuerte",
+    "en": "Strong"
+  },
+  {
+    "id": 290,
+    "lvl": 2,
+    "cat": "Adjetivos",
+    "es": "Débil",
+    "en": "Weak"
+  },
+  {
+    "id": 291,
+    "lvl": 2,
+    "cat": "Emociones",
+    "es": "Feliz",
+    "en": "Happy"
+  },
+  {
+    "id": 292,
+    "lvl": 2,
+    "cat": "Emociones",
+    "es": "Triste",
+    "en": "Sad"
+  },
+  {
+    "id": 293,
+    "lvl": 2,
+    "cat": "Emociones",
+    "es": "Sorpresa",
+    "en": "Surprise"
+  },
+  {
+    "id": 294,
+    "lvl": 2,
+    "cat": "Emociones",
+    "es": "Miedo",
+    "en": "Fear"
+  },
+  {
+    "id": 295,
+    "lvl": 2,
+    "cat": "Emociones",
+    "es": "Asco",
+    "en": "Disgust"
+  },
+  {
+    "id": 296,
+    "lvl": 2,
+    "cat": "Emociones",
+    "es": "Enfado",
+    "en": "Anger"
+  },
+  {
+    "id": 297,
+    "lvl": 2,
+    "cat": "Emociones",
+    "es": "Amor",
+    "en": "Love"
+  },
+  {
+    "id": 298,
+    "lvl": 2,
+    "cat": "Emociones",
+    "es": "Calma",
+    "en": "Calm"
+  },
+  {
+    "id": 299,
+    "lvl": 2,
+    "cat": "Emociones",
+    "es": "Nervios",
+    "en": "Nerves"
+  },
+  {
+    "id": 300,
+    "lvl": 2,
+    "cat": "Emociones",
+    "es": "Orgullo",
+    "en": "Pride"
+  },
+  {
+    "id": 301,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Lunes",
+    "en": "Monday"
+  },
+  {
+    "id": 302,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Martes",
+    "en": "Tuesday"
+  },
+  {
+    "id": 303,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Miércoles",
+    "en": "Wednesday"
+  },
+  {
+    "id": 304,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Jueves",
+    "en": "Thursday"
+  },
+  {
+    "id": 305,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Viernes",
+    "en": "Friday"
+  },
+  {
+    "id": 306,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Sábado",
+    "en": "Saturday"
+  },
+  {
+    "id": 307,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Domingo",
+    "en": "Sunday"
+  },
+  {
+    "id": 308,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Enero",
+    "en": "January"
+  },
+  {
+    "id": 309,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Febrero",
+    "en": "February"
+  },
+  {
+    "id": 310,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Marzo",
+    "en": "March"
+  },
+  {
+    "id": 311,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Abril",
+    "en": "April"
+  },
+  {
+    "id": 312,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Mayo",
+    "en": "May"
+  },
+  {
+    "id": 313,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Junio",
+    "en": "June"
+  },
+  {
+    "id": 314,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Julio",
+    "en": "July"
+  },
+  {
+    "id": 315,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Agosto",
+    "en": "August"
+  },
+  {
+    "id": 316,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Septiembre",
+    "en": "September"
+  },
+  {
+    "id": 317,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Octubre",
+    "en": "October"
+  },
+  {
+    "id": 318,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Noviembre",
+    "en": "November"
+  },
+  {
+    "id": 319,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Diciembre",
+    "en": "December"
+  },
+  {
+    "id": 320,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Año",
+    "en": "Year"
+  },
+  {
+    "id": 321,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Mes",
+    "en": "Month"
+  },
+  {
+    "id": 322,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Semana",
+    "en": "Week"
+  },
+  {
+    "id": 323,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Día",
+    "en": "Day"
+  },
+  {
+    "id": 324,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Noche",
+    "en": "Night"
+  },
+  {
+    "id": 325,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Mañana",
+    "en": "Morning"
+  },
+  {
+    "id": 326,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Tarde",
+    "en": "Afternoon"
+  },
+  {
+    "id": 327,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Hoy",
+    "en": "Today"
+  },
+  {
+    "id": 328,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Ayer",
+    "en": "Yesterday"
+  },
+  {
+    "id": 329,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Mañana (día)",
+    "en": "Tomorrow"
+  },
+  {
+    "id": 330,
+    "lvl": 2,
+    "cat": "Tiempo",
+    "es": "Hora",
+    "en": "Hour"
+  },
+  {
+    "id": 331,
+    "lvl": 2,
+    "cat": "Clima",
+    "es": "Primavera",
+    "en": "Spring"
+  },
+  {
+    "id": 332,
+    "lvl": 2,
+    "cat": "Clima",
+    "es": "Verano",
+    "en": "Summer"
+  },
+  {
+    "id": 333,
+    "lvl": 2,
+    "cat": "Clima",
+    "es": "Otoño",
+    "en": "Autumn"
+  },
+  {
+    "id": 334,
+    "lvl": 2,
+    "cat": "Clima",
+    "es": "Invierno",
+    "en": "Winter"
+  },
+  {
+    "id": 335,
+    "lvl": 2,
+    "cat": "Clima",
+    "es": "Calor",
+    "en": "Heat"
+  },
+  {
+    "id": 336,
+    "lvl": 2,
+    "cat": "Clima",
+    "es": "Frío",
+    "en": "Cold"
+  },
+  {
+    "id": 337,
+    "lvl": 2,
+    "cat": "Clima",
+    "es": "Sol",
+    "en": "Sun"
+  },
+  {
+    "id": 338,
+    "lvl": 2,
+    "cat": "Clima",
+    "es": "Nubes",
+    "en": "Clouds"
+  },
+  {
+    "id": 339,
+    "lvl": 2,
+    "cat": "Clima",
+    "es": "Hielo",
+    "en": "Ice"
+  },
+  {
+    "id": 340,
+    "lvl": 2,
+    "cat": "Clima",
+    "es": "Niebla",
+    "en": "Fog"
+  },
+  {
+    "id": 341,
+    "lvl": 2,
+    "cat": "Formas",
+    "es": "Círculo",
+    "en": "Circle"
+  },
+  {
+    "id": 342,
+    "lvl": 2,
+    "cat": "Formas",
+    "es": "Cuadrado",
+    "en": "Square"
+  },
+  {
+    "id": 343,
+    "lvl": 2,
+    "cat": "Formas",
+    "es": "Triángulo",
+    "en": "Triangle"
+  },
+  {
+    "id": 344,
+    "lvl": 2,
+    "cat": "Formas",
+    "es": "Rectángulo",
+    "en": "Rectangle"
+  },
+  {
+    "id": 345,
+    "lvl": 2,
+    "cat": "Formas",
+    "es": "Estrella",
+    "en": "Star"
+  },
+  {
+    "id": 346,
+    "lvl": 2,
+    "cat": "Formas",
+    "es": "Corazón",
+    "en": "Heart"
+  },
+  {
+    "id": 347,
+    "lvl": 2,
+    "cat": "Formas",
+    "es": "Rombo",
+    "en": "Rhombus"
+  },
+  {
+    "id": 348,
+    "lvl": 2,
+    "cat": "Formas",
+    "es": "Óvalo",
+    "en": "Oval"
+  },
+  {
+    "id": 349,
+    "lvl": 2,
+    "cat": "Formas",
+    "es": "Línea",
+    "en": "Line"
+  },
+  {
+    "id": 350,
+    "lvl": 2,
+    "cat": "Formas",
+    "es": "Punto",
+    "en": "Point"
+  },
+  {
+    "id": 351,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Manzana",
+    "en": "Apple"
+  },
+  {
+    "id": 352,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Plátano",
+    "en": "Banana"
+  },
+  {
+    "id": 353,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Naranja",
+    "en": "Orange"
+  },
+  {
+    "id": 354,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Fresa",
+    "en": "Strawberry"
+  },
+  {
+    "id": 355,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Uva",
+    "en": "Grape"
+  },
+  {
+    "id": 356,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Pera",
+    "en": "Pear"
+  },
+  {
+    "id": 357,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Sandía",
+    "en": "Watermelon"
+  },
+  {
+    "id": 358,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Melón",
+    "en": "Melon"
+  },
+  {
+    "id": 359,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Melocotón",
+    "en": "Peach"
+  },
+  {
+    "id": 360,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Cereza",
+    "en": "Cherry"
+  },
+  {
+    "id": 361,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Ciruela",
+    "en": "Plum"
+  },
+  {
+    "id": 362,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Piña",
+    "en": "Pineapple"
+  },
+  {
+    "id": 363,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Mango",
+    "en": "Mango"
+  },
+  {
+    "id": 364,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Limón",
+    "en": "Lemon"
+  },
+  {
+    "id": 365,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Kiwi",
+    "en": "Kiwi"
+  },
+  {
+    "id": 366,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Coco",
+    "en": "Coconut"
+  },
+  {
+    "id": 367,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Frambuesa",
+    "en": "Raspberry"
+  },
+  {
+    "id": 368,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Mora",
+    "en": "Blackberry"
+  },
+  {
+    "id": 369,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Higo",
+    "en": "Fig"
+  },
+  {
+    "id": 370,
+    "lvl": 2,
+    "cat": "Frutas",
+    "es": "Papaya",
+    "en": "Papaya"
+  },
+  {
+    "id": 371,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Tomate",
+    "en": "Tomato"
+  },
+  {
+    "id": 372,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Patata",
+    "en": "Potato"
+  },
+  {
+    "id": 373,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Zanahoria",
+    "en": "Carrot"
+  },
+  {
+    "id": 374,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Cebolla",
+    "en": "Onion"
+  },
+  {
+    "id": 375,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Lechuga",
+    "en": "Lettuce"
+  },
+  {
+    "id": 376,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Ajo",
+    "en": "Garlic"
+  },
+  {
+    "id": 377,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Pimiento",
+    "en": "Pepper"
+  },
+  {
+    "id": 378,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Pepino",
+    "en": "Cucumber"
+  },
+  {
+    "id": 379,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Brócoli",
+    "en": "Broccoli"
+  },
+  {
+    "id": 380,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Espinaca",
+    "en": "Spinach"
+  },
+  {
+    "id": 381,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Calabaza",
+    "en": "Pumpkin"
+  },
+  {
+    "id": 382,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Calabacín",
+    "en": "Zucchini"
+  },
+  {
+    "id": 383,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Berenjena",
+    "en": "Eggplant"
+  },
+  {
+    "id": 384,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Maíz",
+    "en": "Corn"
+  },
+  {
+    "id": 385,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Guisante",
+    "en": "Pea"
+  },
+  {
+    "id": 386,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Col",
+    "en": "Cabbage"
+  },
+  {
+    "id": 387,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Champiñón",
+    "en": "Mushroom"
+  },
+  {
+    "id": 388,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Puerro",
+    "en": "Leek"
+  },
+  {
+    "id": 389,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Rábano",
+    "en": "Radish"
+  },
+  {
+    "id": 390,
+    "lvl": 2,
+    "cat": "Verduras",
+    "es": "Apio",
+    "en": "Celery"
+  },
+  {
+    "id": 391,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Plato",
+    "en": "Plate"
+  },
+  {
+    "id": 392,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Vaso",
+    "en": "Glass"
+  },
+  {
+    "id": 393,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Taza",
+    "en": "Mug"
+  },
+  {
+    "id": 394,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Tenedor",
+    "en": "Fork"
+  },
+  {
+    "id": 395,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Cuchillo",
+    "en": "Knife"
+  },
+  {
+    "id": 396,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Cuchara",
+    "en": "Spoon"
+  },
+  {
+    "id": 397,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Olla",
+    "en": "Pot"
+  },
+  {
+    "id": 398,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Sartén",
+    "en": "Pan"
+  },
+  {
+    "id": 399,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Jarra",
+    "en": "Jug"
+  },
+  {
+    "id": 400,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Botella",
+    "en": "Bottle"
+  },
+  {
+    "id": 401,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Servilleta",
+    "en": "Napkin"
+  },
+  {
+    "id": 402,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Mantel",
+    "en": "Tablecloth"
+  },
+  {
+    "id": 403,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Horno",
+    "en": "Oven"
+  },
+  {
+    "id": 404,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Nevera",
+    "en": "Fridge"
+  },
+  {
+    "id": 405,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Microondas",
+    "en": "Microwave"
+  },
+  {
+    "id": 406,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Fregadero",
+    "en": "Sink"
+  },
+  {
+    "id": 407,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Basura",
+    "en": "Trash"
+  },
+  {
+    "id": 408,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Batidora",
+    "en": "Blender"
+  },
+  {
+    "id": 409,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Tostadora",
+    "en": "Toaster"
+  },
+  {
+    "id": 410,
+    "lvl": 2,
+    "cat": "Cocina",
+    "es": "Cafetera",
+    "en": "Coffee maker"
+  },
+  {
+    "id": 411,
+    "lvl": 2,
+    "cat": "Salón",
+    "es": "Sillón",
+    "en": "Armchair"
+  },
+  {
+    "id": 412,
+    "lvl": 2,
+    "cat": "Salón",
+    "es": "Cuadro",
+    "en": "Painting"
+  },
+  {
+    "id": 413,
+    "lvl": 2,
+    "cat": "Salón",
+    "es": "Mueble",
+    "en": "Furniture"
+  },
+  {
+    "id": 414,
+    "lvl": 2,
+    "cat": "Salón",
+    "es": "Estantería",
+    "en": "Bookshelf"
+  },
+  {
+    "id": 415,
+    "lvl": 2,
+    "cat": "Salón",
+    "es": "Cojín",
+    "en": "Cushion"
+  },
+  {
+    "id": 416,
+    "lvl": 2,
+    "cat": "Salón",
+    "es": "Cortina",
+    "en": "Curtain"
+  },
+  {
+    "id": 417,
+    "lvl": 2,
+    "cat": "Salón",
+    "es": "Mando",
+    "en": "Remote"
+  },
+  {
+    "id": 418,
+    "lvl": 2,
+    "cat": "Salón",
+    "es": "Planta",
+    "en": "Plant"
+  },
+  {
+    "id": 419,
+    "lvl": 2,
+    "cat": "Salón",
+    "es": "Jarrón",
+    "en": "Vase"
+  },
+  {
+    "id": 420,
+    "lvl": 2,
+    "cat": "Salón",
+    "es": "Revista",
+    "en": "Magazine"
+  },
+  {
+    "id": 421,
+    "lvl": 2,
+    "cat": "Baño",
+    "es": "Ducha",
+    "en": "Shower"
+  },
+  {
+    "id": 422,
+    "lvl": 2,
+    "cat": "Baño",
+    "es": "Bañera",
+    "en": "Bathtub"
+  },
+  {
+    "id": 423,
+    "lvl": 2,
+    "cat": "Baño",
+    "es": "Lavabo",
+    "en": "Sink"
+  },
+  {
+    "id": 424,
+    "lvl": 2,
+    "cat": "Baño",
+    "es": "Retrete",
+    "en": "Toilet"
+  },
+  {
+    "id": 425,
+    "lvl": 2,
+    "cat": "Baño",
+    "es": "Toalla",
+    "en": "Towel"
+  },
+  {
+    "id": 426,
+    "lvl": 2,
+    "cat": "Baño",
+    "es": "Jabón",
+    "en": "Soap"
+  },
+  {
+    "id": 427,
+    "lvl": 2,
+    "cat": "Baño",
+    "es": "Champú",
+    "en": "Shampoo"
+  },
+  {
+    "id": 428,
+    "lvl": 2,
+    "cat": "Baño",
+    "es": "Cepillo",
+    "en": "Brush"
+  },
+  {
+    "id": 429,
+    "lvl": 2,
+    "cat": "Baño",
+    "es": "Pasta de dientes",
+    "en": "Toothpaste"
+  },
+  {
+    "id": 430,
+    "lvl": 2,
+    "cat": "Baño",
+    "es": "Peine",
+    "en": "Comb"
+  },
+  {
+    "id": 431,
+    "lvl": 2,
+    "cat": "Habitación",
+    "es": "Almohada",
+    "en": "Pillow"
+  },
+  {
+    "id": 432,
+    "lvl": 2,
+    "cat": "Habitación",
+    "es": "Manta",
+    "en": "Blanket"
+  },
+  {
+    "id": 433,
+    "lvl": 2,
+    "cat": "Habitación",
+    "es": "Sábana",
+    "en": "Sheet"
+  },
+  {
+    "id": 434,
+    "lvl": 2,
+    "cat": "Habitación",
+    "es": "Colchón",
+    "en": "Mattress"
+  },
+  {
+    "id": 435,
+    "lvl": 2,
+    "cat": "Habitación",
+    "es": "Mesita",
+    "en": "Nightstand"
+  },
+  {
+    "id": 436,
+    "lvl": 2,
+    "cat": "Habitación",
+    "es": "Despertador",
+    "en": "Alarm clock"
+  },
+  {
+    "id": 437,
+    "lvl": 2,
+    "cat": "Habitación",
+    "es": "Lámpara",
+    "en": "Lamp"
+  },
+  {
+    "id": 438,
+    "lvl": 2,
+    "cat": "Habitación",
+    "es": "Cajón",
+    "en": "Drawer"
+  },
+  {
+    "id": 439,
+    "lvl": 2,
+    "cat": "Habitación",
+    "es": "Percha",
+    "en": "Hanger"
+  },
+  {
+    "id": 440,
+    "lvl": 2,
+    "cat": "Habitación",
+    "es": "Juguetero",
+    "en": "Toy box"
+  },
+  {
+    "id": 441,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Pelota",
+    "en": "Ball"
+  },
+  {
+    "id": 442,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Muñeca",
+    "en": "Doll"
+  },
+  {
+    "id": 443,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Cochecito",
+    "en": "Toy car"
+  },
+  {
+    "id": 444,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Tren",
+    "en": "Toy train"
+  },
+  {
+    "id": 445,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Bloques",
+    "en": "Blocks"
+  },
+  {
+    "id": 446,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Puzle",
+    "en": "Puzzle"
+  },
+  {
+    "id": 447,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Peluche",
+    "en": "Teddy bear"
+  },
+  {
+    "id": 448,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Cometa",
+    "en": "Kite"
+  },
+  {
+    "id": 449,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Peonza",
+    "en": "Spinning top"
+  },
+  {
+    "id": 450,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Yoyó",
+    "en": "Yoyo"
+  },
+  {
+    "id": 451,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Cuerda",
+    "en": "Rope"
+  },
+  {
+    "id": 452,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Patines",
+    "en": "Skates"
+  },
+  {
+    "id": 453,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Monopatín",
+    "en": "Skateboard"
+  },
+  {
+    "id": 454,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Bicicleta",
+    "en": "Bicycle"
+  },
+  {
+    "id": 455,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Videojuego",
+    "en": "Video game"
+  },
+  {
+    "id": 456,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Consola",
+    "en": "Console"
+  },
+  {
+    "id": 457,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Cartas",
+    "en": "Cards"
+  },
+  {
+    "id": 458,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Dados",
+    "en": "Dice"
+  },
+  {
+    "id": 459,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Tablero",
+    "en": "Board"
+  },
+  {
+    "id": 460,
+    "lvl": 2,
+    "cat": "Juguetes",
+    "es": "Disfraz",
+    "en": "Costume"
+  },
+  {
+    "id": 461,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Fútbol",
+    "en": "Football"
+  },
+  {
+    "id": 462,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Baloncesto",
+    "en": "Basketball"
+  },
+  {
+    "id": 463,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Tenis",
+    "en": "Tennis"
+  },
+  {
+    "id": 464,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Natación",
+    "en": "Swimming"
+  },
+  {
+    "id": 465,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Atletismo",
+    "en": "Athletics"
+  },
+  {
+    "id": 466,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Ciclismo",
+    "en": "Cycling"
+  },
+  {
+    "id": 467,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Voleibol",
+    "en": "Volleyball"
+  },
+  {
+    "id": 468,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Gimnasia",
+    "en": "Gymnastics"
+  },
+  {
+    "id": 469,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Kárate",
+    "en": "Karate"
+  },
+  {
+    "id": 470,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Judo",
+    "en": "Judo"
+  },
+  {
+    "id": 471,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Esquí",
+    "en": "Skiing"
+  },
+  {
+    "id": 472,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Patinaje",
+    "en": "Skating"
+  },
+  {
+    "id": 473,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Golf",
+    "en": "Golf"
+  },
+  {
+    "id": 474,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Béisbol",
+    "en": "Baseball"
+  },
+  {
+    "id": 475,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Rugby",
+    "en": "Rugby"
+  },
+  {
+    "id": 476,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Surf",
+    "en": "Surfing"
+  },
+  {
+    "id": 477,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Boxeo",
+    "en": "Boxing"
+  },
+  {
+    "id": 478,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Ping-pong",
+    "en": "Table tennis"
+  },
+  {
+    "id": 479,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Ajedrez",
+    "en": "Chess"
+  },
+  {
+    "id": 480,
+    "lvl": 2,
+    "cat": "Deportes",
+    "es": "Balonmano",
+    "en": "Handball"
+  },
+  {
+    "id": 481,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Médico",
+    "en": "Doctor"
+  },
+  {
+    "id": 482,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Enfermera",
+    "en": "Nurse"
+  },
+  {
+    "id": 483,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Policía",
+    "en": "Police officer"
+  },
+  {
+    "id": 484,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Bombero",
+    "en": "Firefighter"
+  },
+  {
+    "id": 485,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Profesor",
+    "en": "Teacher"
+  },
+  {
+    "id": 486,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Piloto",
+    "en": "Pilot"
+  },
+  {
+    "id": 487,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Conductor",
+    "en": "Driver"
+  },
+  {
+    "id": 488,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Cocinero",
+    "en": "Chef"
+  },
+  {
+    "id": 489,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Camarero",
+    "en": "Waiter"
+  },
+  {
+    "id": 490,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Panadero",
+    "en": "Baker"
+  },
+  {
+    "id": 491,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Carnicero",
+    "en": "Butcher"
+  },
+  {
+    "id": 492,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Peluquero",
+    "en": "Hairdresser"
+  },
+  {
+    "id": 493,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Mecánico",
+    "en": "Mechanic"
+  },
+  {
+    "id": 494,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Carpintero",
+    "en": "Carpenter"
+  },
+  {
+    "id": 495,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Pintor",
+    "en": "Painter"
+  },
+  {
+    "id": 496,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Músico",
+    "en": "Musician"
+  },
+  {
+    "id": 497,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Actor",
+    "en": "Actor"
+  },
+  {
+    "id": 498,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Cantante",
+    "en": "Singer"
+  },
+  {
+    "id": 499,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Bailarín",
+    "en": "Dancer"
+  },
+  {
+    "id": 500,
+    "lvl": 2,
+    "cat": "Profesiones",
+    "es": "Escritor",
+    "en": "Writer"
+  },
+  {
+    "id": 501,
+    "lvl": 3,
+    "cat": "Profesiones",
+    "es": "Periodista",
+    "en": "Journalist"
+  },
+  {
+    "id": 502,
+    "lvl": 3,
+    "cat": "Profesiones",
+    "es": "Cartero",
+    "en": "Postman"
+  },
+  {
+    "id": 503,
+    "lvl": 3,
+    "cat": "Profesiones",
+    "es": "Dentista",
+    "en": "Dentist"
+  },
+  {
+    "id": 504,
+    "lvl": 3,
+    "cat": "Profesiones",
+    "es": "Veterinario",
+    "en": "Veterinarian"
+  },
+  {
+    "id": 505,
+    "lvl": 3,
+    "cat": "Profesiones",
+    "es": "Arquitecto",
+    "en": "Architect"
+  },
+  {
+    "id": 506,
+    "lvl": 3,
+    "cat": "Profesiones",
+    "es": "Ingeniero",
+    "en": "Engineer"
+  },
+  {
+    "id": 507,
+    "lvl": 3,
+    "cat": "Profesiones",
+    "es": "Científico",
+    "en": "Scientist"
+  },
+  {
+    "id": 508,
+    "lvl": 3,
+    "cat": "Profesiones",
+    "es": "Juez",
+    "en": "Judge"
+  },
+  {
+    "id": 509,
+    "lvl": 3,
+    "cat": "Profesiones",
+    "es": "Abogado",
+    "en": "Lawyer"
+  },
+  {
+    "id": 510,
+    "lvl": 3,
+    "cat": "Profesiones",
+    "es": "Presidente",
+    "en": "President"
+  },
+  {
+    "id": 511,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Arte",
+    "en": "Art"
+  },
+  {
+    "id": 512,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Pintura",
+    "en": "Painting"
+  },
+  {
+    "id": 513,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Dibujo",
+    "en": "Drawing"
+  },
+  {
+    "id": 514,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Color",
+    "en": "Color"
+  },
+  {
+    "id": 515,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Pincel",
+    "en": "Brush"
+  },
+  {
+    "id": 516,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Lienzo",
+    "en": "Canvas"
+  },
+  {
+    "id": 517,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Escultura",
+    "en": "Sculpture"
+  },
+  {
+    "id": 518,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Música",
+    "en": "Music"
+  },
+  {
+    "id": 519,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Canción",
+    "en": "Song"
+  },
+  {
+    "id": 520,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Instrumento",
+    "en": "Instrument"
+  },
+  {
+    "id": 521,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Guitarra",
+    "en": "Guitar"
+  },
+  {
+    "id": 522,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Piano",
+    "en": "Piano"
+  },
+  {
+    "id": 523,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Batería",
+    "en": "Drums"
+  },
+  {
+    "id": 524,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Violín",
+    "en": "Violin"
+  },
+  {
+    "id": 525,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Flauta",
+    "en": "Flute"
+  },
+  {
+    "id": 526,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Trompeta",
+    "en": "Trumpet"
+  },
+  {
+    "id": 527,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Ritmo",
+    "en": "Rhythm"
+  },
+  {
+    "id": 528,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Melodía",
+    "en": "Melody"
+  },
+  {
+    "id": 529,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Danza",
+    "en": "Dance"
+  },
+  {
+    "id": 530,
+    "lvl": 3,
+    "cat": "Arte",
+    "es": "Teatro",
+    "en": "Theater"
+  },
+  {
+    "id": 531,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Teléfono",
+    "en": "Telephone"
+  },
+  {
+    "id": 532,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Móvil",
+    "en": "Mobile"
+  },
+  {
+    "id": 533,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Pantalla",
+    "en": "Screen"
+  },
+  {
+    "id": 534,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Teclado",
+    "en": "Keyboard"
+  },
+  {
+    "id": 535,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Ratón",
+    "en": "Mouse"
+  },
+  {
+    "id": 536,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Cámara",
+    "en": "Camera"
+  },
+  {
+    "id": 537,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Foto",
+    "en": "Photo"
+  },
+  {
+    "id": 538,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Vídeo",
+    "en": "Video"
+  },
+  {
+    "id": 539,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Internet",
+    "en": "Internet"
+  },
+  {
+    "id": 540,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Web",
+    "en": "Web"
+  },
+  {
+    "id": 541,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Correo",
+    "en": "Mail"
+  },
+  {
+    "id": 542,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Mensaje",
+    "en": "Message"
+  },
+  {
+    "id": 543,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Juego",
+    "en": "Game"
+  },
+  {
+    "id": 544,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Aplicación",
+    "en": "App"
+  },
+  {
+    "id": 545,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Robot",
+    "en": "Robot"
+  },
+  {
+    "id": 546,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Batería",
+    "en": "Battery"
+  },
+  {
+    "id": 547,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Cable",
+    "en": "Cable"
+  },
+  {
+    "id": 548,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Enchufe",
+    "en": "Plug"
+  },
+  {
+    "id": 549,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Auriculares",
+    "en": "Headphones"
+  },
+  {
+    "id": 550,
+    "lvl": 3,
+    "cat": "Tecnologia",
+    "es": "Altavoz",
+    "en": "Speaker"
+  },
+  {
+    "id": 551,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Espacio",
+    "en": "Space"
+  },
+  {
+    "id": 552,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Planeta",
+    "en": "Planet"
+  },
+  {
+    "id": 553,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Tierra",
+    "en": "Earth"
+  },
+  {
+    "id": 554,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Marte",
+    "en": "Mars"
+  },
+  {
+    "id": 555,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Júpiter",
+    "en": "Jupiter"
+  },
+  {
+    "id": 556,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Saturno",
+    "en": "Saturn"
+  },
+  {
+    "id": 557,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Estrella",
+    "en": "Star"
+  },
+  {
+    "id": 558,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Galaxia",
+    "en": "Galaxy"
+  },
+  {
+    "id": 559,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Universo",
+    "en": "Universe"
+  },
+  {
+    "id": 560,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Astronauta",
+    "en": "Astronaut"
+  },
+  {
+    "id": 561,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Nave",
+    "en": "Spaceship"
+  },
+  {
+    "id": 562,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Cohete",
+    "en": "Rocket"
+  },
+  {
+    "id": 563,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Cometa",
+    "en": "Comet"
+  },
+  {
+    "id": 564,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Meteorito",
+    "en": "Meteorite"
+  },
+  {
+    "id": 565,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Telescopio",
+    "en": "Telescope"
+  },
+  {
+    "id": 566,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Órbita",
+    "en": "Orbit"
+  },
+  {
+    "id": 567,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Gravedad",
+    "en": "Gravity"
+  },
+  {
+    "id": 568,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Alien",
+    "en": "Alien"
+  },
+  {
+    "id": 569,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Cielo",
+    "en": "Sky"
+  },
+  {
+    "id": 570,
+    "lvl": 3,
+    "cat": "Espacio",
+    "es": "Sol",
+    "en": "Sun"
+  },
+  {
+    "id": 571,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Norte",
+    "en": "North"
+  },
+  {
+    "id": 572,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Sur",
+    "en": "South"
+  },
+  {
+    "id": 573,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Este",
+    "en": "East"
+  },
+  {
+    "id": 574,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Oeste",
+    "en": "West"
+  },
+  {
+    "id": 575,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Mapa",
+    "en": "Map"
+  },
+  {
+    "id": 576,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Globo",
+    "en": "Globe"
+  },
+  {
+    "id": 577,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Continente",
+    "en": "Continent"
+  },
+  {
+    "id": 578,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Océano",
+    "en": "Ocean"
+  },
+  {
+    "id": 579,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Mar",
+    "en": "Sea"
+  },
+  {
+    "id": 580,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Río",
+    "en": "River"
+  },
+  {
+    "id": 581,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Montaña",
+    "en": "Mountain"
+  },
+  {
+    "id": 582,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Valle",
+    "en": "Valley"
+  },
+  {
+    "id": 583,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Desierto",
+    "en": "Desert"
+  },
+  {
+    "id": 584,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Selva",
+    "en": "Jungle"
+  },
+  {
+    "id": 585,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Bosque",
+    "en": "Forest"
+  },
+  {
+    "id": 586,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Isla",
+    "en": "Island"
+  },
+  {
+    "id": 587,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Costa",
+    "en": "Coast"
+  },
+  {
+    "id": 588,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Volcán",
+    "en": "Volcano"
+  },
+  {
+    "id": 589,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Cueva",
+    "en": "Cave"
+  },
+  {
+    "id": 590,
+    "lvl": 3,
+    "cat": "Geografia",
+    "es": "Cascada",
+    "en": "Waterfall"
+  },
+  {
+    "id": 591,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Insecto",
+    "en": "Insect"
+  },
+  {
+    "id": 592,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Mosca",
+    "en": "Fly"
+  },
+  {
+    "id": 593,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Mosquito",
+    "en": "Mosquito"
+  },
+  {
+    "id": 594,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Abeja",
+    "en": "Bee"
+  },
+  {
+    "id": 595,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Avispa",
+    "en": "Wasp"
+  },
+  {
+    "id": 596,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Hormiga",
+    "en": "Ant"
+  },
+  {
+    "id": 597,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Mariposa",
+    "en": "Butterfly"
+  },
+  {
+    "id": 598,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Araña",
+    "en": "Spider"
+  },
+  {
+    "id": 599,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Escarabajo",
+    "en": "Beetle"
+  },
+  {
+    "id": 600,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Mariquita",
+    "en": "Ladybug"
+  },
+  {
+    "id": 601,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Gusano",
+    "en": "Worm"
+  },
+  {
+    "id": 602,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Caracol",
+    "en": "Snail"
+  },
+  {
+    "id": 603,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Ciempiés",
+    "en": "Centipede"
+  },
+  {
+    "id": 604,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Grillo",
+    "en": "Cricket"
+  },
+  {
+    "id": 605,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Saltamontes",
+    "en": "Grasshopper"
+  },
+  {
+    "id": 606,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Mantis",
+    "en": "Mantis"
+  },
+  {
+    "id": 607,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Libélula",
+    "en": "Dragonfly"
+  },
+  {
+    "id": 608,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Polilla",
+    "en": "Moth"
+  },
+  {
+    "id": 609,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Garrapata",
+    "en": "Tick"
+  },
+  {
+    "id": 610,
+    "lvl": 3,
+    "cat": "Insectos",
+    "es": "Pulga",
+    "en": "Flea"
+  },
+  {
+    "id": 611,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Océano",
+    "en": "Ocean"
+  },
+  {
+    "id": 612,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Ola",
+    "en": "Wave"
+  },
+  {
+    "id": 613,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Arena",
+    "en": "Sand"
+  },
+  {
+    "id": 614,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Concha",
+    "en": "Shell"
+  },
+  {
+    "id": 615,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Alga",
+    "en": "Algae"
+  },
+  {
+    "id": 616,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Coral",
+    "en": "Coral"
+  },
+  {
+    "id": 617,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Tiburón",
+    "en": "Shark"
+  },
+  {
+    "id": 618,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Ballena",
+    "en": "Whale"
+  },
+  {
+    "id": 619,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Delfín",
+    "en": "Dolphin"
+  },
+  {
+    "id": 620,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Pulpo",
+    "en": "Octopus"
+  },
+  {
+    "id": 621,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Calamar",
+    "en": "Squid"
+  },
+  {
+    "id": 622,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Cangrejo",
+    "en": "Crab"
+  },
+  {
+    "id": 623,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Langosta",
+    "en": "Lobster"
+  },
+  {
+    "id": 624,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Estrella de mar",
+    "en": "Starfish"
+  },
+  {
+    "id": 625,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Caballito de mar",
+    "en": "Seahorse"
+  },
+  {
+    "id": 626,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Tortuga",
+    "en": "Turtle"
+  },
+  {
+    "id": 627,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Foca",
+    "en": "Seal"
+  },
+  {
+    "id": 628,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Pingüino",
+    "en": "Penguin"
+  },
+  {
+    "id": 629,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Gaviota",
+    "en": "Seagull"
+  },
+  {
+    "id": 630,
+    "lvl": 3,
+    "cat": "Mar",
+    "es": "Pelícano",
+    "en": "Pelican"
+  },
+  {
+    "id": 631,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Granja",
+    "en": "Farm"
+  },
+  {
+    "id": 632,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Granjero",
+    "en": "Farmer"
+  },
+  {
+    "id": 633,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Tractor",
+    "en": "Tractor"
+  },
+  {
+    "id": 634,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Paja",
+    "en": "Straw"
+  },
+  {
+    "id": 635,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Heno",
+    "en": "Hay"
+  },
+  {
+    "id": 636,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Vaca",
+    "en": "Cow"
+  },
+  {
+    "id": 637,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Toro",
+    "en": "Bull"
+  },
+  {
+    "id": 638,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Cerdo",
+    "en": "Pig"
+  },
+  {
+    "id": 639,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Oveja",
+    "en": "Sheep"
+  },
+  {
+    "id": 640,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Cabra",
+    "en": "Goat"
+  },
+  {
+    "id": 641,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Caballo",
+    "en": "Horse"
+  },
+  {
+    "id": 642,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Burro",
+    "en": "Donkey"
+  },
+  {
+    "id": 643,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Gallina",
+    "en": "Hen"
+  },
+  {
+    "id": 644,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Gallo",
+    "en": "Rooster"
+  },
+  {
+    "id": 645,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Pollito",
+    "en": "Chick"
+  },
+  {
+    "id": 646,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Pato",
+    "en": "Duck"
+  },
+  {
+    "id": 647,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Ganso",
+    "en": "Goose"
+  },
+  {
+    "id": 648,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Pavo",
+    "en": "Turkey"
+  },
+  {
+    "id": 649,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Perro pastor",
+    "en": "Sheepdog"
+  },
+  {
+    "id": 650,
+    "lvl": 3,
+    "cat": "Granja",
+    "es": "Gato",
+    "en": "Cat"
+  },
+  {
+    "id": 651,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "León",
+    "en": "Lion"
+  },
+  {
+    "id": 652,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Tigre",
+    "en": "Tiger"
+  },
+  {
+    "id": 653,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Leopardo",
+    "en": "Leopard"
+  },
+  {
+    "id": 654,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Pantera",
+    "en": "Panther"
+  },
+  {
+    "id": 655,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Guepardo",
+    "en": "Cheetah"
+  },
+  {
+    "id": 656,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Elefante",
+    "en": "Elephant"
+  },
+  {
+    "id": 657,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Rinoceronte",
+    "en": "Rhinoceros"
+  },
+  {
+    "id": 658,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Hipopótamo",
+    "en": "Hippopotamus"
+  },
+  {
+    "id": 659,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Jirafa",
+    "en": "Giraffe"
+  },
+  {
+    "id": 660,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Cebra",
+    "en": "Zebra"
+  },
+  {
+    "id": 661,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Mono",
+    "en": "Monkey"
+  },
+  {
+    "id": 662,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Gorila",
+    "en": "Gorilla"
+  },
+  {
+    "id": 663,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Chimpancé",
+    "en": "Chimpanzee"
+  },
+  {
+    "id": 664,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Oso",
+    "en": "Bear"
+  },
+  {
+    "id": 665,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Lobo",
+    "en": "Wolf"
+  },
+  {
+    "id": 666,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Zorro",
+    "en": "Fox"
+  },
+  {
+    "id": 667,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Ciervo",
+    "en": "Deer"
+  },
+  {
+    "id": 668,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Canguro",
+    "en": "Kangaroo"
+  },
+  {
+    "id": 669,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Koala",
+    "en": "Koala"
+  },
+  {
+    "id": 670,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Panda",
+    "en": "Panda"
+  },
+  {
+    "id": 671,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Cocodrilo",
+    "en": "Crocodile"
+  },
+  {
+    "id": 672,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Serpiente",
+    "en": "Snake"
+  },
+  {
+    "id": 673,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Águila",
+    "en": "Eagle"
+  },
+  {
+    "id": 674,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Halcón",
+    "en": "Falcon"
+  },
+  {
+    "id": 675,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Búho",
+    "en": "Owl"
+  },
+  {
+    "id": 676,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Loro",
+    "en": "Parrot"
+  },
+  {
+    "id": 677,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Avestruz",
+    "en": "Ostrich"
+  },
+  {
+    "id": 678,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Camello",
+    "en": "Camel"
+  },
+  {
+    "id": 679,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Murciélago",
+    "en": "Bat"
+  },
+  {
+    "id": 680,
+    "lvl": 3,
+    "cat": "Salvaje",
+    "es": "Rana",
+    "en": "Frog"
+  },
+  {
+    "id": 681,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Material",
+    "en": "Material"
+  },
+  {
+    "id": 682,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Madera",
+    "en": "Wood"
+  },
+  {
+    "id": 683,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Metal",
+    "en": "Metal"
+  },
+  {
+    "id": 684,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Hierro",
+    "en": "Iron"
+  },
+  {
+    "id": 685,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Acero",
+    "en": "Steel"
+  },
+  {
+    "id": 686,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Oro",
+    "en": "Gold"
+  },
+  {
+    "id": 687,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Plata",
+    "en": "Silver"
+  },
+  {
+    "id": 688,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Cobre",
+    "en": "Copper"
+  },
+  {
+    "id": 689,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Plástico",
+    "en": "Plastic"
+  },
+  {
+    "id": 690,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Goma",
+    "en": "Rubber"
+  },
+  {
+    "id": 691,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Cristal",
+    "en": "Crystal"
+  },
+  {
+    "id": 692,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Vidrio",
+    "en": "Glass"
+  },
+  {
+    "id": 693,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Papel",
+    "en": "Paper"
+  },
+  {
+    "id": 694,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Cartón",
+    "en": "Cardboard"
+  },
+  {
+    "id": 695,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Tela",
+    "en": "Fabric"
+  },
+  {
+    "id": 696,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Algodón",
+    "en": "Cotton"
+  },
+  {
+    "id": 697,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Lana",
+    "en": "Wool"
+  },
+  {
+    "id": 698,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Seda",
+    "en": "Silk"
+  },
+  {
+    "id": 699,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Cuero",
+    "en": "Leather"
+  },
+  {
+    "id": 700,
+    "lvl": 3,
+    "cat": "Materiales",
+    "es": "Piedra",
+    "en": "Stone"
+  },
+  {
+    "id": 701,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Herramienta",
+    "en": "Tool"
+  },
+  {
+    "id": 702,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Martillo",
+    "en": "Hammer"
+  },
+  {
+    "id": 703,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Clavo",
+    "en": "Nail"
+  },
+  {
+    "id": 704,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Tornillo",
+    "en": "Screw"
+  },
+  {
+    "id": 705,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Destornillador",
+    "en": "Screwdriver"
+  },
+  {
+    "id": 706,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Llave",
+    "en": "Wrench"
+  },
+  {
+    "id": 707,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Alicates",
+    "en": "Pliers"
+  },
+  {
+    "id": 708,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Sierra",
+    "en": "Saw"
+  },
+  {
+    "id": 709,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Taladro",
+    "en": "Drill"
+  },
+  {
+    "id": 710,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Hacha",
+    "en": "Axe"
+  },
+  {
+    "id": 711,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Pala",
+    "en": "Shovel"
+  },
+  {
+    "id": 712,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Rastrillo",
+    "en": "Rake"
+  },
+  {
+    "id": 713,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Escoba",
+    "en": "Broom"
+  },
+  {
+    "id": 714,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Fregona",
+    "en": "Mop"
+  },
+  {
+    "id": 715,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Cubo",
+    "en": "Bucket"
+  },
+  {
+    "id": 716,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Tijeras",
+    "en": "Scissors"
+  },
+  {
+    "id": 717,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Cúter",
+    "en": "Cutter"
+  },
+  {
+    "id": 718,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Cinta",
+    "en": "Tape"
+  },
+  {
+    "id": 719,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Metro",
+    "en": "Measuring tape"
+  },
+  {
+    "id": 720,
+    "lvl": 3,
+    "cat": "Herramientas",
+    "es": "Pincel",
+    "en": "Paintbrush"
+  },
+  {
+    "id": 721,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Accesorio",
+    "en": "Accessory"
+  },
+  {
+    "id": 722,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Anillo",
+    "en": "Ring"
+  },
+  {
+    "id": 723,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Collar",
+    "en": "Necklace"
+  },
+  {
+    "id": 724,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Pulsera",
+    "en": "Bracelet"
+  },
+  {
+    "id": 725,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Pendiente",
+    "en": "Earring"
+  },
+  {
+    "id": 726,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Reloj",
+    "en": "Watch"
+  },
+  {
+    "id": 727,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Gafas",
+    "en": "Glasses"
+  },
+  {
+    "id": 728,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Bolso",
+    "en": "Bag"
+  },
+  {
+    "id": 729,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Cartera",
+    "en": "Wallet"
+  },
+  {
+    "id": 730,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Paraguas",
+    "en": "Umbrella"
+  },
+  {
+    "id": 731,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Cinturón",
+    "en": "Belt"
+  },
+  {
+    "id": 732,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Corbata",
+    "en": "Tie"
+  },
+  {
+    "id": 733,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Lazo",
+    "en": "Bow"
+  },
+  {
+    "id": 734,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Diadema",
+    "en": "Headband"
+  },
+  {
+    "id": 735,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Horquilla",
+    "en": "Hairpin"
+  },
+  {
+    "id": 736,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Bufanda",
+    "en": "Scarf"
+  },
+  {
+    "id": 737,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Guante",
+    "en": "Glove"
+  },
+  {
+    "id": 738,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Sombrero",
+    "en": "Hat"
+  },
+  {
+    "id": 739,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Gorra",
+    "en": "Cap"
+  },
+  {
+    "id": 740,
+    "lvl": 3,
+    "cat": "Accesorios",
+    "es": "Mochila",
+    "en": "Backpack"
+  },
+  {
+    "id": 741,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Caer",
+    "en": "Fall"
+  },
+  {
+    "id": 742,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Levantar",
+    "en": "Lift"
+  },
+  {
+    "id": 743,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Empujar",
+    "en": "Push"
+  },
+  {
+    "id": 744,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Tirar",
+    "en": "Pull"
+  },
+  {
+    "id": 745,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Llenar",
+    "en": "Fill"
+  },
+  {
+    "id": 746,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Vaciar",
+    "en": "Empty"
+  },
+  {
+    "id": 747,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Romper",
+    "en": "Break"
+  },
+  {
+    "id": 748,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Arreglar",
+    "en": "Fix"
+  },
+  {
+    "id": 749,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Cortar",
+    "en": "Cut"
+  },
+  {
+    "id": 750,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Pegar",
+    "en": "Stick"
+  },
+  {
+    "id": 751,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Dibujar",
+    "en": "Draw"
+  },
+  {
+    "id": 752,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Pintar",
+    "en": "Paint"
+  },
+  {
+    "id": 753,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Colorear",
+    "en": "Color"
+  },
+  {
+    "id": 754,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Mezclar",
+    "en": "Mix"
+  },
+  {
+    "id": 755,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Separar",
+    "en": "Separate"
+  },
+  {
+    "id": 756,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Esconder",
+    "en": "Hide"
+  },
+  {
+    "id": 757,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Buscar",
+    "en": "Search"
+  },
+  {
+    "id": 758,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Encontrar",
+    "en": "Find"
+  },
+  {
+    "id": 759,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Perder",
+    "en": "Lose"
+  },
+  {
+    "id": 760,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Ganar",
+    "en": "Win"
+  },
+  {
+    "id": 761,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Parar",
+    "en": "Stop"
+  },
+  {
+    "id": 762,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Continuar",
+    "en": "Continue"
+  },
+  {
+    "id": 763,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Empezar",
+    "en": "Start"
+  },
+  {
+    "id": 764,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Terminar",
+    "en": "Finish"
+  },
+  {
+    "id": 765,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Cambiar",
+    "en": "Change"
+  },
+  {
+    "id": 766,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Guardar",
+    "en": "Save"
+  },
+  {
+    "id": 767,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Sacar",
+    "en": "Take out"
+  },
+  {
+    "id": 768,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Meter",
+    "en": "Put in"
+  },
+  {
+    "id": 769,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Poner",
+    "en": "Put"
+  },
+  {
+    "id": 770,
+    "lvl": 3,
+    "cat": "Verbos2",
+    "es": "Quitar",
+    "en": "Remove"
+  },
+  {
+    "id": 771,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Volar",
+    "en": "Fly"
+  },
+  {
+    "id": 772,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Nadar",
+    "en": "Swim"
+  },
+  {
+    "id": 773,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Bucear",
+    "en": "Dive"
+  },
+  {
+    "id": 774,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Trepar",
+    "en": "Climb"
+  },
+  {
+    "id": 775,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Resbalar",
+    "en": "Slip"
+  },
+  {
+    "id": 776,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Columpiar",
+    "en": "Swing"
+  },
+  {
+    "id": 777,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Montar",
+    "en": "Ride"
+  },
+  {
+    "id": 778,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Conducir",
+    "en": "Drive"
+  },
+  {
+    "id": 779,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Viajar",
+    "en": "Travel"
+  },
+  {
+    "id": 780,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Pasear",
+    "en": "Stroll"
+  },
+  {
+    "id": 781,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Visitar",
+    "en": "Visit"
+  },
+  {
+    "id": 782,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Saludar",
+    "en": "Greet"
+  },
+  {
+    "id": 783,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Despedir",
+    "en": "Say goodbye"
+  },
+  {
+    "id": 784,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Abrazar",
+    "en": "Hug"
+  },
+  {
+    "id": 785,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Besar",
+    "en": "Kiss"
+  },
+  {
+    "id": 786,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Sonreír",
+    "en": "Smile"
+  },
+  {
+    "id": 787,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Gritar",
+    "en": "Shout"
+  },
+  {
+    "id": 788,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Susurrar",
+    "en": "Whisper"
+  },
+  {
+    "id": 789,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Preguntar",
+    "en": "Ask"
+  },
+  {
+    "id": 790,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Responder",
+    "en": "Answer"
+  },
+  {
+    "id": 791,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Explicar",
+    "en": "Explain"
+  },
+  {
+    "id": 792,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Entender",
+    "en": "Understand"
+  },
+  {
+    "id": 793,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Recordar",
+    "en": "Remember"
+  },
+  {
+    "id": 794,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Olvidar",
+    "en": "Forget"
+  },
+  {
+    "id": 795,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Soñar",
+    "en": "Dream"
+  },
+  {
+    "id": 796,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Despertar",
+    "en": "Wake up"
+  },
+  {
+    "id": 797,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Cuidar",
+    "en": "Care"
+  },
+  {
+    "id": 798,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Compartir",
+    "en": "Share"
+  },
+  {
+    "id": 799,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Invitar",
+    "en": "Invite"
+  },
+  {
+    "id": 800,
+    "lvl": 4,
+    "cat": "Verbos3",
+    "es": "Prometer",
+    "en": "Promise"
+  },
+  {
+    "id": 801,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Fácil",
+    "en": "Easy"
+  },
+  {
+    "id": 802,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Difícil",
+    "en": "Hard"
+  },
+  {
+    "id": 803,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Claro",
+    "en": "Clear"
+  },
+  {
+    "id": 804,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Oscuro",
+    "en": "Dark"
+  },
+  {
+    "id": 805,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Ligero",
+    "en": "Light"
+  },
+  {
+    "id": 806,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Pesado",
+    "en": "Heavy"
+  },
+  {
+    "id": 807,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Suave",
+    "en": "Soft"
+  },
+  {
+    "id": 808,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Duro",
+    "en": "Hard"
+  },
+  {
+    "id": 809,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Liso",
+    "en": "Smooth"
+  },
+  {
+    "id": 810,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Áspero",
+    "en": "Rough"
+  },
+  {
+    "id": 811,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Seco",
+    "en": "Dry"
+  },
+  {
+    "id": 812,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Mojado",
+    "en": "Wet"
+  },
+  {
+    "id": 813,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Abierto",
+    "en": "Open"
+  },
+  {
+    "id": 814,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Cerrado",
+    "en": "Closed"
+  },
+  {
+    "id": 815,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Correcto",
+    "en": "Correct"
+  },
+  {
+    "id": 816,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Incorrecto",
+    "en": "Incorrect"
+  },
+  {
+    "id": 817,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Pronto",
+    "en": "Soon"
+  },
+  {
+    "id": 818,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Tarde",
+    "en": "Late"
+  },
+  {
+    "id": 819,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Juntos",
+    "en": "Together"
+  },
+  {
+    "id": 820,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Separados",
+    "en": "Apart"
+  },
+  {
+    "id": 821,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Cerca",
+    "en": "Near"
+  },
+  {
+    "id": 822,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Lejos",
+    "en": "Far"
+  },
+  {
+    "id": 823,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Arriba",
+    "en": "Up"
+  },
+  {
+    "id": 824,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Abajo",
+    "en": "Down"
+  },
+  {
+    "id": 825,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Dentro",
+    "en": "Inside"
+  },
+  {
+    "id": 826,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Fuera",
+    "en": "Outside"
+  },
+  {
+    "id": 827,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Delante",
+    "en": "Front"
+  },
+  {
+    "id": 828,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Detrás",
+    "en": "Behind"
+  },
+  {
+    "id": 829,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Izquierda",
+    "en": "Left"
+  },
+  {
+    "id": 830,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Derecha",
+    "en": "Right"
+  },
+  {
+    "id": 831,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Recto",
+    "en": "Straight"
+  },
+  {
+    "id": 832,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Curvo",
+    "en": "Curved"
+  },
+  {
+    "id": 833,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Ancho",
+    "en": "Wide"
+  },
+  {
+    "id": 834,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Estrecho",
+    "en": "Narrow"
+  },
+  {
+    "id": 835,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Grueso",
+    "en": "Thick"
+  },
+  {
+    "id": 836,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Fino",
+    "en": "Fine"
+  },
+  {
+    "id": 837,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Rico",
+    "en": "Rich"
+  },
+  {
+    "id": 838,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Pobre",
+    "en": "Poor"
+  },
+  {
+    "id": 839,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Limpio",
+    "en": "Clean"
+  },
+  {
+    "id": 840,
+    "lvl": 4,
+    "cat": "Adjetivos2",
+    "es": "Sucio",
+    "en": "Dirty"
+  },
+  {
+    "id": 841,
+    "lvl": 4,
+    "cat": "Emociones2",
+    "es": "Vergüenza",
+    "en": "Shame"
+  },
+  {
+    "id": 842,
+    "lvl": 4,
+    "cat": "Emociones2",
+    "es": "Aburrimiento",
+    "en": "Boredom"
+  },
+  {
+    "id": 843,
+    "lvl": 4,
+    "cat": "Emociones2",
+    "es": "Interés",
+    "en": "Interest"
+  },
+  {
+    "id": 844,
+    "lvl": 4,
+    "cat": "Emociones2",
+    "es": "Duda",
+    "en": "Doubt"
+  },
+  {
+    "id": 845,
+    "lvl": 4,
+    "cat": "Emociones2",
+    "es": "Certeza",
+    "en": "Certainty"
+  },
+  {
+    "id": 846,
+    "lvl": 4,
+    "cat": "Emociones2",
+    "es": "Esperanza",
+    "en": "Hope"
+  },
+  {
+    "id": 847,
+    "lvl": 4,
+    "cat": "Emociones2",
+    "es": "Decepción",
+    "en": "Disappointment"
+  },
+  {
+    "id": 848,
+    "lvl": 4,
+    "cat": "Emociones2",
+    "es": "Envidia",
+    "en": "Envy"
+  },
+  {
+    "id": 849,
+    "lvl": 4,
+    "cat": "Emociones2",
+    "es": "Celos",
+    "en": "Jealousy"
+  },
+  {
+    "id": 850,
+    "lvl": 4,
+    "cat": "Emociones2",
+    "es": "Culpa",
+    "en": "Guilt"
+  },
+  {
+    "id": 851,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Ciudad",
+    "en": "City"
+  },
+  {
+    "id": 852,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Pueblo",
+    "en": "Town"
+  },
+  {
+    "id": 853,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Barrio",
+    "en": "Neighborhood"
+  },
+  {
+    "id": 854,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Centro",
+    "en": "Center"
+  },
+  {
+    "id": 855,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Afueras",
+    "en": "Suburbs"
+  },
+  {
+    "id": 856,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Plaza",
+    "en": "Square"
+  },
+  {
+    "id": 857,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Avenida",
+    "en": "Avenue"
+  },
+  {
+    "id": 858,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Acera",
+    "en": "Sidewalk"
+  },
+  {
+    "id": 859,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Semáforo",
+    "en": "Traffic light"
+  },
+  {
+    "id": 860,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Farola",
+    "en": "Streetlamp"
+  },
+  {
+    "id": 861,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Papelera",
+    "en": "Trash can"
+  },
+  {
+    "id": 862,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Fuente",
+    "en": "Fountain"
+  },
+  {
+    "id": 863,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Estatua",
+    "en": "Statue"
+  },
+  {
+    "id": 864,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Monumento",
+    "en": "Monument"
+  },
+  {
+    "id": 865,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Puente",
+    "en": "Bridge"
+  },
+  {
+    "id": 866,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Túnel",
+    "en": "Tunnel"
+  },
+  {
+    "id": 867,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Señal",
+    "en": "Sign"
+  },
+  {
+    "id": 868,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Tráfico",
+    "en": "Traffic"
+  },
+  {
+    "id": 869,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Atasco",
+    "en": "Traffic jam"
+  },
+  {
+    "id": 870,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Parada",
+    "en": "Stop"
+  },
+  {
+    "id": 871,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Estación",
+    "en": "Station"
+  },
+  {
+    "id": 872,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Aeropuerto",
+    "en": "Airport"
+  },
+  {
+    "id": 873,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Puerto",
+    "en": "Port"
+  },
+  {
+    "id": 874,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Hotel",
+    "en": "Hotel"
+  },
+  {
+    "id": 875,
+    "lvl": 4,
+    "cat": "Ciudad",
+    "es": "Correos",
+    "en": "Post office"
+  },
+  {
+    "id": 876,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Desayuno",
+    "en": "Breakfast"
+  },
+  {
+    "id": 877,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Comida",
+    "en": "Lunch"
+  },
+  {
+    "id": 878,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Cena",
+    "en": "Dinner"
+  },
+  {
+    "id": 879,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Merienda",
+    "en": "Snack"
+  },
+  {
+    "id": 880,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Postre",
+    "en": "Dessert"
+  },
+  {
+    "id": 881,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Menú",
+    "en": "Menu"
+  },
+  {
+    "id": 882,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Receta",
+    "en": "Recipe"
+  },
+  {
+    "id": 883,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Ingrediente",
+    "en": "Ingredient"
+  },
+  {
+    "id": 884,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Sabor",
+    "en": "Flavor"
+  },
+  {
+    "id": 885,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Dulce",
+    "en": "Sweet"
+  },
+  {
+    "id": 886,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Salado",
+    "en": "Salty"
+  },
+  {
+    "id": 887,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Amargo",
+    "en": "Bitter"
+  },
+  {
+    "id": 888,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Ácido",
+    "en": "Sour"
+  },
+  {
+    "id": 889,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Picante",
+    "en": "Spicy"
+  },
+  {
+    "id": 890,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Caliente",
+    "en": "Hot"
+  },
+  {
+    "id": 891,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Tibio",
+    "en": "Warm"
+  },
+  {
+    "id": 892,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Crudo",
+    "en": "Raw"
+  },
+  {
+    "id": 893,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Cocido",
+    "en": "Cooked"
+  },
+  {
+    "id": 894,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Fresco",
+    "en": "Fresh"
+  },
+  {
+    "id": 895,
+    "lvl": 4,
+    "cat": "Comida2",
+    "es": "Frito",
+    "en": "Fried"
+  },
+  {
+    "id": 896,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Cráneo",
+    "en": "Skull"
+  },
+  {
+    "id": 897,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Cerebro",
+    "en": "Brain"
+  },
+  {
+    "id": 898,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Pulmón",
+    "en": "Lung"
+  },
+  {
+    "id": 899,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Estómago",
+    "en": "Stomach"
+  },
+  {
+    "id": 900,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Intestino",
+    "en": "Intestine"
+  },
+  {
+    "id": 901,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Hueso",
+    "en": "Bone"
+  },
+  {
+    "id": 902,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Músculo",
+    "en": "Muscle"
+  },
+  {
+    "id": 903,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Sangre",
+    "en": "Blood"
+  },
+  {
+    "id": 904,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Vena",
+    "en": "Vein"
+  },
+  {
+    "id": 905,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Piel",
+    "en": "Skin"
+  },
+  {
+    "id": 906,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Sudor",
+    "en": "Sweat"
+  },
+  {
+    "id": 907,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Lágrima",
+    "en": "Tear"
+  },
+  {
+    "id": 908,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Saliva",
+    "en": "Saliva"
+  },
+  {
+    "id": 909,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Voz",
+    "en": "Voice"
+  },
+  {
+    "id": 910,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Aliento",
+    "en": "Breath"
+  },
+  {
+    "id": 911,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Latido",
+    "en": "Heartbeat"
+  },
+  {
+    "id": 912,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Pestaña",
+    "en": "Eyelash"
+  },
+  {
+    "id": 913,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Ceja",
+    "en": "Eyebrow"
+  },
+  {
+    "id": 914,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Párpado",
+    "en": "Eyelid"
+  },
+  {
+    "id": 915,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Mejilla",
+    "en": "Cheek"
+  },
+  {
+    "id": 916,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Barbilla",
+    "en": "Chin"
+  },
+  {
+    "id": 917,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Labio",
+    "en": "Lip"
+  },
+  {
+    "id": 918,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Mandíbula",
+    "en": "Jaw"
+  },
+  {
+    "id": 919,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Nuca",
+    "en": "Nape"
+  },
+  {
+    "id": 920,
+    "lvl": 4,
+    "cat": "Cuerpo2",
+    "es": "Axila",
+    "en": "Armpit"
+  },
+  {
+    "id": 921,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Planeta",
+    "en": "Planet"
+  },
+  {
+    "id": 922,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Cometa",
+    "en": "Comet"
+  },
+  {
+    "id": 923,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Asteroide",
+    "en": "Asteroid"
+  },
+  {
+    "id": 924,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Polvo",
+    "en": "Dust"
+  },
+  {
+    "id": 925,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Gas",
+    "en": "Gas"
+  },
+  {
+    "id": 926,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Brisa",
+    "en": "Breeze"
+  },
+  {
+    "id": 927,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Huracán",
+    "en": "Hurricane"
+  },
+  {
+    "id": 928,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Tornado",
+    "en": "Tornado"
+  },
+  {
+    "id": 929,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Terremoto",
+    "en": "Earthquake"
+  },
+  {
+    "id": 930,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Lava",
+    "en": "Lava"
+  },
+  {
+    "id": 931,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Ceniza",
+    "en": "Ash"
+  },
+  {
+    "id": 932,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Mineral",
+    "en": "Mineral"
+  },
+  {
+    "id": 933,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Diamante",
+    "en": "Diamond"
+  },
+  {
+    "id": 934,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Rubí",
+    "en": "Ruby"
+  },
+  {
+    "id": 935,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Esmeralda",
+    "en": "Emerald"
+  },
+  {
+    "id": 936,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Zafiro",
+    "en": "Sapphire"
+  },
+  {
+    "id": 937,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Perla",
+    "en": "Pearl"
+  },
+  {
+    "id": 938,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Carbón",
+    "en": "Coal"
+  },
+  {
+    "id": 939,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Roca",
+    "en": "Rock"
+  },
+  {
+    "id": 940,
+    "lvl": 4,
+    "cat": "Naturaleza2",
+    "es": "Barro",
+    "en": "Mud"
+  },
+  {
+    "id": 941,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Cosa",
+    "en": "Thing"
+  },
+  {
+    "id": 942,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Objeto",
+    "en": "Object"
+  },
+  {
+    "id": 943,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Parte",
+    "en": "Part"
+  },
+  {
+    "id": 944,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Todo",
+    "en": "All"
+  },
+  {
+    "id": 945,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Mitad",
+    "en": "Half"
+  },
+  {
+    "id": 946,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Cuarto",
+    "en": "Quarter"
+  },
+  {
+    "id": 947,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Docena",
+    "en": "Dozen"
+  },
+  {
+    "id": 948,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Par",
+    "en": "Pair"
+  },
+  {
+    "id": 949,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Grupo",
+    "en": "Group"
+  },
+  {
+    "id": 950,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Fila",
+    "en": "Row"
+  },
+  {
+    "id": 951,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Centro",
+    "en": "Center"
+  },
+  {
+    "id": 952,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Borde",
+    "en": "Edge"
+  },
+  {
+    "id": 953,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Fondo",
+    "en": "Bottom"
+  },
+  {
+    "id": 954,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Superficie",
+    "en": "Surface"
+  },
+  {
+    "id": 955,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Forma",
+    "en": "Shape"
+  },
+  {
+    "id": 956,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Tamaño",
+    "en": "Size"
+  },
+  {
+    "id": 957,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Peso",
+    "en": "Weight"
+  },
+  {
+    "id": 958,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Medida",
+    "en": "Measure"
+  },
+  {
+    "id": 959,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Cantidad",
+    "en": "Quantity"
+  },
+  {
+    "id": 960,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Número",
+    "en": "Number"
+  },
+  {
+    "id": 961,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Letra",
+    "en": "Letter"
+  },
+  {
+    "id": 962,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Palabra",
+    "en": "Word"
+  },
+  {
+    "id": 963,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Frase",
+    "en": "Sentence"
+  },
+  {
+    "id": 964,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Cuento",
+    "en": "Story"
+  },
+  {
+    "id": 965,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Historia",
+    "en": "History"
+  },
+  {
+    "id": 966,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Fin",
+    "en": "End"
+  },
+  {
+    "id": 967,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Principio",
+    "en": "Beginning"
+  },
+  {
+    "id": 968,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Juego",
+    "en": "Game"
+  },
+  {
+    "id": 969,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Regla",
+    "en": "Rule"
+  },
+  {
+    "id": 970,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Problema",
+    "en": "Problem"
+  },
+  {
+    "id": 971,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Solución",
+    "en": "Solution"
+  },
+  {
+    "id": 972,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Idea",
+    "en": "Idea"
+  },
+  {
+    "id": 973,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Secreto",
+    "en": "Secret"
+  },
+  {
+    "id": 974,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Mentira",
+    "en": "Lie"
+  },
+  {
+    "id": 975,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Verdad",
+    "en": "Truth"
+  },
+  {
+    "id": 976,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Peligro",
+    "en": "Danger"
+  },
+  {
+    "id": 977,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Suerte",
+    "en": "Luck"
+  },
+  {
+    "id": 978,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Regalo",
+    "en": "Gift"
+  },
+  {
+    "id": 979,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Fiesta",
+    "en": "Party"
+  },
+  {
+    "id": 980,
+    "lvl": 4,
+    "cat": "Conceptos",
+    "es": "Paz",
+    "en": "Peace"
+  },
+  {
+    "id": 981,
+    "lvl": 4,
+    "cat": "Direcciones",
+    "es": "Norte",
+    "en": "North"
+  },
+  {
+    "id": 982,
+    "lvl": 4,
+    "cat": "Direcciones",
+    "es": "Sur",
+    "en": "South"
+  },
+  {
+    "id": 983,
+    "lvl": 4,
+    "cat": "Direcciones",
+    "es": "Este",
+    "en": "East"
+  },
+  {
+    "id": 984,
+    "lvl": 4,
+    "cat": "Direcciones",
+    "es": "Oeste",
+    "en": "West"
+  },
+  {
+    "id": 985,
+    "lvl": 4,
+    "cat": "Direcciones",
+    "es": "Izquierda",
+    "en": "Left"
+  },
+  {
+    "id": 986,
+    "lvl": 4,
+    "cat": "Direcciones",
+    "es": "Derecha",
+    "en": "Right"
+  },
+  {
+    "id": 987,
+    "lvl": 4,
+    "cat": "Direcciones",
+    "es": "Arriba",
+    "en": "Up"
+  },
+  {
+    "id": 988,
+    "lvl": 4,
+    "cat": "Direcciones",
+    "es": "Abajo",
+    "en": "Down"
+  },
+  {
+    "id": 989,
+    "lvl": 4,
+    "cat": "Direcciones",
+    "es": "Delante",
+    "en": "Front"
+  },
+  {
+    "id": 990,
+    "lvl": 4,
+    "cat": "Direcciones",
+    "es": "Detrás",
+    "en": "Behind"
+  },
+  {
+    "id": 991,
+    "lvl": 4,
+    "cat": "Espacio2",
+    "es": "Dentro",
+    "en": "Inside"
+  },
+  {
+    "id": 992,
+    "lvl": 4,
+    "cat": "Espacio2",
+    "es": "Fuera",
+    "en": "Outside"
+  },
+  {
+    "id": 993,
+    "lvl": 4,
+    "cat": "Espacio2",
+    "es": "Cerca",
+    "en": "Near"
+  },
+  {
+    "id": 994,
+    "lvl": 4,
+    "cat": "Espacio2",
+    "es": "Lejos",
+    "en": "Far"
+  },
+  {
+    "id": 995,
+    "lvl": 4,
+    "cat": "Espacio2",
+    "es": "Aquí",
+    "en": "Here"
+  },
+  {
+    "id": 996,
+    "lvl": 4,
+    "cat": "Espacio2",
+    "es": "Allí",
+    "en": "There"
+  },
+  {
+    "id": 997,
+    "lvl": 4,
+    "cat": "Espacio2",
+    "es": "Junto",
+    "en": "Next to"
+  },
+  {
+    "id": 998,
+    "lvl": 4,
+    "cat": "Espacio2",
+    "es": "Entre",
+    "en": "Between"
+  },
+  {
+    "id": 999,
+    "lvl": 4,
+    "cat": "Espacio2",
+    "es": "Sobre",
+    "en": "On"
+  },
+  {
+    "id": 1000,
+    "lvl": 4,
+    "cat": "Espacio2",
+    "es": "Bajo",
+    "en": "Under"
+  }
+]

@@ -87,7 +87,7 @@ export const HeaderHUD: React.FC = () => {
           <button
             type="button"
             onClick={toggleMusic}
-              className={`flex h-10 w-10 items-center justify-center rounded-2xl transition ${musicOn ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-500'}`}
+            className={`flex h-10 w-10 items-center justify-center rounded-2xl transition ${musicOn ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-500'}`}
             title={musicOn ? copy.musicOn : copy.musicOff}
             aria-label={musicOn ? copy.musicOn : copy.musicOff}
             aria-pressed={musicOn}

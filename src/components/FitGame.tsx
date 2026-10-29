@@ -31,14 +31,14 @@ export const FitGame: React.FC<FitGameProps> = ({ children }) => {
 
   return (
     <div ref={viewportRef} className="flex h-full min-h-0 w-full flex-1 items-center justify-center overflow-hidden">
-      <div className="flex w-full justify-center" style={{ height: fit.height || undefined }}>
+      <div className="flex w-full items-center justify-center" style={{ height: fit.height || undefined }}>
         <div
           ref={contentRef}
-          className="w-full shrink-0"
+          className="w-full shrink-0 mx-auto flex flex-col items-center"
           style={{
-            maxWidth: 768,
+            maxWidth: 1024,
             transform: `scale(${fit.scale})`,
-            transformOrigin: 'top center',
+            transformOrigin: 'center center',
           }}
         >
           {children}
