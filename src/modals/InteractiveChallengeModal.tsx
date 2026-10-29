@@ -13,6 +13,7 @@ const LineMatchGame = React.lazy(() => import('../games/LineMatchGame').then(m =
 const DrawWordGame = React.lazy(() => import('../games/DrawWordGame').then(m => ({ default: m.DrawWordGame })));
 const LetterPuzzleGame = React.lazy(() => import('../games/LetterPuzzleGame').then(m => ({ default: m.LetterPuzzleGame })));
 const WordSortGame = React.lazy(() => import('../games/WordSortGame').then(m => ({ default: m.WordSortGame })));
+const UnifiedLessonGame = React.lazy(() => import('../games/UnifiedLessonGame').then(m => ({ default: m.UnifiedLessonGame })));
 const CometDashGame = React.lazy(() => import('../games/MathArcadeGames').then(m => ({ default: m.CometDashGame })));
 const CookieCountGame = React.lazy(() => import('../games/MathArcadeGames').then(m => ({ default: m.CookieCountGame })));
 const NumberBridgeGame = React.lazy(() => import('../games/MathArcadeGames').then(m => ({ default: m.NumberBridgeGame })));
@@ -35,6 +36,8 @@ export const InteractiveChallengeModal: React.FC<InteractiveChallengeModalProps>
 }) => {
   const renderGame = () => {
     switch (gameId) {
+      case 'unified_lesson':
+        return <UnifiedLessonGame {...gameProps} />;
       case 'safari':
         return <SafariGame {...gameProps} />;
       case 'garden_match':

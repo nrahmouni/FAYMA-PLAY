@@ -90,6 +90,7 @@ export type Screen =
   | 'REWARDS'
   | 'PASSPORT'
   | 'GAME_SESSION' 
+  | 'REWARD_GAME'
   | 'PODIUM' 
   | 'GARAGE';
 

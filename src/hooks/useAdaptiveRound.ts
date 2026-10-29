@@ -8,6 +8,7 @@ import { shuffleArray } from '../lib/utils';
 export function useAdaptiveRound() {
   const language = useGameStore(s => s.language);
   const activeWorldId = useGameStore(s => s.activeWorldId);
+  const activeGameId = useGameStore(s => s.activeGameId);
   const difficulties = useGameStore(s => s.difficulties);
   const adjustDifficulty = useGameStore(s => s.adjustDifficulty);
   const recordWordAttempt = useProfileStore(s => s.recordWordAttempt);
@@ -54,7 +55,9 @@ export function useAdaptiveRound() {
     const shuffledReview = shuffleArray(reviewWords);
     const shuffledMastered = shuffleArray(masteredWords);
 
-    const targetCount = Math.min(6, 2 + Math.floor((difficulty - 1) / 3), practicePool.length);
+    const targetCount = activeGameId === 'unified_lesson'
+      ? Math.min(6, practicePool.length)
+      : Math.min(6, 2 + Math.floor((difficulty - 1) / 3), practicePool.length);
 
     if (shuffledNew.length > 0) {
       selected.push(...shuffledNew.slice(0, targetCount));
@@ -81,7 +84,7 @@ export function useAdaptiveRound() {
     }
 
     return selected;
-  }, [difficulties, worldPool]);
+  }, [activeGameId, difficulties, worldPool]);
 
   // Get current difficulty for player
   const getPlayerDifficulty = useCallback((playerUid: string): DifficultyLevel => {

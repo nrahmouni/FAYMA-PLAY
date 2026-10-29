@@ -12,13 +12,14 @@ import { HomeScreen } from './screens/HomeScreen';
 import { AuthScreen } from './screens/AuthScreen';
 import { PlayerSetup } from './screens/PlayerSetup';
 import { NativeLangSetup } from './screens/NativeLangSetup';
-import { WorldHub } from './screens/WorldHub';
+import { LearningPathScreen } from './screens/LearningPathScreen';
 import { FlemishLearningScreen } from './screens/FlemishLearningScreen';
 import { RewardsMenu } from './screens/RewardsMenu';
 import { PassportScreen } from './screens/PassportScreen';
 import { GameSession } from './screens/GameSession';
 import { PodiumScreen } from './screens/PodiumScreen';
 import { GarageShop } from './screens/GarageShop';
+import { RewardGameScreen } from './screens/RewardGameScreen';
 
 export default function App() {
   const currentScreen = useGameStore(s => s.currentScreen);
@@ -44,7 +45,7 @@ export default function App() {
       case 'HOME':
         return <HomeScreen />;
       case 'WORLD_HUB':
-        return <WorldHub />;
+        return <LearningPathScreen />;
       case 'LEARN_FLEMISH':
         return <FlemishLearningScreen />;
       case 'REWARDS':
@@ -55,6 +56,8 @@ export default function App() {
         return <GameSession />;
       case 'PODIUM':
         return <PodiumScreen />;
+      case 'REWARD_GAME':
+        return <RewardGameScreen />;
       case 'GARAGE':
         return <GarageShop />;
       default:

@@ -3,7 +3,12 @@ import { Screen, Language, NativeLanguage, DifficultyLevel, GameResult, PlayerPr
 
 export type GameSessionPhase = 'CHALLENGE_PHASE' | 'RESULT_PHASE';
 
-export type GameMechanic = 'safari' | 'garden_match' | 'word_train' | 'word_picker' | 'sound_echo' | 'dino_picnic' | 'line_match' | 'draw_word' | 'letter_puzzle' | 'word_sort' | 'comet_dash' | 'cookie_count' | 'number_bridge' | 'treasure_trail' | 'body_detective' | 'habitat_rescue' | 'space_explorer' | 'eco_mission';
+export type GameMechanic = 'unified_lesson' | 'safari' | 'garden_match' | 'word_train' | 'word_picker' | 'sound_echo' | 'dino_picnic' | 'line_match' | 'draw_word' | 'letter_puzzle' | 'word_sort' | 'comet_dash' | 'cookie_count' | 'number_bridge' | 'treasure_trail' | 'body_detective' | 'habitat_rescue' | 'space_explorer' | 'eco_mission';
+
+export interface PlayerLessonProgress {
+  completed: number;
+  towardReward: number;
+}
 
 export interface WorldNode {
   id: string;
@@ -36,6 +41,7 @@ interface GameState {
   difficulties: Record<string, DifficultyLevel>; // playerUid -> 1-15
   currentTurnResult: GameResult | null;
   worldNodes: Record<Language, WorldNode[]>;
+  lessonProgress: Record<string, PlayerLessonProgress>;
 
   setScreen: (screen: Screen) => void;
   setLanguage: (lang: Language) => void;
@@ -129,6 +135,25 @@ function loadSavedDifficulties(): Record<string, DifficultyLevel> {
   }
 }
 
+function loadSavedLessonProgress(): Record<string, PlayerLessonProgress> {
+  try {
+    if (typeof localStorage === 'undefined') return {};
+    const saved: unknown = JSON.parse(localStorage.getItem('fayma-play-lesson-progress') || '{}');
+    if (!saved || typeof saved !== 'object' || Array.isArray(saved)) return {};
+    return Object.fromEntries(Object.entries(saved).flatMap(([playerId, value]) => {
+      if (!value || typeof value !== 'object') return [];
+      const progress = value as Partial<PlayerLessonProgress>;
+      if (!Number.isInteger(progress.completed) || !Number.isInteger(progress.towardReward)) return [];
+      return [[playerId, {
+        completed: Math.max(0, progress.completed as number),
+        towardReward: Math.min(4, Math.max(0, progress.towardReward as number)),
+      }]];
+    }));
+  } catch {
+    return {};
+  }
+}
+
 export const useGameStore = create<GameState>((set, get) => ({
   currentScreen: 'BOOT',
   language: 'nl-BE',
@@ -147,6 +172,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   difficulties: loadSavedDifficulties(),
   currentTurnResult: null,
   worldNodes: loadSavedWorlds(),
+  lessonProgress: loadSavedLessonProgress(),
 
   setScreen: (screen) => set({ currentScreen: screen }),
   setLanguage: (lang) => set({ language: lang }),
@@ -223,13 +249,41 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   advanceTurn: (totalPlayers: number) => {
-    const { currentPlayerIndex, currentRound, totalRounds } = get();
+    const { currentPlayerIndex, currentRound, totalRounds, activeGameId, results, lessonProgress } = get();
     const nextPlayerIndex = (currentPlayerIndex + 1) % totalPlayers;
     const completedRoundCycle = nextPlayerIndex === 0;
     const nextRound = completedRoundCycle ? currentRound + 1 : currentRound;
 
     if (completedRoundCycle && currentRound >= totalRounds) {
-      set({ currentScreen: 'PODIUM' });
+      if (activeGameId !== 'unified_lesson') {
+        set({ currentScreen: 'PODIUM' });
+        return { isGameOver: true };
+      }
+
+      const nextLessonProgress = { ...lessonProgress };
+      let rewardUnlocked = false;
+      results.forEach(result => {
+        const answerCount = result.correct + result.wrong;
+        if (answerCount === 0 || result.correct / answerCount < 0.8) return;
+        const current = nextLessonProgress[result.playerId] || { completed: 0, towardReward: 0 };
+        const towardReward = current.towardReward + 1;
+        if (towardReward >= 5) rewardUnlocked = true;
+        nextLessonProgress[result.playerId] = {
+          completed: current.completed + 1,
+          towardReward: towardReward >= 5 ? 0 : towardReward,
+        };
+      });
+
+      try {
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem('fayma-play-lesson-progress', JSON.stringify(nextLessonProgress));
+        }
+      } catch { /* Progress remains available in memory if storage is unavailable. */ }
+
+      set({
+        currentScreen: rewardUnlocked ? 'REWARD_GAME' : 'PODIUM',
+        lessonProgress: nextLessonProgress,
+      });
       return { isGameOver: true };
     }
 

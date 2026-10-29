@@ -8,6 +8,9 @@ import { JuiceBurst } from '../components/JuiceBurst';
 
 export const PodiumScreen: React.FC = () => {
   const scores = useGameStore(state => state.scores);
+  const activeGameId = useGameStore(state => state.activeGameId);
+  const results = useGameStore(state => state.results);
+  const lessonProgress = useGameStore(state => state.lessonProgress);
   const setScreen = useGameStore(state => state.setScreen);
   const resetSession = useGameStore(state => state.resetSession);
   const startSession = useGameStore(state => state.startSession);
@@ -41,8 +44,8 @@ export const PodiumScreen: React.FC = () => {
         >
           🎉
         </motion.div>
-        <h1 className="mt-3 text-3xl font-black text-slate-900 sm:text-4xl">¡Partida terminada!</h1>
-        <p className="mt-2 text-sm font-semibold text-slate-600 sm:text-base">¡Lo habéis hecho genial! Cada ronda os enseñó algo nuevo.</p>
+        <h1 className="mt-3 text-3xl font-black text-slate-900 sm:text-4xl">{activeGameId === 'unified_lesson' ? '¡Lección terminada!' : '¡Partida terminada!'}</h1>
+        <p className="mt-2 text-sm font-semibold text-slate-600 sm:text-base">{activeGameId === 'unified_lesson' ? 'Cada intento ayuda a recordar nuevas palabras.' : '¡Lo habéis hecho genial! Cada ronda os enseñó algo nuevo.'}</p>
 
         <div className="mt-6 space-y-3">
           {profiles.map((player, index) => (
@@ -58,7 +61,15 @@ export const PodiumScreen: React.FC = () => {
                   ? <img src={player.avatarUrl} alt="" className="h-12 w-12 rounded-2xl object-cover" />
                   : player.avatarUrl || '⭐'}
               </span>
-              <span className="min-w-0 flex-1 truncate font-black text-slate-900">{player.displayName}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate font-black text-slate-900">{player.displayName}</span>
+                {activeGameId === 'unified_lesson' && (() => {
+                  const result = results.find(item => item.playerId === player.uid);
+                  const progress = lessonProgress[player.uid]?.towardReward ?? 0;
+                  const total = result ? result.correct + result.wrong : 0;
+                  return <span className="block text-xs font-bold text-slate-500">{result?.correct ?? 0}/{total} aciertos · {progress}/5 para el premio</span>;
+                })()}
+              </span>
               <span className="rounded-full bg-amber-100 px-3 py-1.5 text-sm font-black text-amber-900">⭐ {scores[player.uid] || 0}</span>
             </motion.div>
           ))}
@@ -70,14 +81,14 @@ export const PodiumScreen: React.FC = () => {
             onClick={playAgain}
             className="flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-4 text-sm font-black text-white shadow-[0_4px_0_#328248] transition hover:bg-emerald-700 active:translate-y-1 active:shadow-none"
           >
-            <RotateCcw className="h-4 w-4" /> Otra partida
+            <RotateCcw className="h-4 w-4" /> {activeGameId === 'unified_lesson' ? 'Otra lección' : 'Otra partida'}
           </button>
           <button
             type="button"
             onClick={chooseAnotherGame}
             className="flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-sky-500 px-4 text-sm font-black text-white shadow-[0_4px_0_#367cad] transition hover:bg-sky-600 active:translate-y-1 active:shadow-none"
           >
-            <Play className="h-4 w-4 fill-current" /> Otro juego
+            <Play className="h-4 w-4 fill-current" /> {activeGameId === 'unified_lesson' ? 'Camino de aprendizaje' : 'Otro juego'}
           </button>
           <button
             type="button"

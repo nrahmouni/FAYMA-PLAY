@@ -4,6 +4,7 @@ import { Sparkles } from 'lucide-react';
 import { Language, PlayerProfile } from '../types';
 
 const GAME_ART: Record<string, string> = {
+  unified_lesson: '/games/safari.png',
   safari: '/games/safari.png',
   word_train: '/games/train.png',
   garden_match: '/games/garden.png',
