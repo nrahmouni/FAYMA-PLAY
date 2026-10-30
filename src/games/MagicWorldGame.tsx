@@ -213,7 +213,12 @@ export const MagicWorldGame: React.FC<MagicWorldGameProps> = ({ language }) => {
             nearestIndex = index;
           }
         }
-        if (nearestDistance > trackData.width * 1.5) {
+        // If point skips too far ahead along track without visiting intervening points, it is a cut
+        if (nearestIndex > nextProgress + 20) {
+          finish(false, copy.edge);
+          return;
+        }
+        if (nearestDistance > trackData.width * 1.02) {
           finish(false, copy.edge);
           return;
         }
@@ -357,7 +362,7 @@ export const MagicWorldGame: React.FC<MagicWorldGameProps> = ({ language }) => {
               viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
               role="img"
               aria-label={copy.directions}
-              className={`mx-auto block h-auto w-full max-w-[405px] rounded-3xl shadow-inner ${phase === 'ready' || phase === 'draw' ? 'touch-none' : ''}`}
+              className={`mx-auto block h-full max-h-[82vh] w-auto max-w-full rounded-3xl shadow-xl aspect-[540/960] ${phase === 'ready' || phase === 'draw' ? 'touch-none' : ''}`}
               onPointerDown={handlePointerDown}
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}

@@ -49,10 +49,13 @@ export const PlayerSetup: React.FC = () => {
   const [selectingAvatarPlayerId, setSelectingAvatarPlayerId] = useState<string | null>(null);
 
   useEffect(() => {
-    setNames(current => Object.fromEntries(profiles.map(profile => [
-      profile.uid,
-      current[profile.uid] ?? profile.displayName,
-    ])));
+    setNames(current => Object.fromEntries(profiles.map(profile => {
+      let name = current[profile.uid] ?? profile.displayName;
+      if (name && (name.startsWith('http:') || name.startsWith('https:'))) {
+        name = 'Aventurero';
+      }
+      return [profile.uid, name];
+    })));
   }, [profiles]);
 
   const addPlayer = () => {
@@ -64,7 +67,10 @@ export const PlayerSetup: React.FC = () => {
   const continueToLanguages = () => {
     unlockAudio();
     profiles.forEach((profile, index) => {
-      const displayName = names[profile.uid]?.trim() || `Jugador ${index + 1}`;
+      let displayName = names[profile.uid]?.trim() || `Jugador ${index + 1}`;
+      if (displayName.startsWith('http:') || displayName.startsWith('https:')) {
+        displayName = `Jugador ${index + 1}`;
+      }
       if (displayName !== profile.displayName) {
         updateProfile({ ...profile, displayName });
       }
@@ -96,6 +102,13 @@ export const PlayerSetup: React.FC = () => {
         <div className="mt-3 space-y-2.5 max-h-[38vh] overflow-y-auto pr-1">
           {profiles.map((profile, index) => {
             const currentAge = profile.age ?? 6;
+            const isImgAvatar = profile.avatarUrl && (
+              profile.avatarUrl.startsWith('http:') ||
+              profile.avatarUrl.startsWith('https:') ||
+              profile.avatarUrl.startsWith('data:') ||
+              profile.avatarUrl.startsWith('/')
+            );
+
             return (
               <motion.div
                 key={profile.uid}
@@ -107,10 +120,14 @@ export const PlayerSetup: React.FC = () => {
                     type="button"
                     onClick={() => setSelectingAvatarPlayerId(profile.uid)}
                     aria-label={`Cambiar animal para ${names[profile.uid] || `jugador ${index + 1}`}`}
-                    className="group relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-100 to-orange-100 text-3xl shadow-xs ring-2 ring-amber-300/60 transition hover:scale-105"
+                    className="group relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-amber-100 to-orange-100 text-3xl shadow-xs ring-2 ring-amber-300/60 transition hover:scale-105"
                   >
-                    <span>{profile.avatarUrl || '🦊'}</span>
-                    <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-violet-600 text-[9px] text-white">
+                    {isImgAvatar ? (
+                      <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
+                    ) : (
+                      <span>{profile.avatarUrl || '🦊'}</span>
+                    )}
+                    <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-violet-600 text-[9px] text-white z-10">
                       ✏️
                     </span>
                   </button>
@@ -203,13 +220,22 @@ export const PlayerSetup: React.FC = () => {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={continueToLanguages}
-          className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-lime-500 px-4 text-base font-black text-white shadow-[0_4px_0_#287b42] transition hover:brightness-105 active:translate-y-1 active:shadow-none"
-        >
-          Siguiente: Idiomas de casa <ArrowRight className="h-5 w-5" />
-        </button>
+        <div className="mt-3 flex flex-row gap-2.5">
+          <button
+            type="button"
+            onClick={() => setScreen('AUTH')}
+            className="flex min-h-12 items-center justify-center gap-1.5 rounded-xl bg-white px-4 text-sm font-black text-slate-700 shadow-sm ring-1 ring-slate-200 transition hover:bg-slate-50 shrink-0"
+          >
+            Atrás (Cuenta)
+          </button>
+          <button
+            type="button"
+            onClick={continueToLanguages}
+            className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-lime-500 px-4 text-base font-black text-white shadow-[0_4px_0_#287b42] transition hover:brightness-105 active:translate-y-1 active:shadow-none"
+          >
+            Siguiente: Idioma Nativo <ArrowRight className="h-5 w-5" />
+          </button>
+        </div>
       </section>
 
       {/* Animal Avatar Picker Modal */}

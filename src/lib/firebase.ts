@@ -143,3 +143,37 @@ export async function logoutUser(): Promise<void> {
   if (!auth) return;
   await signOut(auth);
 }
+
+export async function recordGameSessionToFirestore(
+  sessionId: string,
+  result: GameResult,
+  language: string
+): Promise<void> {
+  if (!db || !auth?.currentUser) return;
+  const path = `sessions/${sessionId}/results/${Date.now()}`;
+  try {
+    const sessionDocRef = doc(db, 'sessions', sessionId);
+    await setDoc(sessionDocRef, {
+      id: sessionId,
+      userId: auth.currentUser.uid,
+      language,
+      status: 'playing',
+      updatedAt: Date.now(),
+    }, { merge: true });
+
+    const resultDocRef = doc(db, `sessions/${sessionId}/results`, `res_${Date.now()}`);
+    await setDoc(resultDocRef, {
+      playerId: result.playerId,
+      gameId: result.gameId,
+      correct: result.correct,
+      wrong: result.wrong,
+      timeMs: result.timeMs || 0,
+      coinsEarned: result.coinsEarned || 0,
+      wordsSeen: result.wordsSeen || [],
+      createdAt: Date.now(),
+    });
+  } catch (err) {
+    handleFirestoreError(err, OperationType.WRITE, path);
+  }
+}
+

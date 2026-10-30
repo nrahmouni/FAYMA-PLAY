@@ -30,19 +30,12 @@ export const FitGame: React.FC<FitGameProps> = ({ children }) => {
   }, [children]);
 
   return (
-    <div ref={viewportRef} className="flex h-full min-h-0 w-full flex-1 items-center justify-center overflow-hidden">
-      <div className="flex w-full items-center justify-center" style={{ height: fit.height || undefined }}>
-        <div
-          ref={contentRef}
-          className="w-full shrink-0 mx-auto flex flex-col items-center"
-          style={{
-            maxWidth: 1024,
-            transform: `scale(${fit.scale})`,
-            transformOrigin: 'center center',
-          }}
-        >
-          {children}
-        </div>
+    <div ref={viewportRef} className="flex h-full min-h-0 w-full flex-1 flex-col items-center justify-center overflow-y-auto overscroll-contain">
+      <div
+        ref={contentRef}
+        className="w-full flex-1 flex flex-col items-center justify-center p-1 sm:p-2 max-w-4xl mx-auto"
+      >
+        {children}
       </div>
     </div>
   );

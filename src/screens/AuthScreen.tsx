@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, UserCheck, LogOut, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
 import { auth, loginWithGoogle, logoutUser, fetchUserProfile, syncUserProfile } from '../lib/firebase';
+import { syncUserWithCloudSQL, fetchUserStatsFromCloudSQL } from '../lib/cloudsql-client';
 import { useProfileStore } from '../store/profileStore';
 import { useGameStore } from '../store/gameStore';
 import { onAuthStateChanged, User } from 'firebase/auth';
@@ -9,6 +10,7 @@ export const AuthScreen: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(auth?.currentUser || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [cloudStats, setCloudStats] = useState<{ sessions: any[]; words: any[] } | null>(null);
 
   const setScreen = useGameStore(s => s.setScreen);
   const profiles = useProfileStore(s => s.profiles);
@@ -23,6 +25,7 @@ export const AuthScreen: React.FC = () => {
         const cloudProfile = await fetchUserProfile(user.uid);
         if (cloudProfile) {
           updateProfile(cloudProfile);
+          syncUserWithCloudSQL(cloudProfile).catch(() => {});
         } else {
           // Initialize user in cloud
           const active = profiles[0];
@@ -34,8 +37,13 @@ export const AuthScreen: React.FC = () => {
             };
             updateProfile(synced);
             syncUserProfile(synced);
+            syncUserWithCloudSQL(synced).catch(() => {});
           }
         }
+
+        // Fetch stats from Cloud SQL
+        const stats = await fetchUserStatsFromCloudSQL();
+        if (stats) setCloudStats(stats);
       }
     });
 

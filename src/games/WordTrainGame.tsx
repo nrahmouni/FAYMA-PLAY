@@ -19,6 +19,34 @@ interface TrainToken {
   text: string;
 }
 
+const CHALLENGE_ICONS: Record<string, string> = {
+  sun: '☀️',
+  house: '🏡',
+  cat: '🐱',
+  dog: '🐶',
+  girl: '👧',
+  ball: '⚽',
+  brother: '👦',
+  book: '📖',
+  outside: '🏃',
+};
+
+const WORD_TOKEN_ICONS: Record<string, string> = {
+  sol: '☀️', soleil: '☀️', zon: '☀️', sun: '☀️', yellow: '💛', amarillo: '💛', jaune: '💛', gele: '💛',
+  casa: '🏡', maison: '🏡', huis: '🏡', house: '🏡', grande: '🏰', big: '🏰', grote: '🏰',
+  gato: '🐱', chat: '🐱', kat: '🐱', cat: '🐱', duerme: '💤', dort: '💤', slaapt: '💤', sleeps: '💤',
+  perro: '🐶', chien: '🐶', hond: '🐶', dog: '🐶', bebe: '🥛', drinkt: '🥛', drinks: '🥛', agua: '💧', water: '💧',
+  niña: '👧', fille: '👧', meisje: '👧', girl: '👧', come: '🍎', eet: '🍎', eats: '🍎', pan: '🍞', pain: '🍞', brood: '🍞', bread: '🍞',
+  hermano: '👦', frère: '👦', broer: '👦', brother: '👦', pelota: '⚽', ballon: '⚽', bal: '⚽', ball: '⚽', juega: '🎮', joue: '🎮', speelt: '🎮', plays: '🎮',
+  libro: '📖', livre: '📖', boek: '📖', book: '📖', lee: '👓', lit: '👓', leest: '👓', reads: '👓',
+  corre: '👟', court: '👟', loopt: '👟', runs: '👟', rápido: '⚡', vite: '⚡', snel: '⚡', fast: '⚡',
+};
+
+const getTokenIcon = (wordText: string, challengeId: string): string => {
+  const clean = wordText.toLowerCase().trim();
+  return WORD_TOKEN_ICONS[clean] || CHALLENGE_ICONS[challengeId] || '✨';
+};
+
 const CHALLENGES: Record<Language, [TrainChallenge[], TrainChallenge[], TrainChallenge[]]> = {
   es: [
     [
@@ -239,10 +267,15 @@ export const WordTrainGame: React.FC<GameProps> = ({
 
       <div className="mb-5 rounded-3xl bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 p-4 sm:p-6">
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-xs font-black uppercase tracking-wider text-amber-800">{copy.trainTitle}</p>
-            <h2 className="mt-1 text-xl font-black leading-tight text-slate-900 sm:text-3xl">{copy.sentencePrompt}</h2>
-            <p className="mt-2 text-lg font-extrabold text-orange-800 sm:text-2xl">{challenge.clue}</p>
+          <div className="flex items-center gap-3">
+            <span className="text-4xl sm:text-5xl drop-shadow-sm select-none" role="img" aria-hidden="true">
+              {CHALLENGE_ICONS[challenge.id] || '🚂'}
+            </span>
+            <div>
+              <p className="text-xs font-black uppercase tracking-wider text-amber-800">{copy.trainTitle}</p>
+              <h2 className="mt-1 text-xl font-black leading-tight text-slate-900 sm:text-2xl">{copy.sentencePrompt}</h2>
+              <p className="mt-1 text-lg font-extrabold text-orange-800 sm:text-xl">{challenge.clue}</p>
+            </div>
           </div>
           <button
             type="button"
@@ -280,7 +313,7 @@ export const WordTrainGame: React.FC<GameProps> = ({
                   setDraggedTokenId(null);
                 }}
                 aria-label={token ? `${copy.removeWord}: ${token.text}` : `${copy.emptySlot} ${slotIndex + 1}`}
-                className={`flex min-h-14 min-w-0 flex-1 items-center justify-center rounded-2xl border-2 border-dashed px-3 text-lg font-black transition sm:min-h-16 sm:text-xl ${
+                className={`flex min-h-14 min-w-0 flex-1 items-center justify-center gap-2 rounded-2xl border-2 border-dashed px-3 text-lg font-black transition sm:min-h-16 sm:text-xl ${
                   token
                     ? solved ? 'border-emerald-400 bg-emerald-100 text-emerald-900'
                       : orderWrong && misplaced ? 'border-rose-500 bg-rose-100 text-rose-900'
@@ -288,7 +321,12 @@ export const WordTrainGame: React.FC<GameProps> = ({
                     : 'border-amber-300 bg-amber-50 text-amber-700'
                 }`}
               >
-                {token ? token.text : `${copy.emptySlot} ${slotIndex + 1} ⬇️`}
+                {token ? (
+                  <>
+                    <span className="text-xl sm:text-2xl" aria-hidden="true">{getTokenIcon(token.text, challenge.id)}</span>
+                    <span>{token.text}</span>
+                  </>
+                ) : `${copy.emptySlot} ${slotIndex + 1} ⬇️`}
               </button>
               {token && !solved && (
                 <div className="flex shrink-0 flex-col gap-1">
@@ -335,13 +373,18 @@ export const WordTrainGame: React.FC<GameProps> = ({
                 }}
                 onDragStart={() => setDraggedTokenId(token.id)}
                 onDragEnd={() => setDraggedTokenId(null)}
-                className={`min-h-12 rounded-2xl border-2 px-5 text-lg font-black shadow-[0_4px_0_#c7dfeb] transition sm:text-xl ${
+                className={`inline-flex items-center gap-2 min-h-12 rounded-2xl border-2 px-4 py-2 text-base sm:text-lg font-black shadow-[0_4px_0_#c7dfeb] transition ${
                   isPlaced ? 'border-transparent bg-transparent text-transparent shadow-none' : 'border-white bg-white text-sky-900 hover:-translate-y-0.5 hover:bg-sky-100'
                 }`}
                 aria-label={token.text}
                 aria-hidden={isPlaced}
               >
-                {isPlaced ? '\u00a0' : token.text}
+                {isPlaced ? '\u00a0' : (
+                  <>
+                    <span className="text-xl" aria-hidden="true">{getTokenIcon(token.text, challenge.id)}</span>
+                    <span>{token.text}</span>
+                  </>
+                )}
               </motion.button>
             );
           })}

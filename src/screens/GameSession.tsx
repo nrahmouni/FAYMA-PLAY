@@ -66,6 +66,8 @@ export const GameSession: React.FC = () => {
       ? MATH_GAME_COPY[language][activeGameId].voiceGuide
       : isLearningGameId(activeGameId)
         ? LEARNING_GAME_COPY[language][activeGameId].voiceGuide
+        : activeGameId === 'ai_quest'
+          ? copy.safariVoiceGuide
         : activeGameId === 'unified_lesson'
           ? copy.safariVoiceGuide
         : activeGameId === 'safari'

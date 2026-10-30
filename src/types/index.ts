@@ -84,6 +84,7 @@ export type Screen =
   | 'AUTH' 
   | 'PLAYER_SETUP' 
   | 'NATIVE_LANG_SETUP'
+  | 'TARGET_LANG_SETUP'
   | 'HOME' 
   | 'WORLD_HUB' 
   | 'LEARN_FLEMISH'

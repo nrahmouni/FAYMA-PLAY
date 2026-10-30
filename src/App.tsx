@@ -7,11 +7,12 @@ import { AudioUnlocker } from './components/AudioUnlocker';
 import { testConnection } from './lib/firebase';
 import { useSound } from './hooks/useSound';
 
-// Screens
+import { useProfileStore } from './store/profileStore';
+import { MainLoginScreen } from './screens/MainLoginScreen';
 import { HomeScreen } from './screens/HomeScreen';
-import { AuthScreen } from './screens/AuthScreen';
 import { PlayerSetup } from './screens/PlayerSetup';
 import { NativeLangSetup } from './screens/NativeLangSetup';
+import { TargetLangSetup } from './screens/TargetLangSetup';
 import { LearningPathScreen } from './screens/LearningPathScreen';
 import { FlemishLearningScreen } from './screens/FlemishLearningScreen';
 import { RewardsMenu } from './screens/RewardsMenu';
@@ -20,28 +21,53 @@ import { GameSession } from './screens/GameSession';
 import { PodiumScreen } from './screens/PodiumScreen';
 import { GarageShop } from './screens/GarageShop';
 import { RewardGameScreen } from './screens/RewardGameScreen';
+import { auth } from './lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 export default function App() {
   const currentScreen = useGameStore(s => s.currentScreen);
+  const setScreen = useGameStore(s => s.setScreen);
+  const linkGoogleUser = useProfileStore(s => s.linkGoogleUser);
   const { playClick } = useSound();
   const isGameSession = currentScreen === 'GAME_SESSION';
-  // Boot initialization
+
+  // Boot initialization and Google Auth state observer
   useEffect(() => {
-    testConnection();
-  }, []);
+    testConnection().catch(() => {});
+    if (!auth) return;
+
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          await linkGoogleUser(user);
+          // If on BOOT, automatically proceed (WORLD_HUB if setup done, else PLAYER_SETUP)
+          const current = useGameStore.getState().currentScreen;
+          if (current === 'BOOT') {
+            useGameStore.getState().proceedAfterLogin();
+          }
+        } catch (err) {
+          console.warn('Auto-login sync error:', err);
+        }
+      }
+    });
+
+    return () => unsub();
+  }, [linkGoogleUser]);
 
   // Render current active screen
   const renderScreen = () => {
     switch (currentScreen) {
       case 'BOOT':
-        return <PlayerSetup />;
+        return <MainLoginScreen />;
 
       case 'AUTH':
-        return <AuthScreen />;
+        return <MainLoginScreen />;
       case 'PLAYER_SETUP':
         return <PlayerSetup />;
       case 'NATIVE_LANG_SETUP':
         return <NativeLangSetup />;
+      case 'TARGET_LANG_SETUP':
+        return <TargetLangSetup />;
       case 'HOME':
         return <HomeScreen />;
       case 'WORLD_HUB':

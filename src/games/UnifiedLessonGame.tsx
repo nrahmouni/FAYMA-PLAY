@@ -6,6 +6,7 @@ import { shuffleArray } from '../lib/utils';
 import { WordIcon } from '../components/WordIcon';
 import { useGameProgress } from './useGameProgress';
 import { useSpeech } from '../hooks/useSpeech';
+import { AiCompanionWidget } from '../components/AiCompanionWidget';
 
 const LESSON_UI = {
   es: { title: 'Lección de palabras', image: 'Elige el dibujo', meaning: 'Elige el significado', listen: 'Escucha y responde', spell: 'Forma la palabra', build: 'Tus letras', listenButton: 'Escuchar', step: 'Reto' },
@@ -17,7 +18,7 @@ const LESSON_UI = {
 
 type AnswerState = 'correct' | 'wrong' | null;
 
-export const UnifiedLessonGame: React.FC<GameProps> = ({ words, language, onCorrect, onWrong, onComplete }) => {
+export const UnifiedLessonGame: React.FC<GameProps> = ({ words, language, nativeLanguage, onCorrect, onWrong, onComplete }) => {
   const questions = useMemo(() => words.slice(0, Math.min(6, words.length)), [words]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answerState, setAnswerState] = useState<AnswerState>(null);
@@ -75,8 +76,16 @@ export const UnifiedLessonGame: React.FC<GameProps> = ({ words, language, onCorr
     <section lang={language} dir={language === 'ar' ? 'rtl' : 'ltr'} className="mx-auto flex w-full max-w-2xl flex-col rounded-3xl border-2 border-white bg-white p-4 shadow-xl sm:p-6">
       <header className="mb-4">
         <div className="mb-2 flex items-center justify-between gap-3 text-xs font-black text-emerald-800">
-          <span>{ui.title}</span>
-          <span>{questionIndex + 1}/{questions.length}</span>
+          <div className="flex items-center gap-2">
+            <span>{ui.title}</span>
+            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-emerald-900">{questionIndex + 1}/{questions.length}</span>
+          </div>
+          <AiCompanionWidget
+            currentWord={question}
+            language={language}
+            nativeLanguage={nativeLanguage || 'es'}
+            compact
+          />
         </div>
         <div className="h-2.5 overflow-hidden rounded-full bg-emerald-100" role="progressbar" aria-label={`${ui.step} ${questionIndex + 1}`} aria-valuemin={0} aria-valuemax={questions.length} aria-valuenow={questionIndex + 1}>
           <div className="h-full rounded-full bg-emerald-500 transition-[width] duration-300" style={{ width: `${((questionIndex + 1) / questions.length) * 100}%` }} />

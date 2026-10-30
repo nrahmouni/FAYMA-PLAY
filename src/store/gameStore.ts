@@ -1,9 +1,11 @@
 import { create } from 'zustand';
 import { Screen, Language, NativeLanguage, DifficultyLevel, GameResult, PlayerProfile } from '../types';
+import { recordGameSessionToCloudSQL } from '../lib/cloudsql-client';
+import { recordGameSessionToFirestore } from '../lib/firebase';
 
 export type GameSessionPhase = 'CHALLENGE_PHASE' | 'RESULT_PHASE';
 
-export type GameMechanic = 'unified_lesson' | 'safari' | 'garden_match' | 'word_train' | 'word_picker' | 'sound_echo' | 'dino_picnic' | 'line_match' | 'draw_word' | 'letter_puzzle' | 'word_sort' | 'comet_dash' | 'cookie_count' | 'number_bridge' | 'treasure_trail' | 'body_detective' | 'habitat_rescue' | 'space_explorer' | 'eco_mission';
+export type GameMechanic = 'ai_quest' | 'unified_lesson' | 'safari' | 'garden_match' | 'word_train' | 'word_picker' | 'sound_echo' | 'dino_picnic' | 'line_match' | 'draw_word' | 'letter_puzzle' | 'word_sort' | 'comet_dash' | 'cookie_count' | 'number_bridge' | 'treasure_trail' | 'body_detective' | 'habitat_rescue' | 'space_explorer' | 'eco_mission';
 
 export interface PlayerLessonProgress {
   completed: number;
@@ -28,6 +30,7 @@ interface GameState {
   language: Language;
   nativeLanguages: NativeLanguage[]; // Idioma(s) hablado(s) en casa
   targetLanguages: Language[]; // Idioma(s) que desean aprender
+  hasCompletedSetup: boolean;
   totalRounds: number;
   currentRound: number;
   currentPlayerIndex: number;
@@ -55,38 +58,45 @@ interface GameState {
   advanceTurn: (totalPlayers: number) => { isGameOver: boolean };
   adjustDifficulty: (playerUid: string, delta: number) => void;
   resetSession: () => void;
+  completeSetup: () => void;
+  proceedAfterLogin: () => void;
 }
 
 const DEFAULT_WORLDS: Record<Language, WorldNode[]> = {
   es: [
-    { id: 'es_w1', theme: 'saludos', name: 'Plaza del Sol', icon: '🏝️', gameId: 'safari', gameName: 'Safari de palabras', minDifficulty: 1, unlocked: true, completed: false },
-    { id: 'es_w2', theme: 'frases', name: 'Taller del Mercado', icon: '🧩', gameId: 'word_train', gameName: 'Tren de palabras', minDifficulty: 2, unlocked: false, completed: false },
-    { id: 'es_w3', theme: 'mapa', name: 'Ruta de la Costa', icon: '🗺️', gameId: 'garden_match', gameName: 'Jardín de parejas', minDifficulty: 2, unlocked: false, completed: false },
-    { id: 'es_w4', theme: 'memoria', name: 'Museo de Sonidos', icon: '🎧', gameId: 'safari', gameName: 'Safari de palabras', minDifficulty: 3, unlocked: false, completed: false },
+    { id: 'es_w_balloons', theme: 'colores', name: 'Explota-Globos', icon: '🎈', gameId: 'balloon_pop', gameName: '¡Explota-Globos!', minDifficulty: 1, unlocked: true, completed: false },
+    { id: 'es_w_safari', theme: 'animales', name: 'Safari Atrapa-Palabras', icon: '🐾', gameId: 'safari_dash', gameName: 'Safari Atrapa-Palabras', minDifficulty: 1, unlocked: true, completed: false },
+    { id: 'es_w_space', theme: 'viajes', name: 'Láser Espacial Cohete', icon: '🚀', gameId: 'space_blaster', gameName: 'Láser Espacial Cohete', minDifficulty: 2, unlocked: true, completed: false },
+    { id: 'es_w_monster', theme: 'comida', name: 'El Monstruo Glotón', icon: '🍕', gameId: 'monster_snack', gameName: 'El Monstruo Glotón', minDifficulty: 2, unlocked: true, completed: false },
+    { id: 'es_w_ai', theme: 'mision_ai', name: 'Misión Mágica IA', icon: '🦉', gameId: 'ai_quest', gameName: 'Aventura Mágica con IA', minDifficulty: 1, unlocked: true, completed: false },
   ],
   ar: [
-    { id: 'ar_w1', theme: 'saludos', name: 'Oasis de Bienvenida', icon: '🌴', gameId: 'safari', gameName: 'Safari de palabras', minDifficulty: 1, unlocked: true, completed: false },
-    { id: 'ar_w2', theme: 'mercado', name: 'Zoco de Frases', icon: '🧺', gameId: 'word_train', gameName: 'Tren de palabras', minDifficulty: 2, unlocked: false, completed: false },
-    { id: 'ar_w3', theme: 'exploracion', name: 'Ruta del Atlas', icon: '🗺️', gameId: 'garden_match', gameName: 'Jardín de parejas', minDifficulty: 2, unlocked: false, completed: false },
-    { id: 'ar_w4', theme: 'recuerdo', name: 'Cúpula de Memoria', icon: '🪄', gameId: 'garden_match', gameName: 'Jardín de parejas', minDifficulty: 3, unlocked: false, completed: false },
+    { id: 'ar_w_balloons', theme: 'colors', name: 'فرقعة البالونات', icon: '🎈', gameId: 'balloon_pop', gameName: 'فرقعة البالونات السحرية', minDifficulty: 1, unlocked: true, completed: false },
+    { id: 'ar_w_safari', theme: 'animals', name: 'سفاري صيد الكلمات', icon: '🐾', gameId: 'safari_dash', gameName: 'سفاري صيد الكلمات', minDifficulty: 1, unlocked: true, completed: false },
+    { id: 'ar_w_space', theme: 'space', name: 'ليزر الصاروخ الفضائي', icon: '🚀', gameId: 'space_blaster', gameName: 'ليزر الصاروخ الفضائي', minDifficulty: 2, unlocked: true, completed: false },
+    { id: 'ar_w_monster', theme: 'food', name: 'وليمة الوحش الأكول', icon: '🍕', gameId: 'monster_snack', gameName: 'وليمة الوحش الأكول', minDifficulty: 2, unlocked: true, completed: false },
+    { id: 'ar_w_ai', theme: 'mision_ai', name: 'مهمة الذكاء السحرية', icon: '🦉', gameId: 'ai_quest', gameName: 'مغامرة الذكاء الاصطناعي', minDifficulty: 1, unlocked: true, completed: false },
   ],
   'nl-BE': [
-    { id: 'nl_w1', theme: 'saludos', name: 'Puente de Brujas', icon: '🚲', gameId: 'safari', gameName: 'Safari de palabras', minDifficulty: 1, unlocked: true, completed: false },
-    { id: 'nl_w2', theme: 'estacion', name: 'Taller de Palabras', icon: '🧩', gameId: 'word_train', gameName: 'Tren de palabras', minDifficulty: 2, unlocked: false, completed: false },
-    { id: 'nl_w3', theme: 'canales', name: 'Mapa de Flandes', icon: '🗺️', gameId: 'garden_match', gameName: 'Jardín de parejas', minDifficulty: 2, unlocked: false, completed: false },
-    { id: 'nl_w4', theme: 'recuerdo', name: 'Museo de Burbujas', icon: '🫧', gameId: 'garden_match', gameName: 'Jardín de parejas', minDifficulty: 3, unlocked: false, completed: false },
+    { id: 'nl_w_balloons', theme: 'kleuren', name: 'Ballon Prik Feest', icon: '🎈', gameId: 'balloon_pop', gameName: 'Ballon Prik Feest!', minDifficulty: 1, unlocked: true, completed: false },
+    { id: 'nl_w_safari', theme: 'dieren', name: 'Safari Woorden Vangen', icon: '🐾', gameId: 'safari_dash', gameName: 'Safari Woorden Vangen', minDifficulty: 1, unlocked: true, completed: false },
+    { id: 'nl_w_space', theme: 'ruimte', name: 'Ruimte Raket Laser', icon: '🚀', gameId: 'space_blaster', gameName: 'Ruimte Raket Laser', minDifficulty: 2, unlocked: true, completed: false },
+    { id: 'nl_w_monster', theme: 'eten', name: 'Het Snoepmonster', icon: '🍕', gameId: 'monster_snack', gameName: 'Het Vrolijke Snoepmonster', minDifficulty: 2, unlocked: true, completed: false },
+    { id: 'nl_w_ai', theme: 'mision_ai', name: 'AI Magische Missie', icon: '🦉', gameId: 'ai_quest', gameName: 'AI Woorden Avontuur', minDifficulty: 1, unlocked: true, completed: false },
   ],
   fr: [
-    { id: 'fr_w1', theme: 'saludos', name: 'Boulevard de París', icon: '🥐', gameId: 'safari', gameName: 'Safari de palabras', minDifficulty: 1, unlocked: true, completed: false },
-    { id: 'fr_w2', theme: 'frases', name: 'Café de las palabras', icon: '☕', gameId: 'word_train', gameName: 'Tren de palabras', minDifficulty: 2, unlocked: false, completed: false },
-    { id: 'fr_w3', theme: 'mapa', name: 'Ruta del arte', icon: '🗺️', gameId: 'garden_match', gameName: 'Jardín de parejas', minDifficulty: 2, unlocked: false, completed: false },
-    { id: 'fr_w4', theme: 'recuerdo', name: 'Galería feliz', icon: '🧠', gameId: 'safari', gameName: 'Safari de palabras', minDifficulty: 3, unlocked: false, completed: false },
+    { id: 'fr_w_balloons', theme: 'couleurs', name: 'Éclate les Ballons', icon: '🎈', gameId: 'balloon_pop', gameName: 'Éclate les Ballons !', minDifficulty: 1, unlocked: true, completed: false },
+    { id: 'fr_w_safari', theme: 'animaux', name: 'Safari Attrape-Mots', icon: '🐾', gameId: 'safari_dash', gameName: 'Safari Attrape-Mots', minDifficulty: 1, unlocked: true, completed: false },
+    { id: 'fr_w_space', theme: 'espace', name: 'Laser Fusée Spatiale', icon: '🚀', gameId: 'space_blaster', gameName: 'Laser Fusée Spatiale', minDifficulty: 2, unlocked: true, completed: false },
+    { id: 'fr_w_monster', theme: 'nourriture', name: 'Le Monstre Glouton', icon: '🍕', gameId: 'monster_snack', gameName: 'Festin du Monstre Glouton', minDifficulty: 2, unlocked: true, completed: false },
+    { id: 'fr_w_ai', theme: 'mision_ai', name: 'Mission Magique IA', icon: '🦉', gameId: 'ai_quest', gameName: 'Aventure IA des Mots', minDifficulty: 1, unlocked: true, completed: false },
   ],
   en: [
-    { id: 'en_w1', theme: 'saludos', name: 'London Bridge', icon: '🎡', gameId: 'safari', gameName: 'Safari de palabras', minDifficulty: 1, unlocked: true, completed: false },
-    { id: 'en_w2', theme: 'frases', name: 'Big Ben Express', icon: '🚌', gameId: 'word_train', gameName: 'Tren de palabras', minDifficulty: 2, unlocked: false, completed: false },
-    { id: 'en_w3', theme: 'mapa', name: 'Crown Trail', icon: '👑', gameId: 'garden_match', gameName: 'Jardín de parejas', minDifficulty: 2, unlocked: false, completed: false },
-    { id: 'en_w4', theme: 'recuerdo', name: 'Oxford Library', icon: '🎓', gameId: 'safari', gameName: 'Safari de palabras', minDifficulty: 3, unlocked: false, completed: false },
+    { id: 'en_w_balloons', theme: 'colors', name: 'Balloon Pop Mania', icon: '🎈', gameId: 'balloon_pop', gameName: 'Balloon Pop Mania!', minDifficulty: 1, unlocked: true, completed: false },
+    { id: 'en_w_safari', theme: 'animals', name: 'Safari Word Catch', icon: '🐾', gameId: 'safari_dash', gameName: 'Safari Word Catch', minDifficulty: 1, unlocked: true, completed: false },
+    { id: 'en_w_space', theme: 'space', name: 'Space Rocket Blaster', icon: '🚀', gameId: 'space_blaster', gameName: 'Space Rocket Blaster', minDifficulty: 2, unlocked: true, completed: false },
+    { id: 'en_w_monster', theme: 'food', name: 'Hungry Monster Feast', icon: '🍕', gameId: 'monster_snack', gameName: 'Hungry Monster Feast', minDifficulty: 2, unlocked: true, completed: false },
+    { id: 'en_w_ai', theme: 'mision_ai', name: 'AI Magic Quest', icon: '🦉', gameId: 'ai_quest', gameName: 'AI Words Adventure', minDifficulty: 1, unlocked: true, completed: false },
   ],
 };
 
@@ -154,11 +164,45 @@ function loadSavedLessonProgress(): Record<string, PlayerLessonProgress> {
   }
 }
 
+function loadSavedNativeLanguages(): NativeLanguage[] {
+  try {
+    if (typeof localStorage === 'undefined') return ['es'];
+    const saved = localStorage.getItem('fayma-play-native-langs');
+    if (!saved) return ['es'];
+    const parsed = JSON.parse(saved);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : ['es'];
+  } catch {
+    return ['es'];
+  }
+}
+
+function loadSavedTargetLanguages(): Language[] {
+  try {
+    if (typeof localStorage === 'undefined') return ['nl-BE'];
+    const saved = localStorage.getItem('fayma-play-target-langs');
+    if (!saved) return ['nl-BE'];
+    const parsed = JSON.parse(saved);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : ['nl-BE'];
+  } catch {
+    return ['nl-BE'];
+  }
+}
+
+function loadHasCompletedSetup(): boolean {
+  try {
+    if (typeof localStorage === 'undefined') return false;
+    return localStorage.getItem('fayma-play-setup-completed') === 'true';
+  } catch {
+    return false;
+  }
+}
+
 export const useGameStore = create<GameState>((set, get) => ({
   currentScreen: 'BOOT',
-  language: 'nl-BE',
-  nativeLanguages: ['es'],
-  targetLanguages: ['nl-BE'],
+  hasCompletedSetup: loadHasCompletedSetup(),
+  language: loadSavedTargetLanguages()[0] || 'nl-BE',
+  nativeLanguages: loadSavedNativeLanguages(),
+  targetLanguages: loadSavedTargetLanguages(),
   totalRounds: 3,
   currentRound: 1,
   currentPlayerIndex: 0,
@@ -175,9 +219,51 @@ export const useGameStore = create<GameState>((set, get) => ({
   lessonProgress: loadSavedLessonProgress(),
 
   setScreen: (screen) => set({ currentScreen: screen }),
-  setLanguage: (lang) => set({ language: lang }),
-  setNativeLanguages: (langs) => set({ nativeLanguages: langs }),
-  setTargetLanguages: (langs) => set({ targetLanguages: langs, language: langs[0] || 'nl-BE' }),
+
+  setLanguage: (lang) => {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('fayma-play-target-langs', JSON.stringify([lang]));
+      }
+    } catch {}
+    set({ language: lang, targetLanguages: [lang] });
+  },
+
+  setNativeLanguages: (langs) => {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('fayma-play-native-langs', JSON.stringify(langs));
+      }
+    } catch {}
+    set({ nativeLanguages: langs });
+  },
+
+  setTargetLanguages: (langs) => {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('fayma-play-target-langs', JSON.stringify(langs));
+      }
+    } catch {}
+    set({ targetLanguages: langs, language: langs[0] || 'nl-BE' });
+  },
+
+  completeSetup: () => {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('fayma-play-setup-completed', 'true');
+      }
+    } catch {}
+    set({ hasCompletedSetup: true, currentScreen: 'WORLD_HUB' });
+  },
+
+  proceedAfterLogin: () => {
+    const isCompleted = get().hasCompletedSetup || loadHasCompletedSetup();
+    if (isCompleted) {
+      set({ currentScreen: 'WORLD_HUB' });
+    } else {
+      set({ currentScreen: 'PLAYER_SETUP' });
+    }
+  },
   setTotalRounds: (rounds) => set({ totalRounds: rounds }),
 
   setActiveWorld: (worldId, gameId, worldNodeId = null, minDifficulty: DifficultyLevel | null = null) => set({
@@ -238,6 +324,17 @@ export const useGameStore = create<GameState>((set, get) => ({
     try {
       if (typeof localStorage !== 'undefined') localStorage.setItem('fayma-play-world-progress', JSON.stringify(nextWorldNodes));
     } catch { /* Progress remains available in memory if storage is unavailable. */ }
+
+    const sessionAccuracy = Math.round(accuracy * 100);
+    recordGameSessionToCloudSQL({
+      gameType: result.gameId || 'arcade',
+      targetLanguage: language,
+      score: gained,
+      starsEarned: result.coinsEarned || 0,
+      accuracy: sessionAccuracy,
+    }).catch(() => {});
+
+    recordGameSessionToFirestore(`sess_${Date.now()}`, result, language).catch(() => {});
 
     set({
       scores: { ...scores, [result.playerId]: prevScore + gained },

@@ -48,31 +48,47 @@ export const PodiumScreen: React.FC = () => {
         <p className="mt-2 text-sm font-semibold text-slate-600 sm:text-base">{activeGameId === 'unified_lesson' ? 'Cada intento ayuda a recordar nuevas palabras.' : '¡Lo habéis hecho genial! Cada ronda os enseñó algo nuevo.'}</p>
 
         <div className="mt-6 space-y-3">
-          {profiles.map((player, index) => (
-            <motion.div
-              key={player.uid}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.08 }}
-              className="flex items-center gap-3 rounded-2xl border-2 border-white bg-white/90 p-3 text-left shadow-sm sm:p-4"
-            >
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-3xl" aria-hidden="true">
-                {player.avatarUrl?.startsWith('data:') || player.avatarUrl?.startsWith('/')
-                  ? <img src={player.avatarUrl} alt="" className="h-12 w-12 rounded-2xl object-cover" />
-                  : player.avatarUrl || '⭐'}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block truncate font-black text-slate-900">{player.displayName}</span>
-                {activeGameId === 'unified_lesson' && (() => {
-                  const result = results.find(item => item.playerId === player.uid);
-                  const progress = lessonProgress[player.uid]?.towardReward ?? 0;
-                  const total = result ? result.correct + result.wrong : 0;
-                  return <span className="block text-xs font-bold text-slate-500">{result?.correct ?? 0}/{total} aciertos · {progress}/5 para el premio</span>;
-                })()}
-              </span>
-              <span className="rounded-full bg-amber-100 px-3 py-1.5 text-sm font-black text-amber-900">⭐ {scores[player.uid] || 0}</span>
-            </motion.div>
-          ))}
+          {profiles.map((player, index) => {
+            const isImgAvatar = Boolean(
+              player.avatarUrl && (
+                player.avatarUrl.startsWith('data:') ||
+                player.avatarUrl.startsWith('/') ||
+                player.avatarUrl.startsWith('http:') ||
+                player.avatarUrl.startsWith('https:')
+              )
+            );
+            const cleanName = player.displayName && !player.displayName.startsWith('http')
+              ? player.displayName
+              : 'Aventurero';
+
+            return (
+              <motion.div
+                key={player.uid}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.08 }}
+                className="flex items-center gap-3 rounded-2xl border-2 border-white bg-white/90 p-3 text-left shadow-sm sm:p-4"
+              >
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-amber-50 text-3xl" aria-hidden="true">
+                  {isImgAvatar ? (
+                    <img src={player.avatarUrl} alt="" className="h-12 w-12 rounded-2xl object-cover" />
+                  ) : (
+                    player.avatarUrl || '⭐'
+                  )}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate font-black text-slate-900">{cleanName}</span>
+                  {activeGameId === 'unified_lesson' && (() => {
+                    const result = results.find(item => item.playerId === player.uid);
+                    const progress = lessonProgress[player.uid]?.towardReward ?? 0;
+                    const total = result ? result.correct + result.wrong : 0;
+                    return <span className="block text-xs font-bold text-slate-500">{result?.correct ?? 0}/{total} aciertos · {progress}/5 para el premio</span>;
+                  })()}
+                </span>
+                <span className="rounded-full bg-amber-100 px-3 py-1.5 text-sm font-black text-amber-900">⭐ {scores[player.uid] || 0}</span>
+              </motion.div>
+            );
+          })}
         </div>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-3">

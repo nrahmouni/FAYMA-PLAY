@@ -110,11 +110,21 @@ export const GardenMatchGame: React.FC<GameProps> = ({ words, difficulty, langua
                   : open ? 'border-amber-300 bg-white text-slate-800' : 'border-white bg-gradient-to-br from-pink-200 to-amber-200 text-5xl shadow-[0_5px_0_#e8c9a0] hover:-translate-y-1'
               }`}
             >
-              {open
-                ? card.kind === 'picture'
-                  ? <WordIcon icon={card.content} esWord={roundWords.find(w => w.id === card.wordId)?.translation} size="xl" className="text-4xl sm:text-5xl" />
-                  : <span className="text-base font-black sm:text-lg" lang={card.language}>{card.content}</span>
-                : <span aria-hidden="true">🌷</span>}
+              {open ? (
+                card.kind === 'picture' ? (
+                  <div className="flex flex-col items-center justify-center gap-1">
+                    <WordIcon icon={card.content} esWord={roundWords.find(w => w.id === card.wordId)?.translation} size="xl" className="text-3xl sm:text-4xl" />
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{roundWords.find(w => w.id === card.wordId)?.translation || ''}</span>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center gap-1">
+                    <WordIcon icon={roundWords.find(w => w.id === card.wordId)?.imageUrl || '🌱'} esWord={roundWords.find(w => w.id === card.wordId)?.translation} size="md" className="text-2xl sm:text-3xl" />
+                    <span className="text-xs font-black sm:text-sm text-slate-800" lang={card.language}>{card.content}</span>
+                  </div>
+                )
+              ) : (
+                <span aria-hidden="true">🌷</span>
+              )}
             </motion.button>
           );
         })}

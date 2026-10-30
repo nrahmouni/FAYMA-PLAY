@@ -4,6 +4,11 @@ import { Sparkles } from 'lucide-react';
 import { Language, PlayerProfile } from '../types';
 
 const GAME_ART: Record<string, string> = {
+  balloon_pop: '/src/assets/images/words_food_market_1793373486245.jpg',
+  safari_dash: '/src/assets/images/words_animals_safari_1793373484977.jpg',
+  space_blaster: '/src/assets/images/words_space_adventure_1793373486904.jpg',
+  monster_snack: '/src/assets/images/words_super_vehicles_1793373492733.jpg',
+  ai_quest: '/assets/ai/fayma-buddy.jpg',
   unified_lesson: '/games/safari.png',
   safari: '/games/safari.png',
   word_train: '/games/train.png',
@@ -35,7 +40,14 @@ interface TurnReadyOverlayProps {
 
 export const TurnReadyOverlay: React.FC<TurnReadyOverlayProps> = ({ player, gameId, language, onReady }) => {
   const copy = GAME_COPY[language];
-  const isImageAvatar = player.avatarUrl?.startsWith('data:') || player.avatarUrl?.startsWith('/');
+  const isImageAvatar = Boolean(
+    player.avatarUrl && (
+      player.avatarUrl.startsWith('data:') ||
+      player.avatarUrl.startsWith('/') ||
+      player.avatarUrl.startsWith('http:') ||
+      player.avatarUrl.startsWith('https:')
+    )
+  );
 
   return (
     <div
@@ -75,7 +87,7 @@ export const TurnReadyOverlay: React.FC<TurnReadyOverlayProps> = ({ player, game
         </motion.div>
 
         <p className="relative mt-4 text-sm font-black uppercase tracking-[.16em] text-emerald-700">
-          {copy.turn.replace('{name}', player.displayName)}
+          {copy.turn.replace('{name}', player.displayName && !player.displayName.startsWith('http') ? player.displayName : 'Aventurero')}
         </p>
         <h1 id="turn-ready-title" className="relative mt-1 text-3xl font-black text-slate-900 sm:text-4xl">
           {copy.ready}

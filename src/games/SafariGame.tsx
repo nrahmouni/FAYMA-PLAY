@@ -96,7 +96,14 @@ export const SafariGame: React.FC<GameProps> = ({ words, difficulty, language, n
               }`}
             >
               <WordIcon icon={option.imageUrl} esWord={option.translation} size="xl" className="text-4xl sm:text-5xl" />
-              {revealed && <span className={`mt-1 text-sm font-black ${correct && selected ? 'text-emerald-800' : 'text-rose-800'}`} lang={option.language}>{option.text}</span>}
+              <span className={`mt-2 text-base font-black ${revealed && correct && selected ? 'text-emerald-800' : 'text-slate-900'}`} lang={option.language}>
+                {option.text}
+              </span>
+              {option.phonetic && (
+                <span className="text-[10px] font-bold text-slate-500">
+                  {option.phonetic}
+                </span>
+              )}
               <span className="sr-only">{copy.optionLabel} {index + 1}</span>
             </motion.button>
           );

@@ -39,6 +39,7 @@ const isLearningGame = (id: GameMechanic): id is LearningGameId =>
   id === 'body_detective' || id === 'habitat_rescue' || id === 'space_explorer' || id === 'eco_mission';
 
 const LEGACY_GAME_COPY_KEYS: Record<Exclude<GameMechanic, MathGameId | LearningGameId>, keyof typeof GAME_COPY.es.gameNames> = {
+  ai_quest: 'safari',
   unified_lesson: 'safari',
   safari: 'safari',
   word_train: 'train',
@@ -63,6 +64,7 @@ const SUBJECT_LABELS: Record<Language, Record<GameSubject, string>> = {
 };
 
 const GAME_SUBJECT: Record<GameMechanic, Exclude<GameSubject, 'all'>> = {
+  ai_quest: 'words',
   unified_lesson: 'words',
   safari: 'words',
   word_train: 'words',

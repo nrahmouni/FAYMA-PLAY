@@ -1,4 +1,5 @@
 import React from 'react';
+import { getCachedAiImage } from '../lib/ai-image';
 import {
   HandHelping,
   Gift,
@@ -1728,7 +1729,22 @@ export const WordIcon: React.FC<WordIconProps> = ({
     );
   }
 
-  // 3. Fallback: clean, vibrant emoji/symbol representation
+  // 3. Check if we have an AI-generated image cached for this word
+  const aiCached = getCachedAiImage(word || esWord || '', esWord || '');
+  if (aiCached) {
+    const sizeCls = SIZE_CLASSES[size] || 'w-10 h-10';
+    return (
+      <img
+        src={aiCached}
+        alt={esWord || word || 'ai icon'}
+        className={`inline-block object-contain rounded-xl shrink-0 ${sizeCls} ${className}`}
+        style={style}
+        loading="lazy"
+      />
+    );
+  }
+
+  // 4. Fallback: clean, vibrant emoji/symbol representation
   const displayIcon = icon && !icon.startsWith('svg:') ? icon : '✨';
   return (
     <span

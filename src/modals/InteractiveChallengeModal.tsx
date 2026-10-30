@@ -3,25 +3,13 @@ import { Gamepad2 } from 'lucide-react';
 import { GameProps, DifficultyLevel, PlayerProfile } from '../types';
 import { FitGame } from '../components/FitGame';
 
-const SafariGame = React.lazy(() => import('../games/SafariGame').then(m => ({ default: m.SafariGame })));
+const BalloonPopGame = React.lazy(() => import('../games/BalloonPopGame').then(m => ({ default: m.BalloonPopGame })));
+const SafariAnimalDash = React.lazy(() => import('../games/SafariAnimalDash').then(m => ({ default: m.SafariAnimalDash })));
+const SpaceLaserBlaster = React.lazy(() => import('../games/SpaceLaserBlaster').then(m => ({ default: m.SpaceLaserBlaster })));
+const MonsterSnackFeast = React.lazy(() => import('../games/MonsterSnackFeast').then(m => ({ default: m.MonsterSnackFeast })));
 const GardenMatchGame = React.lazy(() => import('../games/GardenMatchGame').then(m => ({ default: m.GardenMatchGame })));
 const WordTrainGame = React.lazy(() => import('../games/WordTrainGame').then(m => ({ default: m.WordTrainGame })));
-const WordPickerGame = React.lazy(() => import('../games/WordPickerGame').then(m => ({ default: m.WordPickerGame })));
-const SoundEchoGame = React.lazy(() => import('../games/SoundEchoGame').then(m => ({ default: m.SoundEchoGame })));
-const DinoPicnicGame = React.lazy(() => import('../games/DinoPicnicGame').then(m => ({ default: m.DinoPicnicGame })));
-const LineMatchGame = React.lazy(() => import('../games/LineMatchGame').then(m => ({ default: m.LineMatchGame })));
-const DrawWordGame = React.lazy(() => import('../games/DrawWordGame').then(m => ({ default: m.DrawWordGame })));
-const LetterPuzzleGame = React.lazy(() => import('../games/LetterPuzzleGame').then(m => ({ default: m.LetterPuzzleGame })));
-const WordSortGame = React.lazy(() => import('../games/WordSortGame').then(m => ({ default: m.WordSortGame })));
-const UnifiedLessonGame = React.lazy(() => import('../games/UnifiedLessonGame').then(m => ({ default: m.UnifiedLessonGame })));
-const CometDashGame = React.lazy(() => import('../games/MathArcadeGames').then(m => ({ default: m.CometDashGame })));
-const CookieCountGame = React.lazy(() => import('../games/MathArcadeGames').then(m => ({ default: m.CookieCountGame })));
-const NumberBridgeGame = React.lazy(() => import('../games/MathArcadeGames').then(m => ({ default: m.NumberBridgeGame })));
-const TreasureTrailGame = React.lazy(() => import('../games/MathArcadeGames').then(m => ({ default: m.TreasureTrailGame })));
-const BodyDetectiveGame = React.lazy(() => import('../games/SubjectArcadeGames').then(m => ({ default: m.BodyDetectiveGame })));
-const HabitatRescueGame = React.lazy(() => import('../games/SubjectArcadeGames').then(m => ({ default: m.HabitatRescueGame })));
-const SpaceExplorerGame = React.lazy(() => import('../games/SubjectArcadeGames').then(m => ({ default: m.SpaceExplorerGame })));
-const EcoMissionGame = React.lazy(() => import('../games/SubjectArcadeGames').then(m => ({ default: m.EcoMissionGame })));
+const AiMagicQuestGame = React.lazy(() => import('../games/AiMagicQuestGame').then(m => ({ default: m.AiMagicQuestGame })));
 
 interface InteractiveChallengeModalProps {
   gameId: string;
@@ -36,46 +24,30 @@ export const InteractiveChallengeModal: React.FC<InteractiveChallengeModalProps>
 }) => {
   const renderGame = () => {
     switch (gameId) {
+      case 'balloon_pop':
       case 'unified_lesson':
-        return <UnifiedLessonGame {...gameProps} />;
+        return <BalloonPopGame {...gameProps} />;
+      case 'safari_dash':
       case 'safari':
-        return <SafariGame {...gameProps} />;
+      case 'word_picker':
+        return <SafariAnimalDash {...gameProps} />;
+      case 'space_blaster':
+      case 'comet_dash':
+      case 'space_explorer':
+      case 'sound_echo':
+        return <SpaceLaserBlaster {...gameProps} />;
+      case 'monster_snack':
+      case 'cookie_count':
+      case 'dino_picnic':
+        return <MonsterSnackFeast {...gameProps} />;
+      case 'ai_quest':
+        return <AiMagicQuestGame {...gameProps} />;
       case 'garden_match':
         return <GardenMatchGame {...gameProps} />;
       case 'word_train':
         return <WordTrainGame {...gameProps} />;
-      case 'word_picker':
-        return <WordPickerGame {...gameProps} />;
-      case 'sound_echo':
-        return <SoundEchoGame {...gameProps} />;
-      case 'dino_picnic':
-        return <DinoPicnicGame {...gameProps} />;
-      case 'line_match':
-        return <LineMatchGame {...gameProps} />;
-      case 'draw_word':
-        return <DrawWordGame {...gameProps} />;
-      case 'letter_puzzle':
-        return <LetterPuzzleGame {...gameProps} />;
-      case 'word_sort':
-        return <WordSortGame {...gameProps} />;
-      case 'comet_dash':
-        return <CometDashGame {...gameProps} />;
-      case 'cookie_count':
-        return <CookieCountGame {...gameProps} />;
-      case 'number_bridge':
-        return <NumberBridgeGame {...gameProps} />;
-      case 'treasure_trail':
-        return <TreasureTrailGame {...gameProps} />;
-      case 'body_detective':
-        return <BodyDetectiveGame {...gameProps} />;
-      case 'habitat_rescue':
-        return <HabitatRescueGame {...gameProps} />;
-      case 'space_explorer':
-        return <SpaceExplorerGame {...gameProps} />;
-      case 'eco_mission':
-        return <EcoMissionGame {...gameProps} />;
       default:
-        return <SafariGame {...gameProps} />;
+        return <BalloonPopGame {...gameProps} />;
     }
   };
 

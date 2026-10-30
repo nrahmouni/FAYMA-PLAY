@@ -58,10 +58,10 @@ export const HomeScreen: React.FC = () => {
             </button>
             <button
               type="button"
-              onClick={() => setScreen('NATIVE_LANG_SETUP')}
+              onClick={() => setScreen('AUTH')}
               className="inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-0.5 text-slate-700 shadow-2xs hover:bg-white"
             >
-              🏠 {copy.house}: {nativeLanguages.map(l => LANGUAGES[l].flag).join(' ')}
+              ☁️ Google Cloud
             </button>
           </div>
         </header>

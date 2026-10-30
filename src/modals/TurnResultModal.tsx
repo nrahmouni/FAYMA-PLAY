@@ -40,15 +40,19 @@ export const TurnResultModal: React.FC<TurnResultModalProps> = ({
   const total = result.correct + result.wrong;
   const accuracy = total > 0 ? Math.round((result.correct / total) * 100) : 100;
   const isArabic = language === 'ar';
+  const cleanPlayerName = player.displayName && !player.displayName.startsWith('http')
+    ? player.displayName
+    : 'Aventurero';
+
   useEffect(() => {
     if (turnAnnounced.current) return;
     turnAnnounced.current = true;
     playSuccess();
     const message = isFinalTurn
-      ? `${copy.goodWork.replace('{name}', player.displayName)} ${copy.finishedTurn} ${levelAdvanced ? copy.nextLevel : ''} ${copy.finished}`
-      : `${copy.goodWork.replace('{name}', player.displayName)} ${copy.finishedTurn} ${levelAdvanced ? copy.nextLevel : ''} ${copy.nextTurn.replace('{name}', nextPlayerName || '')}`;
+      ? `${copy.goodWork.replace('{name}', cleanPlayerName)} ${copy.finishedTurn} ${levelAdvanced ? copy.nextLevel : ''} ${copy.finished}`
+      : `${copy.goodWork.replace('{name}', cleanPlayerName)} ${copy.finishedTurn} ${levelAdvanced ? copy.nextLevel : ''} ${copy.nextTurn.replace('{name}', nextPlayerName || '')}`;
     speak(message, language);
-  }, [copy, isFinalTurn, language, levelAdvanced, nextPlayerName, playSuccess, player.displayName, speak]);
+  }, [cleanPlayerName, copy, isFinalTurn, language, levelAdvanced, nextPlayerName, playSuccess, speak]);
 
   useEffect(() => {
     if (!missionCompleted || celebrationPlayed.current) return;

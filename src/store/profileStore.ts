@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { PlayerProfile, WordMastery, MasteryLevel } from '../types';
-import { syncUserProfile } from '../lib/firebase';
+import { syncUserProfile, fetchUserProfile } from '../lib/firebase';
+import { syncUserWithCloudSQL, recordLearnedWordToCloudSQL } from '../lib/cloudsql-client';
+import { VOCABULARY_BANK } from '../data/vocabulary';
 
 interface ProfileState {
   profiles: PlayerProfile[];
@@ -18,6 +20,7 @@ interface ProfileState {
   updateProfile: (updated: PlayerProfile) => void;
   updateLocalAvatar: (playerUid: string, avatarUrl: string) => void;
   updatePlayerAge: (playerUid: string, age: number) => void;
+  linkGoogleUser: (user: { uid: string; displayName?: string | null; email?: string | null; photoURL?: string | null }) => Promise<PlayerProfile>;
 }
 
 const DEFAULT_PROFILES: PlayerProfile[] = [
@@ -163,6 +166,19 @@ export const useProfileStore = create<ProfileState>((set, get) => {
       });
 
       syncUserProfile(updatedPlayer);
+
+      // Persist learned word to Google Cloud SQL
+      if (isCorrect) {
+        const foundWord = VOCABULARY_BANK.find(w => w.id === wordId);
+        if (foundWord) {
+          recordLearnedWordToCloudSQL({
+            word: foundWord.text,
+            translation: foundWord.translation || foundWord.text,
+            targetLanguage: foundWord.language || 'es',
+            nativeLanguage: 'es',
+          }).catch(() => {});
+        }
+      }
     },
 
     addRewards: (playerUid, coins, gems) => {
@@ -183,6 +199,7 @@ export const useProfileStore = create<ProfileState>((set, get) => {
       persistProfiles(newProfiles);
       set({ profiles: newProfiles });
       syncUserProfile(updatedPlayer);
+      syncUserWithCloudSQL(updatedPlayer).catch(() => {});
     },
 
     equipItem: (playerUid, category, itemId) => {
@@ -203,6 +220,7 @@ export const useProfileStore = create<ProfileState>((set, get) => {
       persistProfiles(newProfiles);
       set({ profiles: newProfiles });
       syncUserProfile(updatedPlayer);
+      syncUserWithCloudSQL(updatedPlayer).catch(() => {});
     },
 
     updateProfile: (updated) => {
@@ -216,6 +234,7 @@ export const useProfileStore = create<ProfileState>((set, get) => {
       persistProfiles(newProfiles);
       set({ profiles: newProfiles });
       syncUserProfile(updated);
+      syncUserWithCloudSQL(updated).catch(() => {});
     },
 
     updateLocalAvatar: (playerUid, avatarUrl) => {
@@ -229,6 +248,8 @@ export const useProfileStore = create<ProfileState>((set, get) => {
       persistProfiles(newProfiles);
       localStorage.setItem(`juegofy_profile_${playerUid}`, JSON.stringify(updated));
       set({ profiles: newProfiles });
+      syncUserProfile(updated);
+      syncUserWithCloudSQL(updated).catch(() => {});
     },
 
     updatePlayerAge: (playerUid, age) => {
@@ -243,6 +264,47 @@ export const useProfileStore = create<ProfileState>((set, get) => {
       persistProfiles(newProfiles);
       set({ profiles: newProfiles });
       syncUserProfile(updated);
+      syncUserWithCloudSQL(updated).catch(() => {});
+    },
+
+    linkGoogleUser: async (user) => {
+      // 1. Try to load existing profile from Firestore
+      const cloudProfile = await fetchUserProfile(user.uid);
+      if (cloudProfile) {
+        if (cloudProfile.displayName && (cloudProfile.displayName.startsWith('http:') || cloudProfile.displayName.startsWith('https:'))) {
+          cloudProfile.displayName = 'Aventurero';
+        }
+        const currentProfiles = get().profiles;
+        const exists = currentProfiles.some(p => p.uid === user.uid);
+        const updated = exists
+          ? currentProfiles.map(p => p.uid === user.uid ? cloudProfile : p)
+          : [cloudProfile, ...currentProfiles.filter(p => !p.uid.startsWith('local_'))];
+        persistProfiles(updated);
+        set({ profiles: updated, activePlayerIndex: 0 });
+        syncUserWithCloudSQL(cloudProfile).catch(() => {});
+        return cloudProfile;
+      }
+
+      // 2. Otherwise adapt current profile to Google user
+      const current = get().getActivePlayer() || DEFAULT_PROFILES[0];
+      const cleanGoogleName = user.displayName && !user.displayName.startsWith('http')
+        ? user.displayName
+        : 'Aventurero';
+
+      const linked: PlayerProfile = {
+        ...current,
+        uid: user.uid,
+        displayName: current.displayName && !current.displayName.startsWith('http') && current.displayName !== 'Jugador 1' && current.displayName !== ''
+          ? current.displayName
+          : cleanGoogleName,
+        avatarUrl: user.photoURL || current.avatarUrl || '🦁',
+      };
+      const updated = [linked, ...get().profiles.filter(p => p.uid !== current.uid && p.uid !== user.uid)];
+      persistProfiles(updated);
+      set({ profiles: updated, activePlayerIndex: 0 });
+      syncUserProfile(linked);
+      syncUserWithCloudSQL(linked).catch(() => {});
+      return linked;
     },
   };
 });

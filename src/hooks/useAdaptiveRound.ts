@@ -17,22 +17,36 @@ export function useAdaptiveRound() {
   // Pool of words for the current language & theme/world
   const worldPool = useMemo(() => {
     const matchesLang = VOCABULARY_BANK.filter(w => w.language === language);
-    const matchesTheme = matchesLang.filter(w => w.theme === activeWorldId);
-    return matchesTheme.length >= 3 ? matchesTheme : matchesLang;
+    const pool = matchesLang.length >= 3 ? matchesLang : VOCABULARY_BANK;
+    const matchesTheme = pool.filter(w => w.theme === activeWorldId);
+    return matchesTheme.length >= 3 ? matchesTheme : pool;
   }, [language, activeWorldId]);
 
   // Keep a larger deck so each level offers enough varied practice.
   const selectRoundWords = useCallback((player: PlayerProfile): Word[] => {
-    if (!worldPool.length) return [];
-
+    const activePool = worldPool.length >= 3 ? worldPool : VOCABULARY_BANK;
     const difficulty = difficulties[player.uid] || 1;
-    const unlockedWords = worldPool.filter((word, index) => {
+
+    let unlockedWords = activePool.filter((word, index) => {
       const learningLevel = word.learningLevel ?? Math.min(8, Math.floor(index / 2) + 1);
       return learningLevel <= difficulty;
     });
-    const practicePool = difficulty < 13
+
+    if (unlockedWords.length < 3) {
+      unlockedWords = activePool;
+    }
+
+    let practicePool = difficulty < 13
       ? unlockedWords.filter(word => !word.text.trim().includes(' '))
       : unlockedWords;
+
+    if (practicePool.length < 3) {
+      practicePool = unlockedWords;
+    }
+    if (practicePool.length === 0) {
+      practicePool = VOCABULARY_BANK.slice(0, 4);
+    }
+
     const newOrLearning: Word[] = [];
     const reviewWords: Word[] = [];
     const masteredWords: Word[] = [];
@@ -55,9 +69,7 @@ export function useAdaptiveRound() {
     const shuffledReview = shuffleArray(reviewWords);
     const shuffledMastered = shuffleArray(masteredWords);
 
-    const targetCount = activeGameId === 'unified_lesson'
-      ? Math.min(6, practicePool.length)
-      : Math.min(6, 2 + Math.floor((difficulty - 1) / 3), practicePool.length);
+    const targetCount = Math.min(6, Math.max(3, 2 + Math.floor((difficulty - 1) / 3)));
 
     if (shuffledNew.length > 0) {
       selected.push(...shuffledNew.slice(0, targetCount));
@@ -69,7 +81,7 @@ export function useAdaptiveRound() {
 
     // Fill remaining spots if needed
     if (selected.length < targetCount) {
-      const remaining = [...shuffledNew.slice(3), ...shuffledReview.slice(2), ...shuffledMastered];
+      const remaining = [...shuffledNew, ...shuffledReview, ...shuffledMastered, ...shuffleArray(practicePool)];
       for (const w of remaining) {
         if (!selected.some(s => s.id === w.id)) {
           selected.push(w);
@@ -78,13 +90,13 @@ export function useAdaptiveRound() {
       }
     }
 
-    // Fallback if pool is small
+    // Fallback if selected is empty
     if (selected.length === 0) {
       return practicePool.slice(0, targetCount);
     }
 
     return selected;
-  }, [activeGameId, difficulties, worldPool]);
+  }, [difficulties, worldPool]);
 
   // Get current difficulty for player
   const getPlayerDifficulty = useCallback((playerUid: string): DifficultyLevel => {

@@ -26,7 +26,7 @@ export const NativeLangSetup: React.FC = () => {
   };
 
   const continueToTargetLang = () => {
-    setScreen('HOME');
+    setScreen('TARGET_LANG_SETUP');
   };
 
   return (
@@ -35,7 +35,7 @@ export const NativeLangSetup: React.FC = () => {
         <header className="text-center">
           <span className="text-3xl sm:text-4xl" aria-hidden="true">🏠</span>
           <div className="mt-1 inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-[11px] font-black text-indigo-700 shadow-xs">
-            <Sparkles className="h-3.5 w-3.5" /> Paso 2 de 3 · Idioma de origen
+            <Sparkles className="h-3.5 w-3.5" /> Paso 2 de 3 · Idioma de origen (en casa)
           </div>
           <h1 className="mt-1.5 text-2xl font-black text-slate-900 sm:text-3xl">¿Qué idioma(s) habláis en casa?</h1>
           <p className="mt-1 text-xs font-semibold text-slate-600 sm:text-sm">
